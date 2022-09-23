@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Fundamentals of R: More Data Structures</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Xiao Hui Tai" />
+    <meta name="date" content="2022-09-26" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Fundamentals of R: More Data Structures
+]
+.subtitle[
+## <br><br> STA35A: Statistical Data Science 1
+]
+.author[
+### Xiao Hui Tai
+]
+.date[
+### September 26, 2022
+]
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &lt;a href="https://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt;  --&gt;
+
+---
+
+
+
+&lt;style type="text/css"&gt;
+.tiny .remark-code { font-size: 60%; }
+.small .remark-code { font-size: 80%; }
+&lt;/style&gt;
+
+## Reminders
+
+- Lab is due today at 9pm
+  - PDF files only
+  - Submission through Gradescope (accessible through Canvas)
+  - If you collaborate with others, write their names in your submission
+
+- Office hours: 
+  - XHT: Mondays 9:30-10:30 AM
+  - JH: Tuesdays 10-11 AM, Thursdays 10:30-11:30 AM
+
+- First homework will be assigned on Friday; due next Thursday at 9pm
+
+---
+## Recap
+
+--
+
+- Data types: Logical/Booleans, Integers, Double, Characters, Complex, Raw
+
+- Operators: unary, binary, arithmetic, logical, assignment
+
+- Data structures group related values together
+
+- Vectors group values of the same type
+
+  - Creating and accessing vectors 
+
+---
+## Questions from last class: NA vs. NaN
+- `NaN` means "not a number" and it means there is a result, but it cannot be represented by the computer
+
+```r
+0 / 0 # note that 1 / 0 returns Inf
+```
+
+```
+## [1] NaN
+```
+
+- `NA` means missing; when working with data sets this is the more common one you will encounter
+- `is.na()` returns `TRUE` for both missing values (`NA`) and `NaN`
+
+
+```r
+is.na(0 / 0)
+```
+
+```
+## [1] TRUE
+```
+
+```r
+NA + NaN 
+```
+
+```
+## [1] NA
+```
+- For more, see https://jameshoward.us/2016/07/18/nan-versus-na-r/.
+
+---
+## Questions from last class: `typeof()` 
+.tiny[
+
+```r
+typeof(7); typeof(c(1, 7))
+```
+
+```
+## [1] "double"
+```
+
+```
+## [1] "double"
+```
+
+```r
+typeof(1:8) # this returns a sequence
+```
+
+```
+## [1] "integer"
+```
+
+```r
+typeof(seq(from = 1, to = 8, by = 1)) 
+```
+
+```
+## [1] "double"
+```
+
+```r
+typeof(seq(from = 1, to = 8))
+```
+
+```
+## [1] "integer"
+```
+
+```r
+typeof(as.integer(7))
+```
+
+```
+## [1] "integer"
+```
+]
+- Not a thing to be too worried about in R; just think of them as numeric 
+
+---
+## Questions from last class: `rm()`
+
+.tiny[
+
+```r
+x &lt;- 1:10
+y &lt;- 2
+ls()
+```
+
+```
+## [1] "x" "y"
+```
+
+```r
+rm(x); ls()
+```
+
+```
+## [1] "y"
+```
+
+```r
+rm("y"); ls()
+```
+
+```
+## character(0)
+```
+
+```r
+x &lt;- 1:10; y &lt;- 1
+rm(list = c(x, y)) # doesn't work
+```
+
+```
+## Warning in rm(list = c(x, y)): object '1' not found
+```
+
+```
+## Warning in rm(list = c(x, y)): object '2' not found
+```
+
+```
+## Warning in rm(list = c(x, y)): object '3' not found
+```
+
+```
+## Warning in rm(list = c(x, y)): object '4' not found
+```
+
+```
+## Warning in rm(list = c(x, y)): object '5' not found
+```
+
+```
+## Warning in rm(list = c(x, y)): object '6' not found
+```
+
+```
+## Warning in rm(list = c(x, y)): object '7' not found
+```
+
+```
+## Warning in rm(list = c(x, y)): object '8' not found
+```
+
+```
+## Warning in rm(list = c(x, y)): object '9' not found
+```
+
+```
+## Warning in rm(list = c(x, y)): object '10' not found
+```
+
+```
+## Warning in rm(list = c(x, y)): object '1' not found
+```
+]
+
+---
+## Questions from last class: `rm()`
+
+.tiny[
+
+```r
+rm(x, y) # rm("x", "y") also works
+ls()
+```
+
+```
+## character(0)
+```
+
+```r
+x &lt;- 1:10; y &lt;- 1
+rm(list = c("x", "y"))
+ls()
+```
+
+```
+## character(0)
+```
+]
+
+From help page:
+- Arguments
+
+`...`	    the objects to be removed, as names (unquoted) or character strings (quoted).
+
+`list` a character vector naming objects to be removed.
+
+- When in doubt, always look at the help page!
+
+---
+## Questions from last class
+- `ls()` and `object()` are identical
+
+- Style guide: https://style.tidyverse.org/index.html
+
+---
+## Today
+- More on vectors: 
+  - Creating vectors 
+  - Attributes
+  - Vector arithmetic
+  - Other functions on vectors
+  
+- Arrays
+
+---
+## Creating vectors
+`vector(length = 7)` returns an empty logical vector of length 7; helpful for filling things up later (see help page: `vector(mode = "logical", length = 0)`)
+
+
+```r
+weeklyHours &lt;- vector(length = 7)
+weeklyHours[5] &lt;- 8
+weeklyHours
+```
+
+```
+## [1] 0 0 0 0 8 0 0
+```
+
+The colon operator produces a sequence
+
+```r
+mySeq &lt;- 2:5
+mySeq
+```
+
+```
+## [1] 2 3 4 5
+```
+
+---
+## Creating vectors
+Many other ways to produce sequences, e.g., 
+
+```r
+(mySeq &lt;- seq(from = 1, to = 10, by = 2))
+```
+
+```
+## [1] 1 3 5 7 9
+```
+&lt;small&gt;(Enclosing an assignment statement in parentheses prints the result)&lt;/small&gt;
+
+---
+## Vectors with additional attributes: Factors
+- Factors are built on top of integer vectors
+
+- These have a fixed and known set of possible values. 
+
+- Factors have two components: level numbers (integers) and level labels (characters) 
+
+
+```r
+tmp &lt;- factor(c("BS", "MS", "PhD", "MS"))
+tmp
+```
+
+```
+## [1] BS  MS  PhD MS 
+## Levels: BS MS PhD
+```
+
+```r
+as.integer(tmp)
+```
+
+```
+## [1] 1 2 3 2
+```
+
+---
+
+## Vectors with additional attributes: Dates
+
+- Dates and date-times are built on top of numeric vectors
+
+- Dates are represented internally as the number of days since the origin, 1 Jan 1970
+
+
+```r
+z &lt;- as.Date("2020-01-01")
+z
+```
+
+```
+## [1] "2020-01-01"
+```
+
+```r
+typeof(z)
+```
+
+```
+## [1] "double"
+```
+
+```r
+str(z)
+```
+
+```
+##  Date[1:1], format: "2020-01-01"
+```
+
+---
+
+## Vectors with additional attributes: Dates
+
+
+```r
+z
+```
+
+```
+## [1] "2020-01-01"
+```
+
+```r
+as.integer(z)
+```
+
+```
+## [1] 18262
+```
+
+```r
+as.integer(z) / 365 # roughly 50 yrs
+```
+
+```
+## [1] 50.03288
+```
+
+We will talk more about packages later on in the class, but the `lubridate` package is particularly useful for dealing with dates. 
+
+---
+## Vector arithmetic
+
+Operators apply to vectors "pairwise" or "elementwise":
+
+```r
+x &lt;- c(7, 8, 10, 45)
+y &lt;- c(-7, -8, -10, -45)
+x + y
+```
+
+```
+## [1] 0 0 0 0
+```
+
+```r
+x * y
+```
+
+```
+## [1]   -49   -64  -100 -2025
+```
+
+```r
+x^c(1, 0, -1, 0.5)
+```
+
+```
+## [1] 7.000000 1.000000 0.100000 6.708204
+```
+
+---
+## Vector arithmetic
+
+R will implicitly coerce the types of vectors to be compatible.  E.g.:
+
+```r
+TRUE + 4
+```
+
+```
+## [1] 5
+```
+---
+## Recycling
+- R will also implicitly coerce the length of vectors.
+
+- This is called vector **recycling**: 
+
+  - When a shorter vector is combined with a longer one, elements of the shorter vector are repeated or recycled, to make it the same length as the longer vector.
+
+
+```r
+x &lt;- c(7, 8, 10, 45)
+x + c(-7, -8)
+```
+
+```
+## [1]  0  0  3 37
+```
+
+Single numbers are vectors of length 1 for purposes of recycling:
+
+```r
+2*x
+```
+
+```
+## [1] 14 16 20 90
+```
+
+---
+## Vectorized functions
+Most built-in functions are vectorized, meaning that they will operate on a vector of numbers:
+
+
+```r
+sample(1:10) + 100
+```
+
+```
+##  [1] 110 106 105 104 101 108 102 107 109 103
+```
+
+&lt;small&gt;(what does `sample()` do?)&lt;/small&gt;
+
+
+```r
+x
+```
+
+```
+## [1]  7  8 10 45
+```
+
+```r
+x &gt; 9 # pairwise comparisons, where the scalar 9 is recycled
+```
+
+```
+## [1] FALSE FALSE  TRUE  TRUE
+```
+
+---
+## Vectorized functions
+
+Lots of functions take vectors as arguments:
+- `mean()`, `median()`, `sd()`, `var()`, `max()`, `min()`, `length()`, `sum()`: return single numbers
+
+- `sort()` returns a new vector
+
+- `hist()` takes a vector of numbers and produces a histogram
+
+- `summary()` gives a five-number summary of numerical vectors
+
+- `any()` and `all()` are useful on Boolean vectors
+
+---
+## Comparison operators
+Boolean operators work elementwise:
+
+```r
+x
+```
+
+```
+## [1]  7  8 10 45
+```
+
+```r
+(x &gt; 9) &amp; (x &lt; 20)
+```
+
+```
+## [1] FALSE FALSE  TRUE FALSE
+```
+
+---
+## Comparison operators
+
+To compare whole vectors, best to use `identical()` or `all.equal()`:
+
+```r
+x; y
+```
+
+```
+## [1]  7  8 10 45
+```
+
+```
+## [1]  -7  -8 -10 -45
+```
+
+```r
+x == -y
+```
+
+```
+## [1] TRUE TRUE TRUE TRUE
+```
+
+```r
+identical(x, -y)
+```
+
+```
+## [1] TRUE
+```
+
+```r
+all.equal(x, -y)
+```
+
+```
+## [1] TRUE
+```
+
+---
+
+```r
+identical(c(0.5 - 0.3, 0.3 - 0.1), c(0.3 - 0.1, 0.5 - 0.3))
+```
+
+```
+## [1] FALSE
+```
+
+```r
+all.equal(c(0.5 - 0.3, 0.3 - 0.1), c(0.3 - 0.1, 0.5 - 0.3))
+```
+
+```
+## [1] TRUE
+```
+
+To see what's going on:
+
+```r
+print(.5 - .3, digits = 20)
+```
+
+```
+## [1] 0.2000000000000000111
+```
+
+```r
+print(.3 - .1, digits = 20)
+```
+
+```
+## [1] 0.19999999999999998335
+```
+
+Decimal numbers are not represented exactly in computer arithmetic. For more, see https://stackoverflow.com/questions/9508518/why-are-these-numbers-not-equal.
+---
+## Combining indexing and comparison operators
+
+```r
+x; y
+```
+
+```
+## [1]  7  8 10 45
+```
+
+```
+## [1]  -7  -8 -10 -45
+```
+
+```r
+x &gt; 9
+```
+
+```
+## [1] FALSE FALSE  TRUE  TRUE
+```
+
+```r
+x[x &gt; 9]
+```
+
+```
+## [1] 10 45
+```
+
+```r
+y[x &gt; 9]
+```
+
+```
+## [1] -10 -45
+```
+
+---
+## Combining indexing and comparison operators
+`which()` turns a Boolean vector into a vector of TRUE indices:
+
+```r
+x; y
+```
+
+```
+## [1]  7  8 10 45
+```
+
+```
+## [1]  -7  -8 -10 -45
+```
+
+```r
+(places &lt;- which(x &gt; 9))
+```
+
+```
+## [1] 3 4
+```
+
+```r
+y[places]
+```
+
+```
+## [1] -10 -45
+```
+
+---
+Note that the behavior of `which()` and the indexing operator is different when there are `NA` values:
+
+```r
+myNAvec &lt;- c(1, 2, NA)
+which(myNAvec &gt; 1)
+```
+
+```
+## [1] 2
+```
+
+```r
+myNAvec &gt; 1
+```
+
+```
+## [1] FALSE  TRUE    NA
+```
+
+```r
+myNAvec[which(myNAvec &gt; 1)]
+```
+
+```
+## [1] 2
+```
+
+```r
+myNAvec[myNAvec &gt; 1]
+```
+
+```
+## [1]  2 NA
+```
+
+---
+## Named components
+
+You can give names to elements or components of vectors
+
+.small[
+
+```r
+x
+```
+
+```
+## [1]  7  8 10 45
+```
+
+```r
+(names(x) &lt;- c("v1", "v2", "v3", "fred"))
+```
+
+```
+## [1] "v1"   "v2"   "v3"   "fred"
+```
+
+```r
+x[c("fred", "v1")]
+```
+
+```
+## fred   v1 
+##   45    7
+```
+
+```r
+x[c(4, 1)]
+```
+
+```
+## fred   v1 
+##   45    7
+```
+]
+
+Note the labels are in what R prints; not actually part of the value
+
+---
+`names(x)` is just another vector (of characters):
+
+```r
+names(y) &lt;- names(x)
+sort(names(x))
+```
+
+```
+## [1] "fred" "v1"   "v2"   "v3"
+```
+
+```r
+which(names(x) == "fred")
+```
+
+```
+## [1] 4
+```
+
+
+
+---
+## Arrays
+
+- Many data structures in R are made by adding bells and whistles to vectors 
+
+- **Arrays** are vectors with *dimensions*
+
+- For example a two-dimensional array:
+
+
+```r
+x &lt;- c(7, 8, 10, 45)
+x.arr &lt;- array(x, dim = c(2, 2))
+x.arr
+```
+
+```
+##      [,1] [,2]
+## [1,]    7   10
+## [2,]    8   45
+```
+
+---
+## Arrays
+
+- Filled column-wise (by columns)
+
+- `dim` says how many rows and columns
+
+
+```r
+dim(x.arr)
+```
+
+```
+## [1] 2 2
+```
+---
+
+## Arrays with more than two dimensions
+- Arrays can have three dimensions ( `\(r \times c \times h\)`; think about stacking `\(r \times c\)` matrices)
+
+- Can also have `\(4, 5, \ldots n\)` dimensional arrays
+
+- `dim` is a length `\(n\)` vector
+  - Says the size/number of indices of each component
+  - e.g., a `\(4 \times 3\)` array has `dim` length 2, elements are 4 and 3
+
+.small[
+
+```r
+myArr &lt;- array(1:12, dim = c(4, 3))
+myArr
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    5    9
+## [2,]    2    6   10
+## [3,]    3    7   11
+## [4,]    4    8   12
+```
+
+```r
+dim(myArr)
+```
+
+```
+## [1] 4 3
+```
+]
+
+---
+
+## Arrays with more than two dimensions
+- A `\(4 \times 3 \times 2\)` array has `dim` length 3, elements are 4, 3 and 2
+
+
+```r
+myArr &lt;- array(1:24, dim = c(4, 3, 2))
+myArr
+```
+
+```
+## , , 1
+## 
+##      [,1] [,2] [,3]
+## [1,]    1    5    9
+## [2,]    2    6   10
+## [3,]    3    7   11
+## [4,]    4    8   12
+## 
+## , , 2
+## 
+##      [,1] [,2] [,3]
+## [1,]   13   17   21
+## [2,]   14   18   22
+## [3,]   15   19   23
+## [4,]   16   20   24
+```
+
+---
+
+## Arrays with more than two dimensions
+- A `\(4 \times 3 \times 2\)` array has `dim` length 3, elements are 4, 3 and 2
+
+
+```r
+dim(myArr)
+```
+
+```
+## [1] 4 3 2
+```
+
+Some other properties of the array:
+
+```r
+is.vector(myArr)
+```
+
+```
+## [1] FALSE
+```
+
+```r
+is.array(myArr)
+```
+
+```
+## [1] TRUE
+```
+
+---
+
+```r
+typeof(myArr)
+```
+
+```
+## [1] "integer"
+```
+
+```r
+str(myArr)
+```
+
+```
+##  int [1:4, 1:3, 1:2] 1 2 3 4 5 6 7 8 9 10 ...
+```
+
+```r
+attributes(myArr)
+```
+
+```
+## $dim
+## [1] 4 3 2
+```
+`typeof()` returns the type of the _elements_
+
+`str()` gives the **structure**: here, a numeric array, with three dimensions, size/indices, and then the actual numbers
+
+
+---
+## Summary
+
+--
+- Vectors: 
+  - Additional attributes: Factors, dates
+  - Vector arithmetic
+  - Other functions on vectors
+    - Comparison operators 
+    - Indexing operators
+  - Named components
+
+- Arrays
+  - Vectors with dimension
+  
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

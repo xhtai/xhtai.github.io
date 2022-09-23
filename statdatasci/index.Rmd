@@ -45,22 +45,27 @@ There will sometimes be additional (optional) reading from:
   - Notes: [Lecture 2](https://xhtai.github.io/statdatasci/lectures/lecture2/lecture2.html)
   - Reading: 
     - R for Data Science Chapter 4, 20
-    - Additional reading Matloff Chapter 2
+    - Additional reading: Matloff Chapter 2
 
 
 
 ### Week 2: Overview of data types
 - Mon Sept 26
-  - Notes:
+  - Notes: [Lecture 3](https://xhtai.github.io/statdatasci/lectures/lecture3/lecture3.html)
   - Reading: 
+    - R for Data Science Chapter 20
+    - Additional reading: Matloff Chapter 3
   
 - Wed Sept 28
   - Notes:
   - Reading: 
+    - R for Data Science Chapter 20 
+    - Additional reading: Matloff Chapters 3, 4 
 
 - Fri Sept 30
   - Notes:
   - Reading: 
+    - Additional reading: Matloff Chapter 5
   - Homework 1: 
   
   
