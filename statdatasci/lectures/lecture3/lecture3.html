@@ -119,7 +119,7 @@ NA + NaN
 .tiny[
 
 ```r
-typeof(7); typeof(c(1, 7))
+typeof(7); typeof(7L) # see help(NumericConstants)
 ```
 
 ```
@@ -127,11 +127,11 @@ typeof(7); typeof(c(1, 7))
 ```
 
 ```
-## [1] "double"
+## [1] "integer"
 ```
 
 ```r
-typeof(1:8) # this returns a sequence
+typeof(1:8) # this returns a sequence; see help(":")
 ```
 
 ```
@@ -162,7 +162,8 @@ typeof(as.integer(7))
 ## [1] "integer"
 ```
 ]
-- Not a thing to be too worried about in R; just think of them as numeric 
+- Not a thing to be too worried about in R in general; just think of them as numeric 
+- See R for Data Science Chapter 20, help pages, Google
 
 ---
 ## Questions from last class: `rm()`
