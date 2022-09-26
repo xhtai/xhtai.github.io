@@ -7,7 +7,8 @@
 
 Some of the materials are adapted from [Data Science in a
 Box](https://datasciencebox.org/) by Mine Çetinkaya-Rundel, [STA
-199](https://sta199-fa21-003.netlify.app/) by Maria Tackett, and
+199](https://sta199-fa21-003.netlify.app/) by Maria Tackett, [STA
+198](https://sta198f2021.github.io/website/) by Amy Herring, and
 [Statistical Computing 36-350: Beginning to Advanced Techniques in
 R](http://www.stat.cmu.edu/~cshalizi/statcomp/14) by Shalizi, C. R. and
 Thomas, A. C..

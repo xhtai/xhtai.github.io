@@ -285,6 +285,8 @@ From help page:
 
 - Style guide: https://style.tidyverse.org/index.html
 
+- Store function in calculator
+
 ---
 ## Today
 - More on vectors: 
@@ -563,6 +565,17 @@ x
 ## [1] FALSE FALSE  TRUE FALSE
 ```
 
+To get the number of components that satisfy a certain condition:
+
+```r
+sum(x &gt; 9) # another example of coercion
+```
+
+```
+## [1] 2
+```
+
+
 ---
 ## Comparison operators
 
@@ -746,6 +759,33 @@ myNAvec[myNAvec &gt; 1]
 
 ```
 ## [1]  2 NA
+```
+
+---
+## Aside: counting the number of missing values
+
+```r
+myNAvec 
+```
+
+```
+## [1]  1  2 NA
+```
+
+```r
+is.na(myNAvec)
+```
+
+```
+## [1] FALSE FALSE  TRUE
+```
+
+```r
+sum(is.na(myNAvec))
+```
+
+```
+## [1] 1
 ```
 
 ---
