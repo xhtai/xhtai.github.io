@@ -57,7 +57,7 @@ There will sometimes be additional (optional) reading from:
     - Additional reading: Matloff Chapter 3
   
 - Wed Sept 28
-  - Notes:
+  - Notes: [Lecture 4](https://xhtai.github.io/statdatasci/lectures/lecture4/lecture4.html)
   - Reading: 
     - R for Data Science Chapter 20 
     - Additional reading: Matloff Chapters 3, 4 
