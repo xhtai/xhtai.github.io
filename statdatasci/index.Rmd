@@ -63,7 +63,7 @@ There will sometimes be additional (optional) reading from:
     - Additional reading: Matloff Chapters 3, 4 
 
 - Fri Sept 30
-  - Notes:
+  - Notes: [Lecture 5](https://xhtai.github.io/statdatasci/lectures/lecture5/lecture5.html)
   - Reading: 
     - Additional reading: Matloff Chapter 5
   - Homework 1: 
