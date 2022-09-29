@@ -28,7 +28,26 @@ library(ggplot2)
 # library(dsbox)
 ```
 
-## Question from last time
+
+
+## Recap
+--
+
+- More on arrays
+  - Accessing array values
+  - Operating on arrays
+  - Array functions 
+
+- Matrices
+  - Matrix multiplication
+  - Other matrix operators 
+
+- Introduction to lists 
+  - Accessing pieces of lists 
+  - Working with lists 
+
+---
+## Questions from last time
 
 - `rowSums()` actually works on arrays
   - `dims` argument (from help page), default = 1: "For row*, the sum or mean is over dimensions dims+1, ..."
@@ -42,6 +61,23 @@ myArr
 rowSums(myArr)
 ```
 ]
+
+---
+## Questions from last time
+
+- Variable names
+
+  - `.` (`my.var`), `_` (`my_var`) and camel case (`myVar`) are commonly used
+  
+  - Style guide recommends underscore (snake case)
+  
+- Do not re-use names of common functions and variables
+
+```{r, eval = FALSE}
+T <- FALSE
+c <- 10
+mean <- function(x) sum(x)
+```
 
 ---
 ## Reminders
@@ -58,22 +94,6 @@ rowSums(myArr)
 
 - Participation survey on Canvas: open 12pm until Monday 9pm
 
----
-## Recap
---
-
-- More on arrays
-  - Accessing array values
-  - Operating on arrays
-  - Array functions 
-
-- Matrices
-  - Matrix multiplication
-  - Other matrix operators 
-
-- Introduction to lists 
-  - Accessing pieces of lists 
-  - Working with lists 
 
 ---
 ## Today
