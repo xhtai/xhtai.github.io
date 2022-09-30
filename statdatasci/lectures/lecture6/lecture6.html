@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Fundamentals of R: Data Manipulation</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Xiao Hui Tai" />
+    <meta name="date" content="2022-10-03" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Fundamentals of R: Data Manipulation
+]
+.subtitle[
+## <br><br> STA35A: Statistical Data Science 1
+]
+.author[
+### Xiao Hui Tai
+]
+.date[
+### October 3, 2022
+]
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &lt;a href="https://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt;  --&gt;
+
+---
+
+
+&lt;style type="text/css"&gt;
+.small .remark-code { font-size: 80%; }
+.tiny .remark-code { font-size: 50%; }
+&lt;/style&gt;
+
+
+
+
+## Reminders
+
+- Lab 2 is due today at 9pm
+  - PDF files only
+  - Submission through Gradescope (accessible through Canvas)
+  - If you collaborate with others, write their names in your submission
+
+- HW 1 posted on course website, due Thursday at 9pm
+
+- If you'd like to practice more, look at exercises in reading material 
+
+---
+## Recap
+
+--
+- Lists (continued)
+  - Names in lists
+  - `lapply()`
+
+- Data frames, or more generally "data sets"
+  - Creating data frames
+  - `tidyverse` and `dplyr`
+
+- Exploratory data analysis
+  - Some visualization examples
+  - We might *manipulate or transform the data* before visualizing or calculating summary statistics
+
+---
+## Today
+- Data manipulation tools 
+
+---
+## Visualization example 1: Mass vs. height in Star Wars data 
+
+&lt;img src="lecture6_files/figure-html/unnamed-chunk-3-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Visualization Example 2: Anscombe's quartet
+
+&lt;img src="lecture6_files/figure-html/quartet-plot-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Visualization Example 3: Facebook visits
+.question[ 
+How are people reporting lower vs. higher values of FB visits?
+]
+
+&lt;img src="lecture6_files/figure-html/unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Data manipulation using `dplyr`
+
+.pull-left[
+&lt;img src="img/dplyr-part-of-tidyverse.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+.midi[
+- `select`: pick columns by name
+- `arrange`: reorder rows
+- `slice`: pick rows using index(es)
+- `filter`: pick rows matching criteria
+- `distinct`: filter for unique rows
+- `mutate`: add new variables
+- `summarize`: reduce variables to values
+- `group_by`: for grouped operations
+- ... (many more)
+]
+]
+
+As we go over the examples, think about how you would do these in base R
+
+---
+
+## Rules of `dplyr` functions
+
+- First argument is always a data frame
+
+- Subsequent arguments say what to do with that data frame
+
+- Always return a data frame
+
+- Don't modify in place
+  - Meaning that you need an assignment operation if you want an "updated" version of the data frame 
+
+---
+
+## Data: Hotel bookings
+
+- Data from two hotels: one resort and one city hotel
+
+- Observations: Each row represents a hotel booking
+
+- Goal for original data collection: Development of prediction models to classify a hotel booking's likelihood to be cancelled ([Antonia et al., 2019](https://www.sciencedirect.com/science/article/pii/S2352340918315191#bib5))
+
+
+```r
+hotels &lt;- readr::read_csv("data/hotels.csv")
+```
+
+.footnote[
+Source: [TidyTuesday](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-11/readme.md)
+]
+
+---
+
+## First question: What is in the data set?
+
+.tiny[
+
+```r
+dplyr::glimpse(hotels)
+```
+
+```
+## Rows: 119,390
+## Columns: 32
+## $ hotel                          &lt;chr&gt; "Resort Hotel", "Resort …
+## $ is_canceled                    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ lead_time                      &lt;dbl&gt; 342, 737, 7, 13, 14, 14,…
+## $ arrival_date_year              &lt;dbl&gt; 2015, 2015, 2015, 2015, …
+## $ arrival_date_month             &lt;chr&gt; "July", "July", "July", …
+## $ arrival_date_week_number       &lt;dbl&gt; 27, 27, 27, 27, 27, 27, …
+## $ arrival_date_day_of_month      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ stays_in_weekend_nights        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ stays_in_week_nights           &lt;dbl&gt; 0, 0, 1, 1, 2, 2, 2, 2, …
+## $ adults                         &lt;dbl&gt; 2, 2, 1, 1, 2, 2, 2, 2, …
+## $ children                       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ babies                         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ meal                           &lt;chr&gt; "BB", "BB", "BB", "BB", …
+## $ country                        &lt;chr&gt; "PRT", "PRT", "GBR", "GB…
+## $ market_segment                 &lt;chr&gt; "Direct", "Direct", "Dir…
+## $ distribution_channel           &lt;chr&gt; "Direct", "Direct", "Dir…
+## $ is_repeated_guest              &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ previous_cancellations         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ previous_bookings_not_canceled &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ reserved_room_type             &lt;chr&gt; "C", "C", "A", "A", "A",…
+## $ assigned_room_type             &lt;chr&gt; "C", "C", "C", "A", "A",…
+## $ booking_changes                &lt;dbl&gt; 3, 4, 0, 0, 0, 0, 0, 0, …
+## $ deposit_type                   &lt;chr&gt; "No Deposit", "No Deposi…
+## $ agent                          &lt;chr&gt; "NULL", "NULL", "NULL", …
+## $ company                        &lt;chr&gt; "NULL", "NULL", "NULL", …
+## $ days_in_waiting_list           &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ customer_type                  &lt;chr&gt; "Transient", "Transient"…
+## $ adr                            &lt;dbl&gt; 0.00, 0.00, 75.00, 75.00…
+## $ required_car_parking_spaces    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ total_of_special_requests      &lt;dbl&gt; 0, 0, 0, 0, 1, 1, 0, 1, …
+## $ reservation_status             &lt;chr&gt; "Check-Out", "Check-Out"…
+## $ reservation_status_date        &lt;date&gt; 2015-07-01, 2015-07-01,…
+```
+]
+---
+
+## `select()`: Select a single column
+
+View only `lead_time` (number of days between booking and arrival date):
+
+
+```r
+select(hotels, lead_time)
+```
+
+```
+## # A tibble: 119,390 × 1
+##   lead_time
+##       &lt;dbl&gt;
+## 1       342
+## 2       737
+## 3         7
+## 4        13
+## 5        14
+## 6        14
+## # … with 119,384 more rows
+```
+
+- First argument: data frame we're working with , `hotels`
+- Second argument: variable we want to select, `lead_time`
+- Result: data frame with 119390 rows and 1 column
+- This is an alternative to `hotels$lead_time`
+---
+
+## Select multiple columns
+
+View only the `hotel` type and `lead_time` columns:
+
+
+
+```r
+select(hotels, hotel, lead_time)
+```
+
+```
+## # A tibble: 119,390 × 2
+##   hotel        lead_time
+##   &lt;chr&gt;            &lt;dbl&gt;
+## 1 Resort Hotel       342
+## 2 Resort Hotel       737
+## 3 Resort Hotel         7
+## 4 Resort Hotel        13
+## 5 Resort Hotel        14
+## 6 Resort Hotel        14
+## # … with 119,384 more rows
+```
+
+---
+## `select()` to exclude variables
+
+- We saw earlier that `select()` keeps variables
+- `select()` can also exclude variables, using the `-` sign
+
+.small[
+
+```r
+hotels %&gt;%
+  select(-agent) 
+```
+
+```
+## # A tibble: 119,390 × 31
+##   hotel   is_ca…¹ lead_…² arriv…³ arriv…⁴ arriv…⁵ arriv…⁶ stays…⁷
+##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Resort…       0     342    2015 July         27       1       0
+## 2 Resort…       0     737    2015 July         27       1       0
+## 3 Resort…       0       7    2015 July         27       1       0
+## 4 Resort…       0      13    2015 July         27       1       0
+## 5 Resort…       0      14    2015 July         27       1       0
+## 6 Resort…       0      14    2015 July         27       1       0
+## # … with 119,384 more rows, 23 more variables:
+## #   stays_in_week_nights &lt;dbl&gt;, adults &lt;dbl&gt;, children &lt;dbl&gt;,
+## #   babies &lt;dbl&gt;, meal &lt;chr&gt;, country &lt;chr&gt;,
+## #   market_segment &lt;chr&gt;, distribution_channel &lt;chr&gt;,
+## #   is_repeated_guest &lt;dbl&gt;, previous_cancellations &lt;dbl&gt;,
+## #   previous_bookings_not_canceled &lt;dbl&gt;,
+## #   reserved_room_type &lt;chr&gt;, assigned_room_type &lt;chr&gt;, …
+```
+]
+
+---
+
+## `select()` a range of variables
+
+- Instead of writing out all the variable names, `select()` also accepts a range of variables 
+
+- This follows the order they are listed in the data frame
+
+
+```r
+hotels %&gt;%
+  select(hotel:arrival_date_month) 
+```
+
+```
+## # A tibble: 119,390 × 5
+##   hotel        is_canceled lead_time arrival_date_year arrival_…¹
+##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt;     
+## 1 Resort Hotel           0       342              2015 July      
+## 2 Resort Hotel           0       737              2015 July      
+## 3 Resort Hotel           0         7              2015 July      
+## 4 Resort Hotel           0        13              2015 July      
+## 5 Resort Hotel           0        14              2015 July      
+## 6 Resort Hotel           0        14              2015 July      
+## # … with 119,384 more rows, and abbreviated variable name
+## #   ¹​arrival_date_month
+```
+
+---
+
+## `select()` variables with certain characteristics
+
+
+```r
+hotels %&gt;%
+  select(starts_with("arrival"))
+```
+
+```
+## # A tibble: 119,390 × 4
+##   arrival_date_year arrival_date_month arrival_date_wee…¹ arriv…²
+##               &lt;dbl&gt; &lt;chr&gt;                           &lt;dbl&gt;   &lt;dbl&gt;
+## 1              2015 July                               27       1
+## 2              2015 July                               27       1
+## 3              2015 July                               27       1
+## 4              2015 July                               27       1
+## 5              2015 July                               27       1
+## 6              2015 July                               27       1
+## # … with 119,384 more rows, and abbreviated variable names
+## #   ¹​arrival_date_week_number, ²​arrival_date_day_of_month
+```
+
+---
+
+## `select()` variables with certain characteristics
+
+
+```r
+hotels %&gt;%
+  select(ends_with("type")) 
+```
+
+```
+## # A tibble: 119,390 × 4
+##   reserved_room_type assigned_room_type deposit_type customer_t…¹
+##   &lt;chr&gt;              &lt;chr&gt;              &lt;chr&gt;        &lt;chr&gt;       
+## 1 C                  C                  No Deposit   Transient   
+## 2 C                  C                  No Deposit   Transient   
+## 3 A                  C                  No Deposit   Transient   
+## 4 A                  A                  No Deposit   Transient   
+## 5 A                  A                  No Deposit   Transient   
+## 6 A                  A                  No Deposit   Transient   
+## # … with 119,384 more rows, and abbreviated variable name
+## #   ¹​customer_type
+```
+
+---
+
+## Select helpers
+
+- `starts_with()`: Starts with a prefix
+- `ends_with()`: Ends with a suffix
+- `contains()`: Contains a literal string
+- `num_range()`: Matches a numerical range like x01, x02, x03
+- `one_of()`: Matches variable names in a character vector
+- `everything()`: Matches all variables
+- `last_col()`: Select last variable, possibly with an offset
+- `matches()`: Matches a regular expression (a sequence of symbols/characters expressing a string/pattern to be searched for within text)
+
+.footnote[
+See help for any of these functions for more info, e.g. `?everything`.
+]
+
+---
+
+## `select()`, then `arrange()`
+
+What if we wanted to select these columns, and then arrange the data in order of lead time?
+
+
+```r
+hotels %&gt;%
+  select(hotel, lead_time) %&gt;%
+  arrange(lead_time)
+```
+
+```
+## # A tibble: 119,390 × 2
+##   hotel        lead_time
+##   &lt;chr&gt;            &lt;dbl&gt;
+## 1 Resort Hotel         0
+## 2 Resort Hotel         0
+## 3 Resort Hotel         0
+## 4 Resort Hotel         0
+## 5 Resort Hotel         0
+## 6 Resort Hotel         0
+## # … with 119,384 more rows
+```
+
+---
+
+## Pipes
+
+In programming, a pipe is a technique for passing information from one process to another. In R, the symbol is `%&gt;%`
+
+.pull-left[
+- Start with the data frame `hotels`, and pass it to the `select()` function,
+]
+.pull-right[
+.small[
+
+```r
+hotels %&gt;% 
+  select(hotel, lead_time) %&gt;%
+  arrange(lead_time)
+```
+
+```
+## # A tibble: 119,390 × 2
+##   hotel        lead_time
+##   &lt;chr&gt;            &lt;dbl&gt;
+## 1 Resort Hotel         0
+## 2 Resort Hotel         0
+## 3 Resort Hotel         0
+## 4 Resort Hotel         0
+## 5 Resort Hotel         0
+## 6 Resort Hotel         0
+## # … with 119,384 more rows
+```
+]
+]
+
+---
+
+## Pipes
+
+In programming, a pipe is a technique for passing information from one process to another.
+
+.pull-left[
+- Start with the data frame `hotels`, and pass it to the `select()` function,
+- then we select the variables `hotel` and `lead_time`,
+]
+.pull-right[
+.small[
+
+```r
+hotels %&gt;%
+  select(hotel, lead_time) %&gt;% #&lt;&lt;
+  arrange(lead_time)
+```
+
+```
+## # A tibble: 119,390 × 2
+##   hotel        lead_time
+##   &lt;chr&gt;            &lt;dbl&gt;
+## 1 Resort Hotel         0
+## 2 Resort Hotel         0
+## 3 Resort Hotel         0
+## 4 Resort Hotel         0
+## 5 Resort Hotel         0
+## 6 Resort Hotel         0
+## # … with 119,384 more rows
+```
+]
+]
+
+---
+
+## Pipes
+
+In programming, a pipe is a technique for passing information from one process to another.
+
+.pull-left[
+- Start with the data frame `hotels`, and pass it to the `select()` function,
+- then we select the variables `hotel` and `lead_time`,
+- and then we arrange the data frame by `lead_time`.
+]
+.pull-right[
+.small[
+
+```r
+hotels %&gt;%
+  select(hotel, lead_time) %&gt;% 
+  arrange(lead_time) #&lt;&lt;
+```
+
+```
+## # A tibble: 119,390 × 2
+##   hotel        lead_time
+##   &lt;chr&gt;            &lt;dbl&gt;
+## 1 Resort Hotel         0
+## 2 Resort Hotel         0
+## 3 Resort Hotel         0
+## 4 Resort Hotel         0
+## 5 Resort Hotel         0
+## 6 Resort Hotel         0
+## # … with 119,384 more rows
+```
+]
+]
+
+Note that the pipe operator is implemented in the package `magrittr`, but is automatically loaded when we use `library(dplyr)` or `library(tidyverse)`.
+
+---
+
+## How does a pipe work?
+
+- You can think about the following sequence of actions - find keys, 
+unlock car, start car, drive to work, park.
+
+- Expressed as a set of nested functions in R pseudocode this would look like:
+
+```r
+park(drive(start_car(find("keys")), to = "work"))
+```
+
+- Writing it out using pipes give it a more natural (and easier to read) 
+structure:
+
+```r
+find("keys") %&gt;%
+  start_car() %&gt;%
+  drive(to = "work") %&gt;%
+  park()
+```
+
+---
+## Simple example
+- We can write `exp(1)` with pipes as `1 %&gt;% exp`, and `log(exp(1))` as `1 %&gt;% exp %&gt;% log`
+
+
+```r
+exp(1)
+```
+
+```
+## [1] 2.718282
+```
+
+```r
+1 %&gt;% exp
+```
+
+```
+## [1] 2.718282
+```
+
+```r
+1 %&gt;% exp %&gt;% log
+```
+
+```
+## [1] 1
+```
+
+- Tidyverse functions are at their best when composed together using the pipe operator
+
+---
+## `arrange()` in ascending or descending order
+
+- We saw earlier that `arrange()` defaults to ascending order
+
+- For descending order, use `desc()`
+
+.pull-left[
+
+```r
+hotels %&gt;%
+  select(hotel, lead_time) %&gt;% 
+  arrange(lead_time)
+```
+
+```
+## # A tibble: 119,390 × 2
+##   hotel        lead_time
+##   &lt;chr&gt;            &lt;dbl&gt;
+## 1 Resort Hotel         0
+## 2 Resort Hotel         0
+## 3 Resort Hotel         0
+## 4 Resort Hotel         0
+## 5 Resort Hotel         0
+## 6 Resort Hotel         0
+## # … with 119,384 more rows
+```
+]
+.pull-right[
+
+```r
+hotels %&gt;%
+  select(hotel, lead_time) %&gt;% 
+  arrange(desc(lead_time))
+```
+
+```
+## # A tibble: 119,390 × 2
+##   hotel        lead_time
+##   &lt;chr&gt;            &lt;dbl&gt;
+## 1 Resort Hotel       737
+## 2 Resort Hotel       709
+## 3 City Hotel         629
+## 4 City Hotel         629
+## 5 City Hotel         629
+## 6 City Hotel         629
+## # … with 119,384 more rows
+```
+]
+
+---
+
+## `slice()` for certain row numbers
+
+This is an alternative indexing option to `hotels[1:5, ]`
+
+
+```r
+hotels %&gt;%
+  slice(1:5) 
+```
+
+```
+## # A tibble: 5 × 32
+##   hotel   is_ca…¹ lead_…² arriv…³ arriv…⁴ arriv…⁵ arriv…⁶ stays…⁷
+##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Resort…       0     342    2015 July         27       1       0
+## 2 Resort…       0     737    2015 July         27       1       0
+## 3 Resort…       0       7    2015 July         27       1       0
+## 4 Resort…       0      13    2015 July         27       1       0
+## 5 Resort…       0      14    2015 July         27       1       0
+## # … with 24 more variables: stays_in_week_nights &lt;dbl&gt;,
+## #   adults &lt;dbl&gt;, children &lt;dbl&gt;, babies &lt;dbl&gt;, meal &lt;chr&gt;,
+## #   country &lt;chr&gt;, market_segment &lt;chr&gt;,
+## #   distribution_channel &lt;chr&gt;, is_repeated_guest &lt;dbl&gt;,
+## #   previous_cancellations &lt;dbl&gt;,
+## #   previous_bookings_not_canceled &lt;dbl&gt;,
+## #   reserved_room_type &lt;chr&gt;, assigned_room_type &lt;chr&gt;, …
+```
+
+
+---
+
+## Reminder: comments in R
+
+- Any text following `#` will be printed as is, and won't be run as code
+
+- This is useful for leaving comments and for temporarily disabling 
+certain lines of code (for debugging, trying out different things)
+
+.tiny[
+
+```r
+hotels %&gt;%
+  # slice the first five rows  # this line is a comment
+  #select(hotel) %&gt;%           # this one doesn't run
+  slice(1:5)                   # this line runs
+```
+
+```
+## # A tibble: 5 × 32
+##   hotel   is_ca…¹ lead_…² arriv…³ arriv…⁴ arriv…⁵ arriv…⁶ stays…⁷
+##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Resort…       0     342    2015 July         27       1       0
+## 2 Resort…       0     737    2015 July         27       1       0
+## 3 Resort…       0       7    2015 July         27       1       0
+## 4 Resort…       0      13    2015 July         27       1       0
+## 5 Resort…       0      14    2015 July         27       1       0
+## # … with 24 more variables: stays_in_week_nights &lt;dbl&gt;,
+## #   adults &lt;dbl&gt;, children &lt;dbl&gt;, babies &lt;dbl&gt;, meal &lt;chr&gt;,
+## #   country &lt;chr&gt;, market_segment &lt;chr&gt;,
+## #   distribution_channel &lt;chr&gt;, is_repeated_guest &lt;dbl&gt;,
+## #   previous_cancellations &lt;dbl&gt;,
+## #   previous_bookings_not_canceled &lt;dbl&gt;,
+## #   reserved_room_type &lt;chr&gt;, assigned_room_type &lt;chr&gt;, …
+```
+]
+
+---
+
+## `filter()` to select a subset of rows
+
+.small[
+
+```r
+# bookings in City Hotels
+hotels %&gt;%
+  filter(hotel == "City Hotel") 
+```
+
+```
+## # A tibble: 79,330 × 32
+##   hotel   is_ca…¹ lead_…² arriv…³ arriv…⁴ arriv…⁵ arriv…⁶ stays…⁷
+##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 City H…       0       6    2015 July         27       1       0
+## 2 City H…       1      88    2015 July         27       1       0
+## 3 City H…       1      65    2015 July         27       1       0
+## 4 City H…       1      92    2015 July         27       1       2
+## 5 City H…       1     100    2015 July         27       2       0
+## 6 City H…       1      79    2015 July         27       2       0
+## # … with 79,324 more rows, 24 more variables:
+## #   stays_in_week_nights &lt;dbl&gt;, adults &lt;dbl&gt;, children &lt;dbl&gt;,
+## #   babies &lt;dbl&gt;, meal &lt;chr&gt;, country &lt;chr&gt;,
+## #   market_segment &lt;chr&gt;, distribution_channel &lt;chr&gt;,
+## #   is_repeated_guest &lt;dbl&gt;, previous_cancellations &lt;dbl&gt;,
+## #   previous_bookings_not_canceled &lt;dbl&gt;,
+## #   reserved_room_type &lt;chr&gt;, assigned_room_type &lt;chr&gt;, …
+```
+]
+
+&lt;small&gt;What was the base R alternative that we saw?&lt;/small&gt;
+
+---
+
+## `filter()` for many conditions at once
+
+
+```r
+hotels %&gt;%
+  filter( 
+    adults == 0,     
+    children &gt;= 1    
+    ) %&gt;% 
+  select(adults, babies, children)
+```
+
+```
+## # A tibble: 223 × 3
+##   adults babies children
+##    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
+## 1      0      0        3
+## 2      0      0        2
+## 3      0      0        2
+## 4      0      0        2
+## 5      0      0        2
+## 6      0      0        3
+## # … with 217 more rows
+```
+
+---
+
+## `filter()` for more complex conditions
+
+
+```r
+# bookings with no adults and some children or babies in the room
+hotels %&gt;%
+  filter( 
+    adults == 0,     
+    children &gt;= 1 | babies &gt;= 1   
+    ) %&gt;%
+  select(adults, babies, children)
+```
+
+```
+## # A tibble: 223 × 3
+##   adults babies children
+##    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
+## 1      0      0        3
+## 2      0      0        2
+## 3      0      0        2
+## 4      0      0        2
+## 5      0      0        2
+## 6      0      0        3
+## # … with 217 more rows
+```
+
+---
+
+## Reminder: Logical operators in R
+
+&lt;br&gt;
+
+operator    | definition                   || operator     | definition
+------------|------------------------------||--------------|----------------
+`&lt;`         | less than                    ||`x`&amp;nbsp;&amp;#124;&amp;nbsp;`y`     | `x` OR `y` 
+`&lt;=`        |	less than or equal to        ||`is.na(x)`    | test if `x` is `NA`
+`&gt;`         | greater than                 ||`!is.na(x)`   | test if `x` is not `NA`
+`&gt;=`        |	greater than or equal to     ||`x %in% y`    | test if `x` is in `y`
+`==`        |	exactly equal to             ||`!(x %in% y)` | test if `x` is not in `y`
+`!=`        |	not equal to                 ||`!x`          | not `x`
+`x &amp; y`     | `x` AND `y`                  ||              |
+
+---
+
+## `mutate()` to add a new variable
+
+
+```r
+hotels %&gt;%
+  mutate(little_ones = children + babies) %&gt;% 
+  select(children, babies, little_ones) %&gt;%
+  arrange(desc(little_ones))
+```
+
+```
+## # A tibble: 119,390 × 3
+##   children babies little_ones
+##      &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;
+## 1       10      0          10
+## 2        0     10          10
+## 3        0      9           9
+## 4        2      1           3
+## 5        2      1           3
+## 6        2      1           3
+## # … with 119,384 more rows
+```
+
+&lt;small&gt;What are these functions doing? How do to the same in base R?&lt;/small&gt;
+
+---
+
+## `summarize()` for summary stats
+
+
+```r
+# mean average daily rate for all bookings
+hotels %&gt;%
+  summarize(mean_adr = mean(adr)) 
+```
+
+```
+## # A tibble: 1 × 1
+##   mean_adr
+##      &lt;dbl&gt;
+## 1     102.
+```
+
+- `summarize()` changes the data frame entirely
+
+- Rows are collapsed into a single summary statistic
+
+- Columns that are irrelevant to the calculation are removed
+
+
+---
+## `summarize()` is often used with `group_by()`
+
+- For grouped operations
+
+- There are two types of `hotel`, city and resort hotels
+
+- We want the mean daily rate for bookings at city vs. resort hotels
+
+
+```r
+hotels %&gt;%
+  group_by(hotel) %&gt;% 
+  summarize(mean_adr = mean(adr))
+```
+
+```
+## # A tibble: 2 × 2
+##   hotel        mean_adr
+##   &lt;chr&gt;           &lt;dbl&gt;
+## 1 City Hotel      105. 
+## 2 Resort Hotel     95.0
+```
+
+- `group_by()` can be used with more than one group
+
+---
+
+## Multiple summary statistics
+
+`summarize` can be used for multiple summary statistics as well
+
+
+```r
+hotels %&gt;%
+  summarize(
+    n = n(), # frequencies
+    min_adr = min(adr),
+    mean_adr = mean(adr),
+    median_adr = median(adr),
+    max_adr = max(adr)
+    )
+```
+
+```
+## # A tibble: 1 × 5
+##        n min_adr mean_adr median_adr max_adr
+##    &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+## 1 119390   -6.38     102.       94.6    5400
+```
+---
+## Summary
+--
+
+- Data manipulation tools 
+
+  - `select()`: selects columns by name
+  
+  - `arrange()`: reorders rows
+  
+  - `slice()`: selects rows using index(es)
+  
+  - `filter()`: selects rows matching criteria
+  
+  - `mutate()`: adds new variables
+  
+  - `summarize()`: reduces variables to values
+  
+  - `group_by()`: for grouped operations
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

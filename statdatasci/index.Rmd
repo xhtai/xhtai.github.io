@@ -69,3 +69,23 @@ There will sometimes be additional (optional) reading from:
   - Homework 1: [Html](https://xhtai.github.io/statdatasci/homework/homework1/HW1.html) [Rmd](https://xhtai.github.io/statdatasci/homework/homework1/HW1.Rmd)
   
   
+  
+### Week 3: Data manipulation and data visualization tools
+- Mon Oct 3
+  - Notes: [Lecture 6](https://xhtai.github.io/statdatasci/lectures/lecture6/lecture6.html)
+  - Reading: 
+    - R for Data Science Chapter 5
+
+- Wed Oct 5
+  - Notes: [Lecture 7]
+  - Reading: 
+    - R for Data Science Chapter 3 
+
+- Fri Oct 7
+  - Notes: [Lecture 8]
+  - Reading: 
+    - R for Data Science Chapter 3 
+  - Homework 2: 
+  
+
+  
