@@ -66,6 +66,6 @@ There will sometimes be additional (optional) reading from:
   - Notes: [Lecture 5](https://xhtai.github.io/statdatasci/lectures/lecture5/lecture5.html)
   - Reading: 
     - Additional reading: Matloff Chapter 5
-  - Homework 1: 
+  - Homework 1: [Html](https://xhtai.github.io/statdatasci/homework/HW1.html) [Rmd](https://xhtai.github.io/statdatasci/homework/HW1.Rmd)
   
   
