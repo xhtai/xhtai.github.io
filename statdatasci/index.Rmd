@@ -36,12 +36,12 @@ There will sometimes be additional (optional) reading from:
 ## Class Schedule
 
 ### Week 1: Introduction, overview of data types	
-- Wed Sept 21
+- Wed Sept 21: Introduction and R Basics
   - Notes: [Lecture 1](https://xhtai.github.io/statdatasci/lectures/lecture1/lecture1.html)
   - Reading: 
     - R for Data Science Chapters 1, 2, 27
 
-- Fri Sept 23
+- Fri Sept 23: Overview of data types and data structures, vectors
   - Notes: [Lecture 2](https://xhtai.github.io/statdatasci/lectures/lecture2/lecture2.html)
   - Reading: 
     - R for Data Science Chapter 4, 20
@@ -50,19 +50,19 @@ There will sometimes be additional (optional) reading from:
 
 
 ### Week 2: Overview of data types
-- Mon Sept 26
+- Mon Sept 26: More on vectors, arrays
   - Notes: [Lecture 3](https://xhtai.github.io/statdatasci/lectures/lecture3/lecture3.html)
   - Reading: 
     - R for Data Science Chapter 20
     - Additional reading: Matloff Chapter 3
   
-- Wed Sept 28
+- Wed Sept 28: Arrays, matrices, lists
   - Notes: [Lecture 4](https://xhtai.github.io/statdatasci/lectures/lecture4/lecture4.html)
   - Reading: 
     - R for Data Science Chapter 20 
     - Additional reading: Matloff Chapters 3, 4 
 
-- Fri Sept 30
+- Fri Sept 30: Lists, data frames, exploratory data analysis
   - Notes: [Lecture 5](https://xhtai.github.io/statdatasci/lectures/lecture5/lecture5.html)
   - Reading: 
     - Additional reading: Matloff Chapter 5
@@ -71,12 +71,12 @@ There will sometimes be additional (optional) reading from:
   
   
 ### Week 3: Data manipulation and data visualization tools
-- Mon Oct 3
+- Mon Oct 3: Exploratory data analysis, data manipulation tools 
   - Notes: [Lecture 6](https://xhtai.github.io/statdatasci/lectures/lecture6/lecture6.html)
   - Reading: 
     - R for Data Science Chapter 5
 
-- Wed Oct 5
+- Wed Oct 5: 
   - Notes: [Lecture 7]
   - Reading: 
     - R for Data Science Chapter 3 
