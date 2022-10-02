@@ -39,7 +39,12 @@ library(ggplot2)
 
 - HW 1 posted on course website, due Thursday at 9pm
 
-- If you'd like to practice more, look at exercises in reading material 
+- Participation survey closes at 9pm tonight
+
+- If you'd like to practice more
+  - Try out the code from lectures on your own
+  - Look at exercises in reading material 
+  - Examples from Matloff
 
 ---
 ## Recap
@@ -265,7 +270,7 @@ hotels %>%
 
 ## Pipes
 
-In programming, a pipe is a technique for passing information from one process to another. In R, the symbol is `%>%`
+In programming, a pipe is a technique for passing information from one process to another. In R, the symbol is `%>%`.
 
 .pull-left[
 - Start with the data frame `hotels`, and pass it to the `select()` function,
@@ -284,7 +289,7 @@ hotels %>%
 
 ## Pipes
 
-In programming, a pipe is a technique for passing information from one process to another.
+In programming, a pipe is a technique for passing information from one process to another. In R, the symbol is `%>%`.
 
 .pull-left[
 - Start with the data frame `hotels`, and pass it to the `select()` function,
@@ -304,7 +309,7 @@ hotels %>%
 
 ## Pipes
 
-In programming, a pipe is a technique for passing information from one process to another.
+In programming, a pipe is a technique for passing information from one process to another. In R, the symbol is `%>%`.
 
 .pull-left[
 - Start with the data frame `hotels`, and pass it to the `select()` function,
