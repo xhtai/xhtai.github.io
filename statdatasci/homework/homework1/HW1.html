@@ -256,16 +256,16 @@ div.tocify {
 <h2>Problem 1: Working with functions and operators on different data types (70 points)</h2>
 <div id="vectors" class="section level3">
 <h3>Vectors</h3>
-<p>Use <code>sample()</code>, sampling <em>with</em> replacement, to create a vector of length 20. (Use the help command <code>?sample</code> to learn about the function.) Print it and check if there are missing values. Find the sum and mean of the vector. Assign the 5th value of the vector the value 0. Create a new vector which only has elements of the first vector that are larger than 5.</p>
+<p>Use <code>sample()</code>, sampling <em>with</em> replacement, to create a vector of length 20. (Use the help command <code>?sample</code> to learn about the function. You can put anything you’d like in the vector, i.e., any suitable input to the first argument of <code>sample()</code>.) Print it and check if there are missing values. Find the sum and mean of the vector. Assign the 5th value of the vector the value 0. Create a new vector which only has elements of the first vector that are larger than 5.</p>
 <p>The colon operator will create a sequence of integers in order. It is a special case of the function <code>seq()</code>. Using the help command <code>?seq</code> to learn about the function, design an expression that will give you the sequence of numbers from 1 to 10000 in increments of 372. Design another that will give you a sequence between 1 and 10000 that is exactly 50 numbers in length. The function <code>rep()</code> repeats a vector some number of times. Explain the difference between <code>rep(1:3, times = 3)</code> and <code>rep(1:3, each = 3)</code>.</p>
 </div>
 <div id="arrays" class="section level3">
 <h3>Arrays</h3>
-<p>Create a three-dimensional array, each with a <span class="math inline">\(2 \times 2\)</span> matrix containing the elements 7, 8, 10, 45 (filled column-wise). Access the second row, first column of the third matrix. Access the second matrix. Sum the columns of the first matrix. Use <code>apply()</code> to do the same. Use two separate <code>apply()</code> operations, the sum and the number of elements, to find the column means.</p>
+<p>Create a three-dimensional array, each with a <span class="math inline">\(2 \times 2\)</span> matrix containing the elements 7, 8, 10, 45 (filled column-wise). Access the second row, first column of the third matrix. Access the second matrix. Sum the columns of the first matrix. Use <code>apply()</code> to do the same. Use two separate <code>apply()</code> operations, the sum and the number of elements, to find the column means of the first matrix.</p>
 </div>
 <div id="matrices" class="section level3">
 <h3>Matrices</h3>
-<p>Create a <span class="math inline">\(3 \times 3\)</span> matrix containing the elements 1 to 9 (filled <em>row-wise</em>). Multiply the matrix by 3, element-wise. Post-multiply the matrix by a <span class="math inline">\(3 \times 1\)</span> vector (5, 5, 1). Pre-multiply the transpose of the matrix by a <span class="math inline">\(3 \times 1\)</span> vector (5, 5, 1).</p>
+<p>Create a <span class="math inline">\(3 \times 3\)</span> matrix containing the elements 1 to 9 (filled <em>row-wise</em>). Multiply the matrix by 3, element-wise. Post-multiply the (original) matrix by a length 3 vector (5, 5, 1). Pre-multiply the transpose of the (original) matrix by a length 3 vector (5, 5, 1).</p>
 </div>
 <div id="lists" class="section level3">
 <h3>Lists</h3>

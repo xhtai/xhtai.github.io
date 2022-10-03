@@ -17,15 +17,15 @@ Students may choose to collaborate with each other on the homework, but must cle
 
 ## Problem 1: Working with functions and operators on different data types (70 points)
 ### Vectors 
-Use `sample()`, sampling *with* replacement, to create a vector of length 20. (Use the help command `?sample` to learn about the function.) Print it and check if there are missing values. Find the sum and mean of the vector. Assign the 5th value of the vector the value 0. Create a new vector which only has elements of the first vector that are larger than 5.
+Use `sample()`, sampling *with* replacement, to create a vector of length 20. (Use the help command `?sample` to learn about the function. You can put anything you'd like in the vector, i.e., any suitable input to the first argument of `sample()`.) Print it and check if there are missing values. Find the sum and mean of the vector. Assign the 5th value of the vector the value 0. Create a new vector which only has elements of the first vector that are larger than 5.
 
 The colon operator will create a sequence of integers in order. It is a special case of the function `seq()`. Using the help command `?seq` to learn about the function, design an expression that will give you the sequence of numbers from 1 to 10000 in increments of 372. Design another that will give you a sequence between 1 and 10000 that is exactly 50 numbers in length. The function `rep()` repeats a vector some number of times. Explain the difference between `rep(1:3, times = 3)` and `rep(1:3, each = 3)`.
 
 ### Arrays
-Create a three-dimensional array, each with a $2 \times 2$ matrix containing the elements 7, 8, 10, 45 (filled column-wise). Access the second row, first column of the third matrix. Access the second matrix. Sum the columns of the first matrix. Use `apply()` to do the same. Use two separate `apply()` operations, the sum and the number of elements, to find the column means. 
+Create a three-dimensional array, each with a $2 \times 2$ matrix containing the elements 7, 8, 10, 45 (filled column-wise). Access the second row, first column of the third matrix. Access the second matrix. Sum the columns of the first matrix. Use `apply()` to do the same. Use two separate `apply()` operations, the sum and the number of elements, to find the column means of the first matrix. 
 
 ### Matrices
-Create a $3 \times 3$ matrix containing the elements 1 to 9 (filled *row-wise*). Multiply the matrix by 3, element-wise. Post-multiply the matrix by a $3 \times 1$ vector (5, 5, 1). Pre-multiply the transpose of the matrix by a $3 \times 1$ vector (5, 5, 1).
+Create a $3 \times 3$ matrix containing the elements 1 to 9 (filled *row-wise*). Multiply the matrix by 3, element-wise. Post-multiply the (original) matrix by a length 3 vector (5, 5, 1). Pre-multiply the transpose of the (original) matrix by a length 3 vector (5, 5, 1).
 
 ### Lists
 Create an empty list of length 2. Assign the vector `c(2, 4, 6, 1)` to the first element of the list. Assign the vector `c(1, 5, 3, 2)` to the second element of the list. Add a third element to the list, with the sequence 1:4. Check what is in the list. Name the list items a, b and c. Find the sum of each of the vectors in the list, using `lapply()`. Create a new vector of length 3 with this information using `unlist()`. 
