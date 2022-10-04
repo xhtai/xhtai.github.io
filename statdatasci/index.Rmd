@@ -76,8 +76,8 @@ There will sometimes be additional (optional) reading from:
   - Reading: 
     - R for Data Science Chapter 5
 
-- Wed Oct 5: 
-  - Notes: [Lecture 7]
+- Wed Oct 5: Data manipulation and visualization tools 
+  - Notes: [Lecture 7](https://xhtai.github.io/statdatasci/lectures/lecture7/lecture7.html)
   - Reading: 
     - R for Data Science Chapter 3 
 
