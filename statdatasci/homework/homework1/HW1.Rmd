@@ -39,7 +39,7 @@ letters[1] + letters[2]
 x <- "7"
 x + 2
 ```
-How can we make the last command work? 
+How can we make the last command (`x + 2`) work? 
 
 ```{r eval = FALSE}
 vector1 <- c("5", "12", "7", "32")
