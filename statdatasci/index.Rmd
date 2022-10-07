@@ -85,7 +85,7 @@ There will sometimes be additional (optional) reading from:
   - Notes: [Lecture 8](https://xhtai.github.io/statdatasci/lectures/lecture8/lecture8.html)
   - Reading: 
     - R for Data Science Chapter 3 
-  - Homework 2: 
+  - Homework 2: [Html](https://xhtai.github.io/statdatasci/homework/homework2/HW2.html) [Rmd](https://xhtai.github.io/statdatasci/homework/homework2/HW2.Rmd)
   
 
   
