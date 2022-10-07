@@ -88,4 +88,22 @@ There will sometimes be additional (optional) reading from:
   - Homework 2: [Html](https://xhtai.github.io/statdatasci/homework/homework2/HW2.html) [Rmd](https://xhtai.github.io/statdatasci/homework/homework2/HW2.Rmd)
   
 
+### Week 4: Data visualization tools, Descriptive statistics
+- Mon Oct 10: Data visualization tools, descriptive statistics 
+  - Notes: [Lecture 9](https://xhtai.github.io/statdatasci/lectures/lecture9/lecture9.html)
+  - Reading: 
+    - Open Intro Statistics Chapter 1
+
+- Wed Oct 12:  
+  - Notes: [Lecture 10]
+  - Reading: 
+    - Open Intro Statistics Chapter 2 
+
+- Fri Oct 14: 
+  - Notes: [Lecture 11]
+  - Reading: 
+    - R for Data Science Chapter 7
+  - Homework 3:
+  
+
   
