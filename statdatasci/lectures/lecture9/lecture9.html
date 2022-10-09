@@ -51,6 +51,8 @@ layout: true
 &lt;style type="text/css"&gt;
 .tiny .remark-code { font-size: 60%; }
 .small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
 &lt;/style&gt;
 
 ## Reminders/announcements
@@ -67,9 +69,22 @@ layout: true
   - Wednesday: Jed Harwood will do review during regular lecture time (same room)
   - Thursday: 10:30-11:30 OH (JH); **no lab**, instead 12:10-2PM OH (XHT; virtual, will post link on Piazza)
   - Friday: midterm during regular lecture time (same room); **no homework**
-      - Midterm will cover material until Monday, Oct 17
-      - Closed-book
-      - You don't need your computers
+
+---
+## Midterm
+- Midterm will cover material until Monday, Oct 17
+
+- Closed-book
+
+- You don't need your computers
+
+- There will be no make-up exams
+
+- Drop policy for exams: 1 midterm may be dropped or used with 50% penalty on the final 
+
+- Updated syllabus: "There will be no make-up exams. If you must miss an exam due to illness, travel, or some other reason, this will be the exam that will be dropped. For the final, if you have another final starting 30 minutes before or after the scheduled time, you may present documentation and request for an accommodation to start 15 minutes before or after the scheduled time."
+
+- Exam dates were announced on the first day of class: Oct 21, Nov 18 and Dec 7
 
 ---
 ## Recap
@@ -112,6 +127,7 @@ ggplot(penguins,
 &lt;img src="lecture9_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 ]
+
 
 ---
 ## Today
@@ -536,6 +552,7 @@ glimpse(loans)
 
 ## Selected variables
 
+.small[
 Variable        | Description
 ----------------|-------------
 `loan_amount`   |	Amount of the loan received, in US dollars
@@ -547,22 +564,28 @@ Variable        | Description
 `homeownership`	| Indicates whether the person owns, owns but has a mortgage, or rents
 `debt_to_income` | Debt-to-income ratio
 `issue_month` | Month the loan was issued
+]
 
 ---
 
 ## Variable types
 
-Variable        | Type
+.small[
+Variable        | Description
 ----------------|-------------
-`loan_amount`   |	
-`interest_rate` |	
-`term`	        | 
-`grade`	        | 
-`state`         |	
-`annual_income` |	
-`homeownership`	| 
-`debt_to_income` | 
-`issue_month` | 
+`loan_amount`   |	Amount of the loan received, in US dollars
+`interest_rate` |	Interest rate on the loan, in an annual percentage
+`term`	        | The length of the loan, which is always set as a whole number of months
+`grade`	        | Loan grade, which takes a values A through G and represents the quality of the loan and its likelihood of being repaid
+`state`         |	US state where the borrower resides
+`annual_income` |	Borrower’s annual income, including any second income, in US dollars
+`homeownership`	| Indicates whether the person owns, owns but has a mortgage, or rents
+`debt_to_income` | Debt-to-income ratio
+`issue_month` | Month the loan was issued
+]
+
+- Numerical variables: Continuous or discrete?
+- Categorical: Ordinal or not? 
 
 ---
 
