@@ -95,7 +95,7 @@ There will sometimes be additional (optional) reading from:
     - Open Intro Statistics Chapter 1
 
 - Wed Oct 12:  
-  - Notes: [Lecture 10]
+  - Notes: [Lecture 10](https://xhtai.github.io/statdatasci/lectures/lecture10/lecture10.html)
   - Reading: 
     - Open Intro Statistics Chapter 2 
 
