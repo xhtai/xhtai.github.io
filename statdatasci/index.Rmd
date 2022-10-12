@@ -94,16 +94,26 @@ There will sometimes be additional (optional) reading from:
   - Reading: 
     - Open Intro Statistics Chapter 1
 
-- Wed Oct 12:  
+- Wed Oct 12: Describing numerical distributions
   - Notes: [Lecture 10](https://xhtai.github.io/statdatasci/lectures/lecture10/lecture10.html)
   - Reading: 
     - Open Intro Statistics Chapter 2 
 
-- Fri Oct 14: 
-  - Notes: [Lecture 11]
+- Fri Oct 14: Numerical and categorical data 
+  - Notes: [Lecture 11](https://xhtai.github.io/statdatasci/lectures/lecture11/lecture11.html)
   - Reading: 
     - R for Data Science Chapter 7
   - Homework 3:
   
+
+### Week 5: Descriptive statistics
+- Mon Oct 17: Numerical and categorical data 
+  - Notes: [Lecture 12]
+  
+  
+- Wed Oct 19: Review
+
+- Fri Oct 21: Midterm
+
 
   
