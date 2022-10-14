@@ -103,12 +103,12 @@ There will sometimes be additional (optional) reading from:
   - Notes: [Lecture 11](https://xhtai.github.io/statdatasci/lectures/lecture11/lecture11.html)
   - Reading: 
     - R for Data Science Chapter 7
-  - Homework 3:
+  - Homework 3: [Html](https://xhtai.github.io/statdatasci/homework/homework3/HW3.html) [Rmd](https://xhtai.github.io/statdatasci/homework/homework3/HW3.Rmd)
   
 
 ### Week 5: Descriptive statistics
 - Mon Oct 17: Numerical and categorical data 
-  - Notes: [Lecture 12]
+  - Notes: [Lecture 12](https://xhtai.github.io/statdatasci/lectures/lecture12/lecture12.html)
   
   
 - Wed Oct 19: Review
