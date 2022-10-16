@@ -572,6 +572,7 @@ ggplot(loans, aes(x = homeownership, y = loan_amount)) +
 
 &lt;img src="lecture12_files/figure-html/unnamed-chunk-24-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
+
 ---
 
 ## Ridge plots
@@ -579,8 +580,10 @@ ggplot(loans, aes(x = homeownership, y = loan_amount)) +
 
 ```r
 library(ggridges)
-ggplot(loans, aes(x = loan_amount, y = homeownership, fill = grade, color = grade)) + 
-  geom_density_ridges(alpha = 0.5)
+ggplot(loans, aes(x = loan_amount, y = homeownership, 
+                  fill = homeownership)) + 
+  geom_density_ridges(alpha = 0.5) +
+  scale_fill_viridis_d()
 ```
 
 &lt;img src="lecture12_files/figure-html/unnamed-chunk-25-1.png" width="60%" style="display: block; margin: auto;" /&gt;
@@ -589,14 +592,32 @@ ggplot(loans, aes(x = loan_amount, y = homeownership, fill = grade, color = grad
 
 ## Ridge plots
 
+Ridge plots can also be used to investigate more complicated relationships, such as those between a categorical and numerical variable, conditional on another categorical variable 
+
+Here, we consider the relationship between loan grade and loan amount, conditional on each level of home ownership
+
 
 ```r
-library(ggridges)
 ggplot(loans, aes(x = loan_amount, y = homeownership, fill = grade, color = grade)) + 
   geom_density_ridges(alpha = 0.5)
 ```
 
 &lt;img src="lecture12_files/figure-html/unnamed-chunk-26-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Ridge plots
+
+Here, we consider the relationship between loan grade and loan amount, conditional on each level of home ownership
+
+
+```r
+ggplot(loans, aes(x = loan_amount, y = homeownership, fill = grade, color = grade)) + 
+  geom_density_ridges(alpha = 0.5)
+```
+
+&lt;img src="lecture12_files/figure-html/unnamed-chunk-27-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 Interestingly, those who had mortgages tend to have a higher proportion of grade G loans that have higher loan amounts. 
 
