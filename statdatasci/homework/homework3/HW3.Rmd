@@ -42,7 +42,7 @@ a. The variable `Built_2005_or_later` indicates the percentage of houses in each
 
 b. Make a new plot, or pair of plots, which breaks the plot in (a) out by state (use your improved version of the scatterplot), for just California and Pennsylvania. Note that the state is recorded in the `STATEFP` variable, with California being state 6 and Pennsylvania state 42. What do you learn from this figure? Is there a difference between the two states?
 
-c. What is the median percentage of houses built in 2005 or later (in the entire data set, not just California and Pennsylvania)? Create a new binary variable for whether the Census tract has percentage greater or less than this median. Make a visualization for the median house prices, broken down by this new variable. What do you learn from this figure? 
+c. What is the median percentage of houses built in 2005 or later (in the entire data set, i.e., California and Pennsylvania)? Create a new binary variable for whether the Census tract has percentage greater or less than this median. Make a visualization for the median house prices, broken down by this new variable. What do you learn from this figure? 
 
 ## Problem 3: Nobody Home (25 points)
 The vacancy rate is the fraction of housing units which are not occupied. The dataframe contains columns giving the total number of housing units for each Census tract, and the number of vacant housing units.
