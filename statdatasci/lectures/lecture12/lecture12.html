@@ -88,9 +88,6 @@ layout: true
 
   - Numerical summaries in R
 
-
-
-
 ---
 ## Data: Lending Club
 
@@ -207,10 +204,9 @@ prop.table(outTable, margin = 1)
 .tiny[
 
 ```r
-rowProps &lt;- outTableTotals %&gt;%
+outTableTotals %&gt;%
   data.frame() %&gt;%
   mutate(across(everything(), ~ .x/rowTotal))
-rowProps
 ```
 
 ```
@@ -230,6 +226,34 @@ rowProps
 ## columnTotal 0.03350000 0.005800000 0.0012000000        1
 ```
 ]
+---
+## Contingency tables with proportions
+- `apply` option is also not straightforward
+
+.tiny[
+
+```r
+t(apply(outTableTotals, MARGIN = 1, FUN = function(x) x/x[9]))
+```
+
+```
+##                         A         B         C         D
+##             NaN       NaN       NaN       NaN       NaN
+## ANY         NaN       NaN       NaN       NaN       NaN
+## MORTGAGE      0 0.2683232 0.3130090 0.2576738 0.1225726
+## OWN           0 0.2564671 0.3059867 0.2475979 0.1559497
+## RENT          0 0.2143598 0.2913427 0.2809746 0.1679627
+## columnTotal   0 0.2459000 0.3037000 0.2653000 0.1446000
+##                      E           F            G rowTotal
+##                    NaN         NaN          NaN      NaN
+## ANY                NaN         NaN          NaN      NaN
+## MORTGAGE    0.03090416 0.006681980 0.0008352474        1
+## OWN         0.02808574 0.003695492 0.0022172949        1
+## RENT        0.03862105 0.005443235 0.0012960083        1
+## columnTotal 0.03350000 0.005800000 0.0012000000        1
+```
+]
+
 ---
 ## Contingency tables with proportions
 - How about **column proportions**?
@@ -268,6 +292,10 @@ prop.table(outTable, margin = 2)
 ---
 ## Stacked bar plot
 
+- A stacked bar plot looks at numeric values across two categorical variable
+
+- Each bar in a standard bar plot is divided into stacked sub-bars, each one corresponding to a level of the second categorical variable.
+
 
 ```r
 ggplot(loans, aes(x = homeownership, 
@@ -279,7 +307,7 @@ ggplot(loans, aes(x = homeownership,
 ---
 
 ## Stacked bar plot
-Turning `grade` into an ordered variable 
+Turning `grade` into an ordered variable makes `ggplot` use the `viridis` scale by default
 
 
 ```r

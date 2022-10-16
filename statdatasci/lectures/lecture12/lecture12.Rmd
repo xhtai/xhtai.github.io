@@ -62,14 +62,6 @@ library(openintro)
 
   - Numerical summaries in R
 
-
-```{r include = FALSE}
-loans <- loans_full_schema %>%
-  select(loan_amount, interest_rate, term, grade, 
-         state, annual_income, homeownership, debt_to_income,
-         issue_month)
-```
-
 ---
 ## Data: Lending Club
 
@@ -123,12 +115,21 @@ prop.table(outTable, margin = 1)
 
 .tiny[
 ```{r}
-rowProps <- outTableTotals %>%
+outTableTotals %>%
   data.frame() %>%
   mutate(across(everything(), ~ .x/rowTotal))
-rowProps
 ```
 ]
+---
+## Contingency tables with proportions
+- `apply` option is also not straightforward
+
+.tiny[
+```{r}
+t(apply(outTableTotals, MARGIN = 1, FUN = function(x) x/x[9]))
+```
+]
+
 ---
 ## Contingency tables with proportions
 - How about **column proportions**?
@@ -149,6 +150,10 @@ prop.table(outTable, margin = 2)
 ---
 ## Stacked bar plot
 
+- A stacked bar plot looks at numeric values across two categorical variable
+
+- Each bar in a standard bar plot is divided into stacked sub-bars, each one corresponding to a level of the second categorical variable.
+
 ```{r}
 ggplot(loans, aes(x = homeownership, 
                   fill = grade)) + #<<
@@ -157,7 +162,7 @@ ggplot(loans, aes(x = homeownership,
 ---
 
 ## Stacked bar plot
-Turning `grade` into an ordered variable 
+Turning `grade` into an ordered variable makes `ggplot` use the `viridis` scale by default
 
 ```{r}
 str(loans$grade)
