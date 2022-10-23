@@ -76,6 +76,7 @@ library(tidyverse)
 
 - **Inferential statistics** or **statistical inference** gives us an idea about how each of these sample means are likely to vary from each other and from the mean of all the students in the class
 
+
 ---
 ## Recall: Population vs. sample 
 - A **sample** is a portion or **subset** of the larger **population**
@@ -93,11 +94,34 @@ library(tidyverse)
   - Depends on the sample 
 
 ---
-## Statistical inference
 
-- Statistical inference relies on the assumption that the data are drawn or sampled from some larger population
+## Population parameters vs. sample statistics
 
-- Allows us to draw conclusions about the larger population
+```{r echo=FALSE, out.width = "30%"}
+knitr::include_graphics("img/popsample.png")
+```
+
+|   | **Parameters** | **Statistics** |
+|:----|:------:|:------:|
+| Source | Population | Sample |
+| Calculated? | No | Yes |
+| Example notation | $\mu, \sigma, p$ | $\overline{x}, s, \hat{p}, \hat{\mu}, \hat{\sigma}$ |
+
+
+---
+## Statistical Inference
+
+- **Statistical inference** allows us to draw conclusions about the larger population. It is the process of using sample data to make conclusions about the underlying population the sample came from.
+
+.pull-left[
+```{r echo=FALSE, out.width="70%"}
+knitr::include_graphics("img/soup.png")
+```
+]
+
+.pull-right[
+Similar to tasting a spoonful of soup while cooking to make an inference about the entire pot.
+]
 
 - This is one goal of statistics: to answer a question, by making **inferences** about a **population** based on data in one or more **samples**.
 
