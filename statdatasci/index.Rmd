@@ -107,13 +107,29 @@ There will sometimes be additional (optional) reading from:
   
 
 ### Week 5: Descriptive statistics
-- Mon Oct 17: Numerical and categorical data 
+- Mon Oct 17: Numerical and categorical data
   - Notes: [Lecture 12](https://xhtai.github.io/statdatasci/lectures/lecture12/lecture12.html)
-  
   
 - Wed Oct 19: Review
 
 - Fri Oct 21: Midterm
 
+### Week 6: Introduction to probability
+- Mon Oct 24: Introduction to probability 
+  - Notes: [Lecture 13](https://xhtai.github.io/statdatasci/lectures/lecture13/lecture13.html)
+  - Reading: 
+    - Open Intro Statistics Chapter 3.1
+  
+- Wed Oct 26: Conditional, marginal and joint probability; Bayes' Theorem
+  - Notes: 
+  - Reading: 
+    - Open Intro Statistics Chapter 3.2
 
+- Fri Oct 28: 
+  - Notes: 
+  - Reading: 
+    - Open Intro Statistics Chapter 3.4, 3.5
+  - Homework 4: 
+  
+  
   
