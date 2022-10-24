@@ -374,7 +374,7 @@ Define events A = vaccine hesitant and B = Asian or Asian British-Indian. Calcul
 - $P(B) = \frac{37 + 143}{10000} = .018$
 - $P(A \cap B) = \frac{37}{10000} = .0037$
 - $P(A \cup B) = \frac{1362 + 71 + 55 + 37 + 85 + 15 + 136 + 31 + 143}{10000} = .1935$
-- $P(A \cup {B^c}) = \frac{1792 + 7368 + 199 + 115 + 95+ 54 + 119}{10000} = .9875$
+- $P(A \cup {B^c}) = \frac{1935 - 143 + 7368 + 199 + 115 + 115+ 95+ 54 + 119}{10000} = .9875$
   - Or, $1 - \frac{143}{10000}$
 
 

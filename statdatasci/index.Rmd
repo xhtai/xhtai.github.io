@@ -121,7 +121,7 @@ There will sometimes be additional (optional) reading from:
     - Open Intro Statistics Chapter 3.1
   
 - Wed Oct 26: Conditional, marginal and joint probability; Bayes' Theorem
-  - Notes: 
+  - Notes: [Lecture 14](https://xhtai.github.io/statdatasci/lectures/lecture14/lecture14.html)
   - Reading: 
     - Open Intro Statistics Chapter 3.2
 
