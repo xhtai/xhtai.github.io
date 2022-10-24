@@ -54,6 +54,8 @@ library(tidyverse)
 
 - Bayes' Theorem
 
+- Introduction to random variables 
+
 ---
 ## Conditional Probability
 
@@ -568,6 +570,53 @@ In the group of 9900 women without cancer, the mammogram should correctly identi
 
 ]
 
+---
+## Random variables
+
+- A random variable is a mapping or a function from possible outcomes in a sample space to a probability space. 
+
+- Recall: **sample space** is the set of all possible outcomes from a **random process**
+
+```{r echo = FALSE, out.width = "60%"}
+knitr::include_graphics("img/coinToss.png")
+```
+.small[
+Source: https://medium.com/jun94-devpblog/prob-stats-1-random-variable-483c45242b3c
+]
+
+---
+## Random variables
+
+```{r echo = FALSE, out.width = "60%"}
+knitr::include_graphics("img/coinToss.png")
+```
+.small[
+Source: https://medium.com/jun94-devpblog/prob-stats-1-random-variable-483c45242b3c
+]
+
+- Let $X$ be the random variable indicating whether a coin flip results in heads.
+
+- Instead of saying $P(\texttt{heads})$, we say $P(X = 1)$
+
+- This representation allows us to apply mathematical frameworks and get a better understanding of real-world phenomenon
+
+---
+## Random variables
+
+- Random variables are usually denoted by capital letters, most commonly $X$, $Y$, $Z$
+
+- A realization or draw of the random variable is denoted by a lowercase letter, $x$, $y$, $z$
+
+- Other examples of random variables:
+
+  - Mass of classroom chairs
+  
+  - Ages of students at UC Davis
+
+- For discrete random variables:
+  
+  - Each outcome has an associated probability $P(X = x_i)$ where $i = 1, ..., k$ ( $k$ outcomes are denoted by lower-case, $x_1, ..., x_k$)
+  - Sometimes also written as $p_1, ..., p_k$ 
 
 ---
 ## Summary
@@ -586,6 +635,5 @@ In the group of 9900 women without cancer, the mammogram should correctly identi
 - Bayes' Theorem
   - $P(A \mid B) =\frac{P(A \cap B)}{P(B)} =\frac{P(B \mid A)P(A)}{P(B)} =\frac{P(B \mid A)P(A)}{P(B \mid A)P(A) + P(B \mid A^c)P(A^c)}$
 
-
-
+- Introduction to random variables
 
