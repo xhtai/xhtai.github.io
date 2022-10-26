@@ -82,7 +82,6 @@ layout: true
 
 - Bayes' Theorem
 
-- Introduction to random variables 
 
 ---
 ## Conditional Probability
@@ -411,7 +410,7 @@ Tails | `\(\frac{1}{12}\)` | `\(\frac{1}{12}\)` | `\(\frac{1}{12}\)` | `\(\frac{
 
 ## Checking Independence
 
-Are vaccine hesitancy and Indian ethnicity independent in our cohort?
+Are vaccine hesitancy and Indian ethnicity independent in our population?
 
 - **Marginal probability** of vaccine hesitancy, `\(P(A) = \frac{1362 + 71 + 55 + 37 + 85 + 15 + 136 + 31}{10000} = \frac{1792}{10000} = .1792\)`
 
@@ -619,50 +618,6 @@ In the group of 9900 women without cancer, the mammogram should correctly identi
 ]
 
 ---
-## Random variables
-
-- A random variable is a mapping or a function from possible outcomes in a sample space to a probability space. 
-
-- Recall: **sample space** is the set of all possible outcomes from a **random process**
-
-&lt;img src="img/coinToss.png" width="60%" style="display: block; margin: auto;" /&gt;
-.small[
-Source: https://medium.com/jun94-devpblog/prob-stats-1-random-variable-483c45242b3c
-]
-
----
-## Random variables
-
-&lt;img src="img/coinToss.png" width="60%" style="display: block; margin: auto;" /&gt;
-.small[
-Source: https://medium.com/jun94-devpblog/prob-stats-1-random-variable-483c45242b3c
-]
-
-- Let `\(X\)` be the random variable indicating whether a coin flip results in heads.
-
-- Instead of saying `\(P(\texttt{heads})\)`, we say `\(P(X = 1)\)`
-
-- This representation allows us to apply mathematical frameworks and get a better understanding of real-world phenomenon
-
----
-## Random variables
-
-- Random variables are usually denoted by capital letters, most commonly `\(X\)`, `\(Y\)`, `\(Z\)`
-
-- A realization or draw of the random variable is denoted by a lowercase letter, `\(x\)`, `\(y\)`, `\(z\)`
-
-- Other examples of random variables:
-
-  - Mass of classroom chairs
-  
-  - Ages of students at UC Davis
-
-- For discrete random variables:
-  
-  - Each outcome has an associated probability `\(P(X = x_i)\)` where `\(i = 1, ..., k\)` ( `\(k\)` outcomes are denoted by lower-case, `\(x_1, ..., x_k\)`)
-  - Sometimes also written as `\(p_1, ..., p_k\)` 
-
----
 ## Summary
 --
 
@@ -679,7 +634,6 @@ Source: https://medium.com/jun94-devpblog/prob-stats-1-random-variable-483c45242
 - Bayes' Theorem
   - `\(P(A \mid B) =\frac{P(A \cap B)}{P(B)} =\frac{P(B \mid A)P(A)}{P(B)} =\frac{P(B \mid A)P(A)}{P(B \mid A)P(A) + P(B \mid A^c)P(A^c)}\)`
 
-- Introduction to random variables
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
