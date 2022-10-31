@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Binomial and Poisson Distribution</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Xiao Hui Tai" />
+    <meta name="date" content="2022-11-02" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Binomial and Poisson Distribution
+]
+.subtitle[
+## <br><br> STA35A: Statistical Data Science 1
+]
+.author[
+### Xiao Hui Tai
+]
+.date[
+### November 2, 2022
+]
+
+---
+
+
+
+
+
+
+layout: true
+  
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &lt;a href="https://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt;  --&gt;
+
+---
+
+&lt;style type="text/css"&gt;
+.tiny .remark-code { font-size: 70%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+&lt;/style&gt;
+
+
+
+
+
+## Recap
+--
+
+- Common probability distributions
+
+  - Bernoulli 
+      - Theoretical properties: probability mass function, parameters, mean and variance 
+      - Sampling and law of large numbers; effect of changing parameters 
+  
+  - Binomial
+      - Theoretical properties: probability mass function, parameters, mean and variance 
+
+---
+## Today
+- Common probability distributions
+
+  - Binomial 
+      - More on calculating binomial probabilities
+      - Sampling and law of large numbers; effect of changing parameters 
+  
+  - Poisson
+  
+---
+
+## Recall: Binomial random variable
+
+- The **binomial distribution** gives us the probability of `\(X\)` "successes" from a sequence of `\(n\)` independent Bernoulli trials (size `\(n\)`). 
+
+- The random variable `\(X\)` is the number of "successes," out of n, e.g., the number of students, out of 3, that have recent e-cigarette use 
+
+- The probability mass function is given by `\(P(X=x)=\begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}\)`
+
+- For a binomial random variable with number of Bernoulli trials `\(n\)` (size `\(n\)`) and probability of success `\(p\)`, `\(E(X) = np\)` and `\(Var(X) = n(p)(1-p)\)`
+
+---
+
+## Case Study: E-Cigarettes
+
+- The [CDC reports](https://www.cdc.gov/tobacco/data_statistics/fact_sheets/youth_data/tobacco_use/index.htm) that 19.6% of high school students have smoked e-cigarettes in the past 30 days. We'll round this to 20% for simplicity.
+
+- `\(P(Y=1)=P(Smoker)=p=0.2\)` and `\(P(Y=0)=0.8\)`
+
+- Previously, we talked about an experiment with 3 Bernoulli trials
+  
+  - Random variable was the number of students, out of 3, who smoked e-cigarettes in the past 30 days
+
+---
+## More examples of calculating binomial probabilities 
+
+- We might be interested in the probability that there is at least 1 student, out of 500, that has recent e-cigarette use. 
+
+- This translates to `\(P(X \geq 1)\)`, where `\(X\)` is the random variable representing the number of students, out of 500, with recent e-cigarette use. Here, `\(n = 500\)` and `\(p = .2\)`
+
+- Other probabilities that may be of interest include the probability that more than 2 students, out of 500, have recent e-cigarette use. 
+
+Binomial distribution: `\(P(X = x)=\begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}\)`
+
+- Quick trick: `\(P(X \geq 1) = 1 - P(X=0)\)` (you either have no students with recent e-cigarette use, or one or more students with recent e-cigarette use)
+
+- Similarly, `\(P(X &gt; 2)=1-P(X=0)-P(X=1)-P(X=2)\)` 
+
+
+---
+## More examples of calculating binomial probabilities 
+
+Binomial distribution: `\(P(X = x)=\begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}\)`
+
+We thus have
+
+.small[
+$$
+`\begin{aligned}
+P(X \geq 1) &amp; =1-P(X = 0) \\
+&amp;=1-\begin{pmatrix}500 \\ 0 \end{pmatrix} 0.2^0 (0.8)^{500-0} \\
+&amp;=1-0.8^{500} \\
+&amp;= 1\\
+ P(X&gt;2) &amp; = 1-P(X=0)-P(X=1)-P(X=2) \\ 
+ &amp; = 1 - 0.8^{500} - \begin{pmatrix} {500} \\ 1 \end{pmatrix}0.2^1(0.8)^{{500}-1} - \begin{pmatrix} {500} \\ 2 \end{pmatrix}0.2^2(0.8)^{{500}-2} \\
+ &amp; = 1 - 0.8^{500} - {500}(0.2)(0.8)^{{500}-1} - \frac{{500}!}{2!({500}-2)!}0.2^2(0.8)^{{500}-2} \\
+ &amp; = 1 - 0.8^{500} - {500}(0.2)(0.8)^{{500}-1} - \frac{{500}({500}-1)}{2}0.2^2(0.8)^{{500}-2} \\
+ &amp; = 1
+\end{aligned}`
+$$
+]
+
+---
+## In R
+
+- Given the large number of students (500), it is almost certain that at least 1 or 2 would have recent e-cigarette use. 
+
+- We might be interested instead in `\(P(X \geq 100)\)`, the probability that at least four-fifths of the students have recent e-cigarette use
+
+- As we can see, this quickly becomes intractable. Luckily, we can do this in R
+
+
+```r
+sum(dbinom(x = 100:500, size = 500, prob = .2))
+```
+
+```
+## [1] 0.5178363
+```
+
+- We can also use the `pbinom()` function, which gives us `\(P(X \leq x)\)` directly
+
+```r
+1 - pbinom(q = 99, size = 500, prob = .2)
+```
+
+```
+## [1] 0.5178363
+```
+
+---
+## Sampling from a binomial distribution in R
+
+- Recall draws from the Bernoulli distribution:
+  
+  - For any value of `\(0 \leq p \leq 1\)` (including .5), we can use the `rbinom()` function
+
+  - `rbinom()` has the arguments `n, size, prob`, where `n` is the number of draws, and `prob` is the probability of success.
+  
+  - `size` is the "number of trials (zero or more)" -- for the Bernoulli distribution, we use `size = 1`. 
+  
+---
+## Sampling from a binomial distribution in R
+
+- For the binomial distribution, `size` is the number of Bernoulli trials; in the e-cigarette example, `size = 3`
+
+- **NOTE**: we use `\(n\)` to denote the number of Bernoulli trials; in R this is the `size` argument
+
+Description | R
+----|--
+Number of draws/samples from Binomial | `n`
+Number of Bernoulli trials, size `\(n\)` | `size`
+Probability of success, `\(p\)` | `prob`
+
+- It should now make sense that for draws from the Bernoulli distribution, we use the argument `size = 1`.
+
+---
+## Sampling from a binomial distribution in R
+
+Example: 100 draws from the binomial distribution; each draw is made of 3 Bernoulli trials (size 3); probability of success = .2
+
+
+```r
+set.seed(0) # so results are reproducible 
+inputP &lt;- .2
+binomDraws &lt;- rbinom(n = 100, size = 3, prob = inputP)
+binomDraws
+```
+
+```
+##   [1] 2 0 0 1 2 0 2 2 1 1 0 0 0 1 0 1 0 1 2 0 1 2 0 1 0 0 0 0 0 1
+##  [31] 0 0 1 0 0 1 1 1 0 1 0 1 1 1 1 1 1 0 0 1 1 0 1 0 0 0 0 0 1 1
+##  [61] 0 2 0 0 0 1 0 0 1 0 1 0 1 0 0 0 1 1 0 1 2 0 1 0 0 1 0 1 0 0
+##  [91] 0 0 0 1 1 1 1 0 0 1
+```
+
+
+---
+## Sample mean  
+
+- Recall: for a binomial random variable with number of trials `\(n\)` and probability of success `\(p\)`, `\(E(X) = np\)` and `\(Var(X) = n(p)(1-p)\)`
+
+- In our example, `\(p = .2\)`, `\(n = 3\)`, so `\(E(X) = .6\)` and `\(Var(X) = 3*.2*.8 = .48\)`
+
+- We can calculate the sample mean from our sample of 100:
+
+```r
+mean(binomDraws)
+```
+
+```
+## [1] 0.56
+```
+
+---
+## Law of Large Numbers again
+As the sample size grows, the sample mean gets closer to the expected value, or population mean
+
+.small[
+
+```r
+set.seed(0) # so results are reproducible 
+binomDraws &lt;- rbinom(n = 5000, size = 3, prob = .2)
+myMeans &lt;- data.frame(sampleSize = 1:5000, myMean = NA)
+meanFun &lt;- function(inputSampSize, outcomes) {
+  return(mean(outcomes[1:inputSampSize]))
+}
+myMeans$myMean &lt;- sapply(myMeans$sampleSize, meanFun, binomDraws)
+head(myMeans)
+```
+
+```
+##   sampleSize    myMean
+## 1          1 2.0000000
+## 2          2 1.0000000
+## 3          3 0.6666667
+## 4          4 0.7500000
+## 5          5 1.0000000
+## 6          6 0.8333333
+```
+
+```r
+tail(myMeans)
+```
+
+```
+##      sampleSize    myMean
+## 4995       4995 0.5949950
+## 4996       4996 0.5950761
+## 4997       4997 0.5949570
+## 4998       4998 0.5948379
+## 4999       4999 0.5947189
+## 5000       5000 0.5946000
+```
+]
+---
+## Law of Large Numbers again 
+.small[
+
+```r
+myMeans %&gt;%
+  ggplot(aes(x = sampleSize, y = myMean)) +
+  geom_line() +
+  labs(x = "Sample size",
+       y = "Sample mean",
+       title = "Illustration of law of large numbers for Binomial distribution\nn = 3, p = .2")
+```
+
+&lt;img src="lecture17_files/figure-html/unnamed-chunk-8-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+
+## Frequency distribution of e-cigarette smokers (from sampling)
+
+- The frequency distribution from sampling from a binomial distribution should resemble the probability distribution of the binomial distribution
+
+- Use `rbinom()` to get 5000 draws from the population 
+
+- In R:
+.small[
+
+```r
+set.seed(0) # so results are reproducible 
+binomDraws &lt;- rbinom(n = 5000, size = 3, prob = .2)
+table(binomDraws)/5000
+```
+
+```
+## binomDraws
+##      0      1      2      3 
+## 0.5246 0.3638 0.1040 0.0076
+```
+]
+
+- Compare with the theoretical probabilities:
+.small[
+
+```r
+dbinom(x = 0:3, size = 3, prob = .2)
+```
+
+```
+## [1] 0.512 0.384 0.096 0.008
+```
+]
+---
+
+## Frequency distribution of e-cigarette smokers 
+
+
+```r
+data.frame(binomDraws) %&gt;%
+  ggplot(aes(x = binomDraws)) + 
+    geom_bar() +
+    labs(x = "Number of Smokers",
+         title = "5000 samples from Binomial(3, .2)")
+```
+
+&lt;img src="lecture17_files/figure-html/unnamed-chunk-11-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Varying the number of Bernoulli trials: 100 trials
+
+.small[
+
+```r
+set.seed(0) # so results are reproducible 
+binomDraws100 &lt;- rbinom(n = 5000, size = 100, prob = .2)
+data.frame(binomDraws100) %&gt;%
+  ggplot(aes(x = binomDraws100)) + 
+    geom_bar() +
+    labs(x = "Number of Smokers",
+         title = "5000 samples from Binomial(100, .2)")
+```
+
+&lt;img src="lecture17_files/figure-html/unnamed-chunk-12-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+---
+## Varying the number of Bernoulli trials: 500 trials
+
+.small[
+
+```r
+set.seed(0) # so results are reproducible 
+binomDraws500 &lt;- rbinom(n = 5000, size = 500, prob = .2)
+data.frame(binomDraws500) %&gt;%
+  ggplot(aes(x = binomDraws500)) + 
+    geom_bar() +
+    labs(x = "Number of Smokers",
+         title = "5000 samples from Binomial(500, .2)")
+```
+
+&lt;img src="lecture17_files/figure-html/unnamed-chunk-13-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+---
+## Frequency distribution of e-cigarette smokers varying number of Bernoulli trials
+
+.small[
+.pull-left[
+
+```r
+data.frame(binomDraws) %&gt;%
+  bind_cols(size = 3) %&gt;%
+  bind_rows(
+    data.frame(binomDraws100) %&gt;%
+      rename(binomDraws = binomDraws100) %&gt;%
+      bind_cols(size = 100)
+  ) %&gt;%
+  bind_rows(
+    data.frame(binomDraws500) %&gt;%
+      rename(binomDraws = binomDraws500) %&gt;%
+      bind_cols(size = 500)
+  ) %&gt;%
+  ggplot(aes(x = binomDraws, 
+             fill = as.factor(size))) +
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of smokers",
+      y = "Frequency",
+      title = "5000 samples each from Binomial(3, .2), Binomial(100, .2), Binomial(500, .2)",
+      fill = "Size"
+    )
+```
+]
+]
+.pull-right[
+&lt;img src="lecture17_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## Frequency distribution of e-cigarette smokers varying probability of success
+
+.small[
+
+```r
+set.seed(0) # so results are reproducible 
+binomP.2 &lt;- rbinom(n = 5000, size = 100, prob = .2)
+binomP.5 &lt;- rbinom(n = 5000, size = 100, prob = .5)
+binomP.7 &lt;- rbinom(n = 5000, size = 100, prob = .7)
+```
+]
+&lt;img src="lecture17_files/figure-html/unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+## Poisson distribution
+
+- The Poisson distribution is often useful for estimating the number of events in a large population over a unit of time. 
+
+- For example:
+  - The number of people having heart attacks in New York City every year
+  - The number of cars crossing an intersection per hour
+  - The number of typos in a book 
+  
+- It is named after French mathematician Siméon Denis Poisson
+
+---
+## Poisson distribution
+- Examples: The number of people having heart attacks in New York City every year
+
+- This distribution involves a few key ingredients
+  - There must be a fixed interval of time or space
+  
+  - Events happen with a known average rate, independently of time since the last event ("memoryless" property)
+      - One person having a heart attack does not change the probability of when the next person will have a heart attack
+
+- The parameter that defines a Poisson distributed random variable is the rate, often denoted by `\(\lambda\)`, where `\(\lambda &gt; 0\)`
+
+- The rate is the average number of occurrences per unit of time
+
+- Often used to model rare events
+
+---
+## Probability mass function, mean and variance
+
+- The probability mass function for a Poisson distributed random variable is `\(P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}\)`, defined over non-negative integer values of `\(x\)`
+
+- Recall: n! (pronounced "n factorial") is shorthand for the recursive multiplication `\(n! = n(n - 1)(n - 2)\cdots (1)\)`. 
+
+- The distribution has no upper limit, i.e., `\(x\)` can take very large non-negative integer values 
+
+- For a Poisson random variable, the mean, `\(E(X) = \lambda\)`, and the variance, `\(Var(X) = \lambda\)`
+
+---
+## Poisson probabilities  
+- Like we saw before, we can use the probability mean function, `\(P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}\)`, to calculate probabilities of taking a certain value
+
+- For `\(x = 2\)` and `\(\lambda = 3\)`, we have 
+
+$$
+`\begin{aligned}
+P(X = 2) &amp;= \frac{3^2 e^{-3}}{2!}  = \frac{9(e^{-3})}{2(1)}  = 0.2240418
+\end{aligned}`
+$$
+- In R:
+
+
+```r
+dpois(x = 2, lambda = 3)
+```
+
+```
+## [1] 0.2240418
+```
+
+- For large values of `\(x\)`, the probability is very small because of the large denominator
+
+
+```r
+dpois(x = 10, lambda = 3)
+```
+
+```
+## [1] 0.0008101512
+```
+
+---
+## Probability distribution
+- In the same manner, we can derive the entire probability distribution
+
+.tiny[
+.pull-left[
+
+```r
+dpois(x = 0:10, lambda = 3)
+```
+
+```
+##  [1] 0.0497870684 0.1493612051 0.2240418077 0.2240418077
+##  [5] 0.1680313557 0.1008188134 0.0504094067 0.0216040315
+##  [9] 0.0081015118 0.0027005039 0.0008101512
+```
+
+
+```r
+data.frame(x = 0:10, y = dpois(0:10, lambda = 3)) %&gt;%
+  ggplot(aes(x = x, y = y)) + 
+    geom_bar(stat = "identity") +
+  labs(title = "Probability distribution of Poisson(3)",
+       y = "P(X = x)")
+```
+]
+]
+.pull-right[
+&lt;img src="lecture17_files/figure-html/unnamed-chunk-22-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## Probability distribution varying lambda
+
+.small[
+
+```r
+data.frame(x = 0:30, y = dpois(0:30, lambda = 3), lambda = 3) %&gt;%
+  bind_rows(data.frame(x = 0:30, y = dpois(0:30, lambda = 10), lambda = 10)) %&gt;%
+  bind_rows(data.frame(x = 0:30, y = dpois(0:30, lambda = 20), lambda = 20)) %&gt;%
+    ggplot(aes(x = x, y = y, fill = as.factor(lambda))) + 
+      geom_bar(stat = "identity", 
+               position = "identity", 
+               alpha = .5) +
+    labs(title = "Probability distribution of \nPoisson(3), Poisson(10), Poisson(20)",
+         y = "P(X = x)",
+         fill = "Lambda")
+```
+
+&lt;img src="lecture17_files/figure-html/unnamed-chunk-23-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## Sampling from Poisson distribution in R
+- For any non-negative value of `\(\lambda\)`, we can simulate random draws using the `rpois()` function
+
+- `rpois()` has the arguments `n, lambda`, where `n` is the number of draws from the distribution, and `lambda` is the mean.
+
+
+```r
+set.seed(0) # so results are reproducible 
+inputLambda &lt;- 3
+poissonDraws &lt;- rpois(n = 100, lambda = inputLambda)
+poissonDraws
+```
+
+```
+##   [1] 5 2 2 3 5 2 5 6 4 3 1 2 1 4 2 4 3 4 8 2 4 6 2 4 1 2 2 0 2 5
+##  [31] 2 3 3 3 1 5 4 4 1 4 2 5 3 4 3 3 4 0 3 4 4 3 5 3 2 1 1 2 3 4
+##  [61] 2 5 2 3 2 4 2 3 4 1 5 2 5 2 2 3 5 5 2 4 6 3 4 2 2 4 2 4 1 2
+##  [91] 1 2 1 3 5 4 4 3 2 4
+```
+
+---
+## Frequency distribution varying lambda
+
+.small[
+
+```r
+set.seed(0) # so results are reproducible 
+poissonL3 &lt;- rpois(n = 5000, lambda = 3)
+poissonL10 &lt;- rpois(n = 5000, lambda = 10)
+poissonL20 &lt;- rpois(n = 5000, lambda = 20)
+```
+]
+
+.tiny[
+.pull-left[
+
+```r
+data.frame(poissonL3) %&gt;%
+  rename(outcome = poissonL3) %&gt;%
+  bind_cols(lambda = 3) %&gt;%
+  bind_rows(
+    data.frame(poissonL10) %&gt;%
+      rename(outcome = poissonL10) %&gt;%
+      bind_cols(lambda = 10)
+  ) %&gt;%
+  bind_rows(
+    data.frame(poissonL20) %&gt;%
+      rename(outcome = poissonL20) %&gt;%
+      bind_cols(lambda = 20)
+  ) %&gt;%
+  ggplot(aes(x = outcome, 
+                    fill = as.factor(lambda))) +
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of occurrences",
+      y = "Frequency",
+      title = "5000 samples each from \nPoisson(3), Poisson(10), Poisson(20)",
+      fill = "Lambda"
+    )
+```
+]
+]
+.pull-right[
+&lt;img src="lecture17_files/figure-html/unnamed-chunk-27-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## Summary
+
+--
+
+- Common probability distributions: Binomial and Poisson 
+
+  - Theoretical properties: probability mass function, parameters, mean and variance, effect of varying parameters
+  
+  - Sampling and law of large numbers; effect of changing parameters 
+
+  - R functions:
+  
+      - `d____()`, e.g., `dbinom()`: for densities (more accurately, for discrete random variables these are probability mass functions, `\(P(X = x)\)`)
+      - `p____()`, e.g., `pbinom()`: for `\(P(X\leq x)\)`
+      - `r____()`, e.g., `rbinom()`: for random sample
+    
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

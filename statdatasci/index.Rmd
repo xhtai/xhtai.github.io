@@ -138,7 +138,7 @@ There will sometimes be additional (optional) reading from:
     - Open Intro Statistics Chapter 4.3
   
 - Wed Nov 2: Binomial and Poisson distribution
-  - Notes: 
+  - Notes: [Lecture 17](https://xhtai.github.io/statdatasci/lectures/lecture17/lecture17.html)
   - Reading: 
     - Open Intro Statistics Chapter 4.5
 
