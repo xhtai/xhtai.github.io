@@ -143,7 +143,7 @@ There will sometimes be additional (optional) reading from:
     - Open Intro Statistics Chapter 4.5
 
 - Fri Nov 4: Normal distribution
-  - Notes: 
+  - Notes: [Lecture 18](https://xhtai.github.io/statdatasci/lectures/lecture18/lecture18.html)
   - Reading: 
     - Open Intro Statistics Chapter 4.1
   - Homework 5: 
