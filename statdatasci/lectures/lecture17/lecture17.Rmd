@@ -401,8 +401,8 @@ data.frame(binomP.2) %>%
 
 - For example:
   - The number of people having heart attacks in New York City every year
-  - The number of cars crossing an intersection per hour
-  - The number of typos in a book 
+  - The number of accidents occurring at an intersection per hour
+  - The number of typos in every 100 pages of a book 
   
 - It is named after French mathematician Siméon Denis Poisson
 
@@ -414,7 +414,7 @@ data.frame(binomP.2) %>%
   - There must be a **fixed interval** of time or space
   
   - Events happen with a **known average rate**, independently of time since the last event ("memoryless" property)
-      - One person having a heart attack does not change the probability of when the next person will have a heart attack
+      - One person having a heart attack does not change the probability of another person having a heart attack, hence the timing of the next heart attack 
 
 - The parameter that defines a Poisson distributed random variable is the **rate**, often denoted by $\lambda$, where $\lambda > 0$
 
@@ -455,133 +455,6 @@ dpois(x = 2, lambda = 3)
 ```{r}
 dpois(x = 10, lambda = 3)
 ```
-
----
-## Probability distribution
-- In the same manner, we can derive the entire probability distribution
-
-.tiny[
-.pull-left[
-```{r}
-dpois(x = 0:10, lambda = 3)
-```
-
-```{r eval = FALSE}
-data.frame(x = 0:10, y = dpois(0:10, lambda = 3)) %>%
-  ggplot(aes(x = x, y = y)) + 
-    geom_bar(stat = "identity") +
-  labs(title = "Probability distribution of Poisson(3)",
-       y = "P(X = x)")
-```
-]
-]
-.pull-right[
-```{r echo = FALSE, out.width = "100%"}
-data.frame(x = 0:10, y = dpois(0:10, lambda = 3)) %>%
-  ggplot(aes(x = x, y = y)) + 
-    geom_bar(stat = "identity") +
-  labs(title = "Probability distribution of Poisson(3)",
-       y = "P(X = x)")
-```
-]
-
----
-## Probability distribution varying lambda
-
-.small[
-```{r}
-data.frame(x = 0:30, y = dpois(0:30, lambda = 3), lambda = 3) %>%
-  bind_rows(data.frame(x = 0:30, y = dpois(0:30, lambda = 10), lambda = 10)) %>%
-  bind_rows(data.frame(x = 0:30, y = dpois(0:30, lambda = 20), lambda = 20)) %>%
-    ggplot(aes(x = x, y = y, fill = as.factor(lambda))) + 
-      geom_bar(stat = "identity", 
-               position = "identity", 
-               alpha = .5) +
-    labs(title = "Probability distribution of \nPoisson(3), Poisson(10), Poisson(20)",
-         y = "P(X = x)",
-         fill = "Lambda")
-```
-]
-
----
-## Sampling from Poisson distribution in R
-- For any non-negative value of $\lambda$, we can simulate random draws using the `rpois()` function
-
-- `rpois()` has the arguments `n, lambda`, where `n` is the number of draws from the distribution, and `lambda` is the mean.
-
-```{r}
-set.seed(0) # so results are reproducible 
-inputLambda <- 3
-poissonDraws <- rpois(n = 100, lambda = inputLambda)
-poissonDraws
-```
-
----
-## Frequency distribution varying lambda
-
-.small[
-```{r }
-set.seed(0) # so results are reproducible 
-poissonL3 <- rpois(n = 5000, lambda = 3)
-poissonL10 <- rpois(n = 5000, lambda = 10)
-poissonL20 <- rpois(n = 5000, lambda = 20)
-```
-]
-
-.tiny[
-.pull-left[
-```{r eval = FALSE}
-data.frame(poissonL3) %>%
-  rename(outcome = poissonL3) %>%
-  bind_cols(lambda = 3) %>%
-  bind_rows(
-    data.frame(poissonL10) %>%
-      rename(outcome = poissonL10) %>%
-      bind_cols(lambda = 10)
-  ) %>%
-  bind_rows(
-    data.frame(poissonL20) %>%
-      rename(outcome = poissonL20) %>%
-      bind_cols(lambda = 20)
-  ) %>%
-  ggplot(aes(x = outcome, 
-                    fill = as.factor(lambda))) +
-    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
-    labs(
-      x = "Number of occurrences",
-      y = "Frequency",
-      title = "5000 samples each from \nPoisson(3), Poisson(10), Poisson(20)",
-      fill = "Lambda"
-    )
-```
-]
-]
-.pull-right[
-```{r echo = FALSE, out.width = "100%"}
-data.frame(poissonL3) %>%
-  rename(outcome = poissonL3) %>%
-  bind_cols(lambda = 3) %>%
-  bind_rows(
-    data.frame(poissonL10) %>%
-      rename(outcome = poissonL10) %>%
-      bind_cols(lambda = 10)
-  ) %>%
-  bind_rows(
-    data.frame(poissonL20) %>%
-      rename(outcome = poissonL20) %>%
-      bind_cols(lambda = 20)
-  ) %>%
-  ggplot(aes(x = outcome, 
-                    fill = as.factor(lambda))) +
-    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
-    labs(
-      x = "Number of occurrences",
-      y = "Frequency",
-      title = "5000 samples each from \nPoisson(3), Poisson(10), Poisson(20)",
-      fill = "Lambda"
-    )
-```
-]
 
 ---
 ## Summary
