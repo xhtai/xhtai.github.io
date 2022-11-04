@@ -142,11 +142,25 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - Open Intro Statistics Chapter 4.5
 
-- Fri Nov 4: Normal distribution
+- Fri Nov 4: Poisson and Normal distribution
   - Notes: [Lecture 18](https://xhtai.github.io/statdatasci/lectures/lecture18/lecture18.html)
   - Reading: 
     - Open Intro Statistics Chapter 4.1
-  - Homework 5: 
+  - Homework 5: [Html](https://xhtai.github.io/statdatasci/homework/homework5/HW5.html) [Pdf](https://xhtai.github.io/statdatasci/homework/homework5/HW5.pdf) [Rmd](https://xhtai.github.io/statdatasci/homework/homework5/HW5.Rmd)
+
+### Week 8: Normal distribution, sampling distribution 
+- Mon Nov 7: Normal distribution, sampling distributions
+  - Notes: 
+  - Reading: 
+    - Open Intro Statistics Chapter 5.1 
+  
+- Wed Nov 9: Sampling distribution of sample mean 
+  - Notes: 
+  - Reading:
+    - 
+
+- Fri Nov 11: Veteren's Day
+
 
 
   
