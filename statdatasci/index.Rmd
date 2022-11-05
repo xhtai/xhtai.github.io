@@ -157,7 +157,7 @@ There will sometimes be additional (optional) reading from:
 - Wed Nov 9: Sampling distribution of sample mean and proportion
   - Notes: 
 
-- Fri Nov 11: Veteren's Day
+- Fri Nov 11: Veterans Day
 
 ### Week 9: Confidence intervals 
 - Mon Nov 14: Introduction to confidence intervals 
