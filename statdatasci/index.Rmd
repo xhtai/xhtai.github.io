@@ -155,7 +155,7 @@ There will sometimes be additional (optional) reading from:
     - Open Intro Statistics Chapter 5.1 
   
 - Wed Nov 9: Sampling distribution of sample mean and proportion
-  - Notes: 
+  - Notes: [Lecture 20](https://xhtai.github.io/statdatasci/lectures/lecture20/lecture20.html)
 
 - Fri Nov 11: Veterans Day
 
