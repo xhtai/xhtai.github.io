@@ -161,12 +161,11 @@ There will sometimes be additional (optional) reading from:
 
 ### Week 9: Confidence intervals 
 - Mon Nov 14: Introduction to confidence intervals 
-  - Notes: 
+  - Notes: [Lecture 21](https://xhtai.github.io/statdatasci/lectures/lecture21/lecture21.html)
   - Reading:
     - Introduction to Modern Statistics Chapter 19.2.1-19.2.4
-  
+  - Homework 6: 
 - Wed Nov 16: Review
-
 - Fri Nov 18: Midterm 2
 
 
