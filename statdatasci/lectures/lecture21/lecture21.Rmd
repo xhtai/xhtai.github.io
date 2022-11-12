@@ -334,25 +334,23 @@ Source: https://www.istockphoto.com/photo/pitching-horseshoes-gm140471913-341388
 
 - What we want: "If we were to **repeat this procedure** a large number of times, sampling and constructing confidence intervals in the same way, **95% of constructed intervals would contain the true population parameter**." This translates to P(CI contains true parameter) = .95.
 
-- Recall: z-scores corresponding to particular probabilities are often written as $z_p$, where $p$ denotes the probability, e.g., $z_{.025} \approx -1.96$
+- Recall: z-scores corresponding to particular probabilities (critical values) are often written as $z_p$, where $p$ denotes the probability in the right tail, e.g., $z_{.025} \approx 1.96$
 
-- Set up: $X \sim N(\mu, \sigma^2)$. We are interested in a confidence interval for the unknown population parameter $\mu$. We use the sample mean, $\overline{X}$, constructed from a sample of size $n$, as an estimator for the population mean. Assume $n$ is large.
+- **Set up**: $X_i$ are independent and identically distributed with population mean $\mu$ and variance, $\sigma^2$. We are interested in a confidence interval for the unknown population parameter $\mu$. We use the sample mean, $\overline{X}$, constructed from a sample of size $n$, as an estimator for the population mean. Assume $n$ is large.
 
 
 ---
 ## Confidence intervals using CLT 
 
-- Set up: $X \sim N(\mu, \sigma^2)$. We are interested in a confidence interval for the unknown population parameter $\mu$. We use the sample mean, $\overline{X}$, constructed from a sample of size $n$, as an estimator for the population mean. Assume $n$ is large.
+- **Set up**: $X_i$ are independent and identically distributed with population mean $\mu$ and variance, $\sigma^2$. We are interested in a confidence interval for the unknown population parameter $\mu$. We use the sample mean, $\overline{X}$, constructed from a sample of size $n$, as an estimator for the population mean. Assume $n$ is large.
 
 - The final ingredient we will need is $\alpha$, which is the **significance level** of the confidence interval
 
-  - Confidence level = $100(1 - \alpha)$%, i.e., a **95% confidence interval** will need $\alpha = .05$
+  - **Confidence level** = $100(1 - \alpha)$%, i.e., a **95% confidence interval** will need $\alpha = .05$
   
   - The previous statement on the interpretation of CIs is more generally P(CI contains true parameter) = $1 - \alpha$ (more accurately, we need P(CI contains true parameter) $\geq 1 - \alpha$)
 
-- Confidence level = $100(1 - \alpha)$%
-
-- $z_{\frac{\alpha}{2}}$ is the z-score corresponding to a probability of $\frac{\alpha}{2}$ in the left tail. We saw earlier that for $\alpha = .05$, $z_{\frac{\alpha}{2}}$ is -1.96, i.e., $P(Z \leq -1.96) \approx .025$.
+- $z_{\frac{\alpha}{2}}$ is the z-score corresponding to a probability of $\frac{\alpha}{2}$ in the right tail. We saw earlier that for $\alpha = .05$, $z_{\frac{\alpha}{2}}$ is 1.96, i.e., $P(Z > 1.96) \approx .025$.
 
 ---
 ## Confidence intervals using CLT 
@@ -451,5 +449,5 @@ Which interval is which?
 
   - Introduction and interpretation 
   
-  - Construction using Central Limit Theorem 
+  - Construction using Central Limit Theorem: $\left(\overline{x}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{x}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)$
 
