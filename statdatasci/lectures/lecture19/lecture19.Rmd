@@ -134,15 +134,15 @@ qnorm(p = .5, mean = 0, sd = 1)
 ---
 ## Important reference points for the normal distribution 
 
-- For the standard normal, z-scores (quantiles in R) corresponding to particular probabilities are often written as $z_p$, where $p$ denotes the probability, e.g., $z_{.5} = 0$
+- For the standard normal, z-scores (quantiles in R) corresponding to particular probabilities (critical values) are often written as $z_p$, where $p$ denotes the probability in the **right tail**, e.g., $z_{.5} = 0$
 
-- The z-scores corresponding to probabilities of 0.025 (2.5%) in the left and right tails are important reference points. Specifically, $z_{.025} \approx -1.96$
+- The z-scores corresponding to probabilities of 0.025 (2.5%) in the left and right tails are important reference points. Specifically, $z_{.025} \approx 1.96$
 
-- In R, `qnorm(.025)` returns the z-score corresponding to .025, $z_{.025}$, i.e., 2.5% probability in the left tail, so we should get -1.96. By symmetry, `qnorm(.975)` will return 1.96.
+- In R, `qnorm(.025, lower.tail = FALSE)` returns the z-score corresponding to a probability of .025 in the right tail, $z_{.025}$, i.e., 2.5% probability in the right tail, so we should get 1.96. By symmetry, `qnorm(.975)` will return 1.96.
 
 .pull-left[
 ```{r}
-qnorm(.025)
+qnorm(.025, lower.tail = FALSE)
 qnorm(.975)
 ```
 ]
