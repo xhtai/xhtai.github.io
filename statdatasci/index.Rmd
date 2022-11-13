@@ -164,7 +164,7 @@ There will sometimes be additional (optional) reading from:
   - Notes: [Lecture 21](https://xhtai.github.io/statdatasci/lectures/lecture21/lecture21.html)
   - Reading:
     - Introduction to Modern Statistics Chapter 19.2.1-19.2.4
-  - Homework 6: 
+  - Homework 6: [Html](https://xhtai.github.io/statdatasci/homework/homework6/HW6.html) [Pdf](https://xhtai.github.io/statdatasci/homework/homework6/HW6.pdf) [Rmd](https://xhtai.github.io/statdatasci/homework/homework6/HW6.Rmd)
 - Wed Nov 16: Review
 - Fri Nov 18: Midterm 2
 
