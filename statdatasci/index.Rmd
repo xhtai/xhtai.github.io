@@ -168,5 +168,10 @@ There will sometimes be additional (optional) reading from:
 - Wed Nov 16: Review
 - Fri Nov 18: Midterm 2
 
+### Week 10: Confidence intervals 
+- Mon Nov 21: Confidence intervals for population mean and proportion 
+  - Notes: [Lecture 22](https://xhtai.github.io/statdatasci/lectures/lecture22/lecture22.html)
+  - Reading:
+    - Open Intro Statistics Chapter 5.2 
+- Wed Nov 23, Fri Nov 25: Thanksgiving 
 
-  
