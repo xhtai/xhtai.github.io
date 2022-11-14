@@ -193,7 +193,7 @@ Knowing the sampling distribution can help us
   - Point estimate: A **point estimate** is a single value computed from the sample data to serve as the "best guess", or estimate, for the population parameter. 
     - "Based on a survey of 300 UC Davis students, we estimate that 50% of students ride bikes on campus."
   
-  - **Interval estimate**: "Based on a survey of 300 UC Davis students, we are 95% confident that the mean proportion of students riding bikes on campus is (.45, .55)."
+  - **Interval estimate**: "Based on a survey of 300 UC Davis students, we are 95% confident that the proportion of students riding bikes on campus is (.45, .55)."
 
 - **Testing**: evaluating whether our observed sample provides evidence against some claim about the population
 
@@ -269,11 +269,11 @@ What is the population parameter of interest? What is the sample statistic?
 
 --
 
-**Population parameter**: Proportion of likely voters that strongly approve of President Biden 
+**Population parameter**: Proportion of likely voters that strongly disapprove of President Biden (red line; alternatively, strongly approve (green line))
 
 **Sample statistic**: Proportion based on 1500 likely voters (on a given day)
 
-**95% confidence interval**: (37%, 43%)
+**95% confidence interval**: (37%, 43%) for strongly disapprove
 ---
 ## Example: Vaccine efficacy
 
@@ -424,54 +424,6 @@ Since `\(n = 200\)` is large, by CLT, a 95% confidence interval for `\(\mu\)` is
 Substitute `\(\overline{x} = 24\)`, `\(z_{\frac{\alpha}{2}} = 1.96\)`, `\(\sigma = 2\)`, `\(n = 200\)`, giving `\(\left(24-1.96*2/ \sqrt{200}, 24 + 1.96*2/ \sqrt{200} \right)\)` or (23.72, 24.28)
 
 We are 95% confident that `\(\mu\)` falls within the interval (23.72, 24.28).
-
----
-
-## Confidence Interval Width: changing n
-
-`$$\left(\overline{x}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{x}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)$$`
-
-For a given `\(z_{\frac{\alpha}{2}}\)`, confidence intervals that are narrower indicate greater certainty in estimated values. We can get narrower intervals by increasing `\(n\)`, the sample size.
-
----
-
-## Earlier example
-We had `\(n = 200\)`, `\(\overline{x} = 24\)`, `\(\sigma = 2\)`, and our 95% confidence interval for `\(\mu\)` was (23.72, 24.28).
-
-What about when `\(n = 2000\)`?
-
-`$$\left(\overline{x}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{x}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)$$`
-
-Substitute `\(\overline{x} = 24\)`, `\(z_{\frac{\alpha}{2}} = 1.96\)`, `\(\sigma = 2\)`, `\(n = 2000\)`, giving `\(\left(24-1.96*2/ \sqrt{2000}, 24 + 1.96*2/ \sqrt{2000} \right)\)` or (23.91, 24.09)
-
----
-
-## Confidence Interval Width: changing alpha
-
-While 95% confidence intervals are the most common, it is simple to generate other intervals, for example 99% intervals, by replacing the z-score. E.g., for a 99% interval, we need the z-score that cuts off the upper 0.005 of the distribution, which is 2.58.
-
-
-```r
-qnorm(.995)
-```
-
-```
-## [1] 2.575829
-```
-
-In our earlier example, we had `\(n = 200\)`, `\(\overline{x} = 24\)`, `\(\sigma = 2\)`, and our 95% confidence interval for `\(\mu\)` was (23.72, 24.28). When `\(\alpha = .01\)`, a 99% confidence interval is `\(\left(24-2.58*2/ \sqrt{200}, 24 + 2.58*2/ \sqrt{200} \right)\)` or (23.64, 24.36).
-
----
-## Confidence Interval Width: changing alpha
-
-In a recent study of 50 randomly selected statistics students, they
-were asked the number of hours per week they spend studying for
-their statistics classes. The results were used to estimate the mean
-time for all statistics students with 90%, 95% and 99% confidence
-intervals. These were (not necessarily in the same order):
-`$$(7.5, 8.5) ~~~ (7.6, 8.4) ~~~(7.7, 8.3).$$`
-
-Which interval is which?
 
 ---
 ## Summary
