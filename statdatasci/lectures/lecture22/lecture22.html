@@ -60,7 +60,7 @@ layout: true
 
 - Homework 6 due today at 9PM  
 
-- Participation survey for last week and this week closes at 9PM
+- Participation survey for last week and the previous week closes at 9PM
 
 - This week's schedule: 
   - Tuesday 10-11am OH (JH, MSB 1117)
@@ -68,7 +68,7 @@ layout: true
   
 - Last homework (Homework 7) will be released next Monday 11/28 and due Friday 12/2 9PM
 
-- Final exam on 12/7 at 3:30pm 
+- Final exam on 12/7 at 3:30pm (cumulative)
 
 ---
 ## Recap
@@ -310,7 +310,7 @@ sum(CIsDF$lower &lt;= 3 &amp; CIsDF$upper &gt;= 3) / nrow(CIsDF)
 ---
 ## First case (n large)
 
-- If `\(n\)` is large, CLT still holds, and using another theorem (out of scope for this class), we can prove that 
+- If `\(n\)` is large, CLT still holds (for the `\(\sigma^2\)` version), and using another theorem (out of scope for this class), we can prove that 
 `\(\frac{\overline{X} - \mu}{S / \sqrt{n}} \approx N(0, 1)\)` 
 
 - Notice that the only difference is that we have replaced `\(\sigma\)` by `\(S\)`.
@@ -390,7 +390,7 @@ qt(.025, df = 19, lower.tail = FALSE)
 
 &lt;img src="img/normalt.png" width="30%" style="display: block; margin: auto;" /&gt;
 
-- The `\(t\)` distribution has a parameter called **degrees of freedom**, abbreviated *df*. For each possible df, there is a different `\(t\)` distribution, with the `\(t\)` distribution looking more like the normal as `\(n\)` gets large.
+- The `\(t\)` distribution has a parameter called **degrees of freedom**, abbreviated *df*. For each possible df, there is a different `\(t\)` distribution, with the `\(t\)` distribution looking more like the normal as df gets large.
 
 - As the sample size gets bigger, the `\(t\)` distribution approximates the normal distribution
 

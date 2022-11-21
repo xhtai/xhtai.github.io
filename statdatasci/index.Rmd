@@ -175,3 +175,16 @@ There will sometimes be additional (optional) reading from:
     - Open Intro Statistics Chapter 7.1.1-7.1.4
 - Wed Nov 23, Fri Nov 25: Thanksgiving 
 
+### Week 11: Hypothesis testing 
+- Mon Nov 28: Hypothesis testing framework and errors 
+  - Notes: [Lecture 23](https://xhtai.github.io/statdatasci/lectures/lecture23/lecture23.html)
+  - Reading:
+    - Open Intro Statistics Chapter 5.3
+  - Homework 7: 
+- Wed Nov 30: Hypothesis testing for population mean and proportion 
+  - Notes: 
+  - Reading:
+    - Open Intro Statistics Chapter 6.1
+- Fri Dec 2: One-sided tests 
+  - Notes: 
+
