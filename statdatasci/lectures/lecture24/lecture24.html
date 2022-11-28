@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Hypothesis Testing for Population Mean and Proportion</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Xiao Hui Tai" />
+    <meta name="date" content="2022-11-30" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Hypothesis Testing for Population Mean and Proportion
+]
+.subtitle[
+## <br><br> STA35A: Statistical Data Science 1
+]
+.author[
+### Xiao Hui Tai
+]
+.date[
+### November 30, 2022
+]
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &lt;a href="https://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt;  --&gt;
+
+---
+
+
+&lt;style type="text/css"&gt;
+.tiny .remark-code { font-size: 70%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+&lt;/style&gt;
+
+
+
+## Recap
+
+- Hypothesis testing framework
+  - Null and alternative hypotheses
+  
+  - Test statistics 
+  
+  - p-values
+  
+  - Significance level
+
+- Errors from hypothesis tests
+  - Type I error
+  
+  - Type II error and power
+
+---
+## Today
+
+- Hypothesis tests for population mean and proportion 
+
+  - p-value approach 
+
+  - Critical value approach
+
+  - Inverting a confidence interval to get a hypothesis test
+
+---
+## Recall: Hypothesis Testing for the Population Mean
+Say `\(X_i\)` has mean `\(\mu\)` and standard deviation `\(\sigma\)`. The test statistic we will use is `\(Z = \frac{\overline{X} - \mu}{\sigma / \sqrt{n}}\)`. By CLT, `\(Z \approx N(0, 1)\)` when `\(n\)` large.
+
+`\(H_0\)`: `\(\mu = \mu_0\)`  
+`\(H_A\)`: `\(\mu \neq \mu_0\)`
+
+Under `\(H_0\)`, `\(Z = \frac{\overline{X} - \mu_0}{\sigma / \sqrt{n}} \approx N(0, 1)\)`
+
+Value of test statistic: `\(z = \frac{\overline{x} - \mu_0}{\sigma / \sqrt{n}}\)`
+
+Decision rule: reject `\(H_0\)` if `\(P(|Z| \geq |z|) = P(Z \geq |z|\)` or `\(Z \leq -|z|) &lt; \alpha\)`
+
+---
+## More about p-values
+
+&lt;img src="img/nullDist3.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+- Note that all computations are done assuming that `\(H_0\)` is true, i.e., to be precise, the decision rule is reject `\(H_0\)` if the p-value `\(P(|Z| \geq |z| \mid H_0) = P(Z \geq |z|\)` or `\(Z \leq -|z| \mid H_0) &lt; \alpha\)`
+
+- The blue distribution is the distribution under the null hypothesis
+
+- `\(P(|Z| \geq |z|) = P(Z \geq |z|) + P(Z \leq -|z|)\)` (shaded area)
+
+---
+## More about p-values
+
+&lt;img src="img/nullDist3.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+- The **test statistic** is `\(z\)` (value on horizontal axis)
+
+- **p-value** = `\(P(|Z| \geq |z|)\)` under `\(H_0\)` (for a two-sided test; more details coming). It is the probability of getting a result as extreme as what we got, if `\(H_0\)` were true. 
+
+- Recall the decision rule: reject `\(H_0\)` if `\(P(|Z| \geq |z|) = P(Z \geq |z|\)` or `\(Z \leq -|z|) &lt; \alpha\)`. Alternatively, the p-value can be interpreted as the smallest significance level that we would reject `\(H_0\)`.
+
+
+---
+
+## More about p-values
+
+- The p-value is the probability of getting data like ours or more extreme data if `\(H_0\)` were true
+
+- Common misinterpretation: "p-value is the probability that `\(H_0\)` is true". The p-value is calculated *assuming* that `\(H_0\)` is true. It cannot be used to tell us how likely it is that assumption is correct.
+
+- **Decision rule**: reject `\(H_0\)` if p-value `\(&lt; \alpha\)`
+  - We will demonstrate that this produces the required property that P(reject `\(H_0\)` | `\(H_0\)` true) `\(= \alpha\)`
+
+---
+
+## More about p-values: simulation example 
+Setup: `\(X_i \sim N(\mu,4^2)\)` 
+
+`\(H_0\)`: `\(\mu = \mu_0 = 20\)`  
+`\(H_A\)`: `\(\mu \neq 20\)`
+
+Under `\(H_0\)`, `\(Z = \frac{\overline{X} - \mu_0}{\sigma / \sqrt{n}} \sim N(0, 1)\)` 
+
+Value of test statistic: `\(z = \frac{\overline{x} - \mu_0}{\sigma / \sqrt{n}}\)`
+
+Decision rule: reject `\(H_0\)` if `\(P(|Z| \geq |z|) = P(Z \geq |z|\)` or `\(Z \leq -|z|) &lt; \alpha\)`
+
+---
+
+## More about p-values: simulation example 
+1. Get 1000 draws from `\(N(20, 4^2)\)`. This is the distribution when `\(H_0\)` is true.
+2. Calculate the sample mean, `\(\bar{x}\)`, and the test statistic, `\(z = \frac{\overline{x} - 20}{4 / \sqrt{1000}}\)`
+3. Calculate the p-value, `\(P(|Z| \geq |z|)\)` 
+4. Repeat steps (1)-(3) 10,000 times
+
+
+```r
+set.seed(0)
+myDraws &lt;- t(replicate(10000, rnorm(1000, 20, 4)))
+sampleMeans &lt;- rowMeans(myDraws)
+testStat &lt;- (sampleMeans - 20)/(4/sqrt(1000))
+pValues &lt;- 2*pnorm(abs(testStat), lower.tail = FALSE)
+```
+
+---
+
+## More about p-values: simulation example 
+- The rejection rule is reject if p-value `\(&lt; \alpha\)`. What proportion out of the 10,000 experiments should we expect to reject `\(H_0\)`?
+
+--
+
+This is given by the significance level `\(\alpha\)`. When `\(\alpha = .05\)`, we should reject 5% of the time to produce the required property that P(reject `\(H_0\)` | `\(H_0\)` true) `\(= \alpha\)` (more accurately, this is `\(\leq \alpha\)`, meaning that when `\(H_0\)` is true we mistakenly reject 5% or less when `\(\alpha = .05\)`)
+
+
+```r
+sum(pValues &lt; .05)
+```
+
+```
+## [1] 486
+```
+
+```r
+mean(pValues &lt; .05)
+```
+
+```
+## [1] 0.0486
+```
+
+---
+
+## More about p-values: simulation example 
+
+
+```r
+ggplot(data.frame(pValues), aes(x = pValues)) +
+  geom_histogram(binwidth = .05, boundary = 0) + 
+  labs(title = "10,000 p-values",
+       x = "p-value",
+       y = "Count")
+```
+
+&lt;img src="lecture24_files/figure-html/unnamed-chunk-7-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+- Note: the p-value is actually a random variable and it follows a uniform distribution (out of scope for this class)
+
+---
+## Critical value approach
+
+&lt;img src="img/nullDist1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+- The **rejection region** is `\(|z| &gt; z_{\alpha/2}\)` or `\(|z| &gt; 1.96\)` when `\(\alpha = .05\)`. This is a **portion of the x-axis**. 
+
+- The boundaries of the rejection region are called **critical values**.
+
+- **Significance level** is the probability over the rejection region, the red area: `\(P(|Z| &gt; z_{\frac{\alpha}{2}}) = \alpha\)`
+
+---
+## Hypothesis Testing for the Population Mean ( `\(\sigma\)` known)
+Say `\(X_i\)` has mean `\(\mu\)` and standard deviation `\(\sigma\)`. The test statistic we will use is `\(Z = \frac{\overline{X} - \mu}{\sigma / \sqrt{n}}\)`. By CLT, `\(Z \approx N(0, 1)\)` when `\(n\)` large.
+
+`\(H_0\)`: `\(\mu = \mu_0\)`  
+`\(H_A\)`: `\(\mu \neq \mu_0\)`
+
+Under `\(H_0\)`, `\(Z = \frac{\overline{X} - \mu_0}{\sigma / \sqrt{n}} \approx N(0, 1)\)`
+
+Value of test statistic: `\(z = \frac{\overline{x} - \mu_0}{\sigma / \sqrt{n}}\)`
+
+Decision rule: 
+- p-value approach: reject `\(H_0\)` if `\(P(|Z| \geq z) = P(Z \geq |z|\)` or `\(Z \leq -|z|) &lt; \alpha\)`
+- Critical value approach: reject if `\(|z| &gt; z_{\alpha/2}\)` or `\(|z| &gt; 1.96\)` when `\(\alpha = .05\)`
+
+---
+## Hypothesis Testing for the Population Mean ( `\(\sigma\)` unknown)
+Say `\(X_i\)` has mean `\(\mu\)` and standard deviation `\(\sigma\)`. The test statistic we will use is `\(Z = \frac{\overline{X} - \mu}{S / \sqrt{n}}\)`. `\(Z \approx N(0, 1)\)` when `\(n\)` large. (Here notice that `\(\sigma\)` has been replaced by `\(S\)`)
+
+`\(H_0\)`: `\(\mu = \mu_0\)`  
+`\(H_A\)`: `\(\mu \neq \mu_0\)`
+
+Under `\(H_0\)`, `\(Z = \frac{\overline{X} - \mu_0}{S / \sqrt{n}} \approx N(0, 1)\)` (Here notice that `\(\sigma\)` has been replaced by `\(S\)`)
+
+Value of test statistic: `\(z = \frac{\overline{x} - \mu_0}{s / \sqrt{n}}\)` (replace `\(\sigma\)` by `\(s\)`)
+
+Decision rule: 
+- p-value approach: reject `\(H_0\)` if `\(P(|Z| \geq z) = P(Z \geq |z|\)` or `\(Z \leq -|z|) &lt; \alpha\)`
+- Critical value approach: reject if `\(|z| &gt; z_{\alpha/2}\)` or `\(|z| &gt; 1.96\)` when `\(\alpha = .05\)`
+
+---
+## Hypothesis Testing for the Population Proportion (alternative 1, using `\(\hat{p}\)`)
+Say `\(X_i \sim\)` Bernoulli(p). The test statistic we will use is `\(Z = \frac{\hat{P} - p}{\sqrt{\hat{P}(1-\hat{P})} / \sqrt{n}}\)`. `\(Z \approx N(0, 1)\)` when `\(n\)` large. 
+
+`\(H_0\)`: `\(p = p_0\)`  
+`\(H_A\)`: `\(p \neq p_0\)`
+
+Under `\(H_0\)`, `\(Z = \frac{\hat{P} - p_0}{\sqrt{\hat{P}(1-\hat{P})} / \sqrt{n}} \approx N(0, 1)\)`
+
+Value of test statistic: `\(z = \frac{\hat{p} - p_0}{\sqrt{\hat{p}(1-\hat{p})} / \sqrt{n}}\)`
+
+Decision rule: 
+- p-value approach: reject `\(H_0\)` if `\(P(|Z| \geq z) = P(Z \geq |z|\)` or `\(Z \leq -|z|) &lt; \alpha\)`
+- Critical value approach: reject if `\(|z| &gt; z_{\alpha/2}\)` or `\(|z| &gt; 1.96\)` when `\(\alpha = .05\)`
+
+---
+## Hypothesis Testing for the Population Proportion (alternative 2, using `\(p_0\)`)
+Say `\(X_i \sim\)` Bernoulli(p). The test statistic we will use is `\(Z = \frac{\hat{P} - p}{\sqrt{p(1-p)} / \sqrt{n}}\)`. By CLT, `\(Z \approx N(0, 1)\)` when `\(n\)` large. 
+
+`\(H_0\)`: `\(p = p_0\)`  
+`\(H_A\)`: `\(p \neq p_0\)`
+
+Under `\(H_0\)`, `\(Z = \frac{\hat{P} - p_0}{\sqrt{p_0(1-p_0)} / \sqrt{n}} \approx N(0, 1)\)` (Here notice that `\(p\)` is replaced by `\(p_0\)`)
+
+Value of test statistic: `\(z = \frac{\hat{p} - p_0}{\sqrt{p_0(1-p_0)} / \sqrt{n}}\)`
+
+Decision rule: 
+- p-value approach: reject `\(H_0\)` if `\(P(|Z| \geq z) = P(Z \geq |z|\)` or `\(Z \leq -|z|) &lt; \alpha\)`
+- Critical value approach: reject if `\(|z| &gt; z_{\alpha/2}\)` or `\(|z| &gt; 1.96\)` when `\(\alpha = .05\)`
+
+---
+## Example 1: test for population mean, `\(\sigma\)` known
+Assume that the heights of redwood trees in California follow a distribution with standard deviation 25 feet. Let the random variable `\(X_i\)` denote the height of the `\(i\)`th redwood tree. 
+
+We guess that the unknown population mean is 230, and would like to test this hypothesis against the alternative that `\(\mu \neq 230\)`. We collect data on the heights of 300 randomly sampled redwood trees. Assume the samples are indepedent. We get a sample mean of 220. Construct a hypothesis test at a 5% significance level. 
+
+---
+## Example 1: test for population mean, `\(\sigma\)` known (critical value approach)
+
+`\(H_0\)`: `\(\mu = 230\)`  
+`\(H_A\)`: `\(\mu \neq 230\)`
+
+Test statistic: `\(Z = \frac{\overline{X} - \mu}{\sigma / \sqrt{n}}\)`. By CLT, `\(Z \approx N(0, 1)\)` when `\(n\)` large.
+
+Under `\(H_0\)`, `\(Z = \frac{\overline{X} - 230}{25 / \sqrt{300}} \approx N(0, 1)\)` 
+
+Value of test statistic: `\(z = \frac{220 - 230}{25 / \sqrt{300}} = -6.928203\)` 
+
+The rejection region is `\(|z| &gt; 1.96\)` when `\(\alpha = .05\)`
+
+`\(|z|  = 6.928203 &gt; 1.96\)`. The test statistic is in the rejection region, so we reject `\(H_0\)` that `\(\mu = 230\)`. There is sufficient evidence at a 5% level to reject the null hypothesis that the mean height of a Californian redwood tree is 230 feet. 
+
+---
+## Example 1: test for population mean, `\(\sigma\)` known (p-value approach)
+
+(Same set up as last slide)
+
+Value of test statistic: `\(z = \frac{220 - 230}{25 / \sqrt{300}} = -6.928203\)` 
+
+The p-value is `\(P(|Z| \geq |z|)\)`, in this case `\(P(|Z| \geq 6.928203) = P(Z \geq 6.928203 \text{ or } Z \leq 6.928203)\)`
+
+
+```r
+2*pnorm(-6.928203)
+```
+
+```
+## [1] 4.262199e-12
+```
+
+The p-value is less than .05, so we reject `\(H_0\)` that `\(\mu = 230\)`. There is sufficient evidence at a 5% level to reject the null hypothesis that the mean height of a Californian redwood tree is 230 feet. 
+
+---
+## Example 2: test for population mean, `\(\sigma\)` unknown
+Assume that the heights of redwood trees in California follow a distribution with unknown mean and standard deviation. Let the random variable `\(X_i\)` denote the height of the `\(i\)`th redwood tree. 
+
+We guess that the unknown population mean is 230, and would like to test this hypothesis against the alternative that `\(\mu \neq 230\)`. We collect data on the heights of 300 randomly sampled redwood trees. Assume the samples are indepedent. We get a sample mean of 220 and sample standard deviation of 24. Construct a hypothesis test at a 5% significance level. 
+
+---
+## Example 2: test for population mean, `\(\sigma\)` unknown
+
+
+`\(H_0\)`: `\(\mu = 230\)`  
+`\(H_A\)`: `\(\mu \neq 230\)`
+
+Test statistic: `\(Z = \frac{\overline{X} - \mu}{S / \sqrt{n}}\)`. `\(Z \approx N(0, 1)\)` when `\(n\)` large.
+
+Under `\(H_0\)`, `\(Z = \frac{\overline{X} - 230}{S / \sqrt{300}} \approx N(0, 1)\)` 
+
+Value of test statistic: `\(z = \frac{220 - 230}{24 / \sqrt{300}} = -7.216878\)` 
+
+The rejection region is `\(|z| &gt; 1.96\)` when `\(\alpha = .05\)`
+
+`\(|z|  = 7.216878 &gt; 1.96\)`. The test statistic is in the rejection region, so we reject `\(H_0\)` that `\(\mu = 230\)`. There is sufficient evidence at a 5% level to reject the null hypothesis that the mean height of a Californian redwood tree is 230 feet. 
+
+---
+## Example 3: test for population proportion
+We are interested in the population proportion of likely voters that approve of President Biden. We guess that this is .4 and would like to test this hypothesis against the alternative that it is different from .4. We conduct a random sample of 1500 likely voters, and the proportion among them that approve of President Biden is .3. Construct a hypothesis test at a 5% significance level to determine if our hypothesis is plausible. 
+
+---
+## Example 3: test for population proportion
+
+
+Let `\(X_i\)` be a binary random variable denoting whether or not the `\(i\)`th sampled voter approves of President Biden. Now, `\(X_i \sim\)` Bernoulli(p), and by CLT, `\(Z = \frac{\hat{P} - p}{\sqrt{p(1-p)} / \sqrt{n}} \approx N(0, 1)\)` when `\(n\)` large. 
+
+`\(H_0\)`: `\(p = .4\)`  
+`\(H_A\)`: `\(p \neq .4\)`
+
+Under `\(H_0\)`, `\(Z = \frac{\hat{P} - .4}{\sqrt{.4(1-.4)} / \sqrt{1500}} \approx N(0, 1)\)`
+
+Value of test statistic: `\(z = \frac{.3 - .4}{\sqrt{.4(1-.4)} / \sqrt{1500}} = -7.91\)`
+
+The rejection region is `\(|z| &gt; 1.96\)` when `\(\alpha = .05\)`
+
+`\(|z|  = 7.91 &gt; 1.96\)`. The test statistic is in the rejection region, so we reject `\(H_0\)` that `\(p = .4\)`. There is sufficient evidence at a 5% level to reject the null hypothesis that the population proportion of likely voters that approve of President Biden is .4. 
+
+---
+## Different critical values
+
+Recall: The boundaries of the rejection region are called critical values
+
+&lt;img src="img/nullDist2.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+.small[
+
+```r
+qnorm(.95) # alpha = .1 (5% in each tail)
+```
+
+```
+## [1] 1.644854
+```
+
+```r
+qnorm(.975) # alpha = .05 (2.5% in each tail)
+```
+
+```
+## [1] 1.959964
+```
+
+```r
+qnorm(.995) # alpha = .01 (.5% in each tail)
+```
+
+```
+## [1] 2.575829
+```
+]
+
+---
+## Rejection regions
+
+Decision rule: Reject `\(H_0\)` if `\(|z| &gt; z_{\alpha/2}\)`
+
+&lt;img src="img/nullDist2.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+- `\(|z| &gt; 2.58\)` for `\(\alpha = .01\)`
+- `\(|z| &gt; 1.96\)` for `\(\alpha = .05\)`
+- `\(|z| &gt; 1.64\)` for `\(\alpha = .1\)`
+
+---
+## Summary of rejection rules 
+
+For two-sided z-tests:
+
+| `\(\alpha\)` | Critical value approach | p-value approach
+|:------|:------:|:---------:|:----------------:|:---------------:|
+| .01 | `\(\lvert z \rvert &gt; z_{\alpha/2} \approx 2.58\)` | `\(P(\lvert Z\rvert \geq \lvert z\rvert \mid H_0) &lt; .01\)`|
+| .05 | `\(\lvert z \rvert &gt; 1.96\)` | `\(P(\lvert Z\rvert \geq \lvert z\rvert \mid H_0) &lt; .05\)`|
+| .1 | `\(\lvert z \rvert &gt; 1.64\)`| `\(P(\lvert Z\rvert \geq \lvert z\rvert \mid H_0) &lt; .1\)`|
+
+
+---
+## Recall: Significance level
+
+- We defined the significance level, `\(\alpha\)`, when discussing confidence intervals: 
+  - Confidence level = `\(100(1 - \alpha)\)`%, i.e., a 95% confidence interval will need `\(\alpha = .05\)`
+  - P(CI contains true parameter) = `\(1 - \alpha\)`.
+  
+- The significance level is also an important ingredient in a hypothesis test
+
+- It defines the tolerable **Type I error**: the probability of rejecting `\(H_0\)` **when `\(H_0\)` is actually true**. `\(\alpha=0.05\)` is often used.
+
+- There is a direct correspondence between hypothesis tests and confidence intervals
+
+---
+## Correspondence between Hypothesis Tests and Confidence Intervals
+
+Consider the following proposal: 
+
+- Given a hypothesis about `\(\mu\)` that we wish to test, we simply check if the value falls within the constructed confidence interval. If it does, do not reject our hypothesis. If it doesn't, reject. 
+
+- Example: suppose we are testing `\(H_0: \mu=0.02\)` versus `\(H_A: \mu \neq 0.02\)` using a significance level of `\(\alpha=0.05\)`. We construct a 95% confidence interval for `\(\mu\)` and use the following decision rule.
+
+  - If `\(0.02\)` falls outside the confidence interval, reject `\(H_0\)`
+  - If `\(0.02\)` falls inside the confidence interval, do not reject `\(H_0\)`
+
+---
+## Correspondence between Hypothesis Tests and Confidence Intervals
+
+- Consider the confidence interval `\(\left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)\)`
+  - We proved that P(CI contains true parameter) = `\(1 - \alpha\)`, i.e., `\(P(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \leq \mu \leq \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}) = 1 - \alpha\)`
+
+- Consider a hypothesis test with `\(H_0: \mu = \mu_0\)`. We want a test with level `\(\alpha\)`. This means we need P(reject `\(H_0\)` when `\(H_0\)` true) `\(= \alpha\)`. 
+
+- Proposal: reject `\(H_0\)` if `\(\mu_0 \notin \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)\)`
+
+- For this to be a valid hypothesis test (controls type I error), we need to show that P(reject `\(H_0\)` when `\(H_0\)` true) = `\(.05\)` using our proposed rejection rule 
+---
+
+## Proof
+
+We have `\(P(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \leq \mu \leq \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}) = 1 - \alpha\)`
+
+- Proposal: reject `\(H_0\)` if `\(\mu_0 \notin \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)\)`
+
+- Want to show: P(reject `\(H_0\)` when `\(H_0\)` true) `\(= \alpha\)` 
+
+- When `\(H_0\)` is true, `\(\mu = \mu_0\)`, so our first line becomes `\(P(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \leq \mu_0 \leq \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}) = 1 - \alpha\)`, i.e., `\(P(\mu_0 \in \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)) = 1 - \alpha\)`
+
+Hence, 
+$$
+`\begin{aligned}
+P\text{(reject }H_0\text{ when }H_0\text{ true}) &amp;= P(\mu_0 \notin \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)) \\
+&amp; = 1 - (1 - \alpha) \\
+&amp; = \alpha
+\end{aligned}`
+$$
+
+---
+
+## Correspondence between Hypothesis Tests and Confidence Intervals
+
+Hence our decision rule for an `\(\alpha\)`-level test for `\(H_0: \mu = \mu_0\)` is reject `\(H_0\)` if `\(\mu_0 \notin \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)\)`
+
+In other words, given a sample, we construct a `\(100(1-\alpha)\)`% confidence interval for `\(\mu\)`. 
+
+Given a hypothesis about `\(\mu\)` that we wish to test, we simply check if the value falls within the constructed confidence interval. If it does, do not reject our hypothesis. If it doesn't, reject. 
+
+- Some intuition: Confidence intervals can be thought of as representing the range of population means that are "compatible with the data". Looking at a confidence interval can hence help us decide if a proposed value for the population mean is reasonable.
+
+---
+## Previous Example
+Let `\(X_1, X_2, ..., X_{200}\)` be independent `\(N(\mu, 4)\)` random variables. We collect the sample of size 200, and the resulting sample mean, `\(\overline{x}\)`, is `\(\overline{x} = 24\)`. What is a 95% confidence interval for `\(\mu\)`?
+
+We are 95% confident that `\(\mu\)` falls within the interval (23.72, 24.28).
+
+--
+
+Consider the hypothesis that `\(\mu = 24\)`. Do we have sufficient evidence to reject this hypothesis at a 5% level? 
+
+How about `\(\mu = 25\)`? 
+
+
+---
+## Summary
+
+- Hypothesis tests for population mean and proportion 
+
+  - p-value approach: reject `\(H_0\)` if `\(P(|Z| \geq |z| \mid H_0) = P(Z \geq |z|\)` or `\(Z \leq -|z| \mid H_0) &lt; \alpha\)`
+
+  - Critical value approach: reject if `\(|z| &gt; z_{\alpha/2}\)` 
+
+  - Inverting a confidence interval to get a hypothesis test: reject `\(H_0\)` if `\(\mu_0 \notin \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)\)`
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

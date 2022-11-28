@@ -182,7 +182,7 @@ There will sometimes be additional (optional) reading from:
     - Open Intro Statistics Chapter 5.3
   - Homework 7: [Html](https://xhtai.github.io/statdatasci/homework/homework7/HW7.html) [Pdf](https://xhtai.github.io/statdatasci/homework/homework7/HW7.pdf) [Rmd](https://xhtai.github.io/statdatasci/homework/homework7/HW7.Rmd)
 - Wed Nov 30: Hypothesis testing for population mean and proportion 
-  - Notes: 
+  - Notes: [Lecture 24](https://xhtai.github.io/statdatasci/lectures/lecture24/lecture24.html)
   - Reading:
     - Open Intro Statistics Chapter 6.1
 - Fri Dec 2: One-sided tests 
