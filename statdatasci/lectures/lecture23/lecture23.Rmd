@@ -42,7 +42,15 @@ library(emo)
 
 - Final exam on 12/7 at 3:30pm 
 
-- Practice problems on Canvas
+  - Practice problems on Canvas
+
+  - Same rules as midterms 
+  
+  - Additional info provided: **Critical value**: $z_{.025} \approx 1.96$
+  
+- Midterm 2 grades released this afternoon 
+
+- Grade breakdown 
 
 ---
 ## Recap
