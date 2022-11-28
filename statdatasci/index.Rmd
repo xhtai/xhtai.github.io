@@ -180,7 +180,7 @@ There will sometimes be additional (optional) reading from:
   - Notes: [Lecture 23](https://xhtai.github.io/statdatasci/lectures/lecture23/lecture23.html)
   - Reading:
     - Open Intro Statistics Chapter 5.3
-  - Homework 7: 
+  - Homework 7: [Html](https://xhtai.github.io/statdatasci/homework/homework7/HW7.html) [Pdf](https://xhtai.github.io/statdatasci/homework/homework7/HW7.pdf) [Rmd](https://xhtai.github.io/statdatasci/homework/homework7/HW7.Rmd)
 - Wed Nov 30: Hypothesis testing for population mean and proportion 
   - Notes: 
   - Reading:

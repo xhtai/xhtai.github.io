@@ -1,0 +1,52 @@
+---
+title: "Homework 7"
+author: ""
+date: "DUE: December 2 2022, 9PM"
+output: 
+  pdf_document
+---
+
+## Instructions
+Upload a PDF file, named with your UC Davis email ID and homework number (e.g., `xtai_hw1.pdf`), to Gradescope (accessible through Canvas). You will give the commands to answer each question in its own code block, which will also produce output that will be automatically embedded in the output file. Each answer must be supported by written statements as well as any code used. 
+
+All code used to produce your results must be shown in your PDF file (e.g., do not use `echo = FALSE` or `include = FALSE` as options anywhere). `Rmd` files do not need to be submitted, but may be requested by the TA and must be available when the assignment is submitted. 
+
+Students may choose to collaborate with each other on the homework, but must clearly indicate with whom they collaborated. 
+
+# Palmer Penguins 
+Let's go back to the Palmer Penguins example from Lecture 7. This data set contains information on 344 penguins in the Palmer Archipelago. Assume these are independent samples from the population of penguins in the Palmer Archipelago. You can load the data set using the following code. 
+
+```{r}
+library(palmerpenguins)
+dplyr::glimpse(penguins)
+```
+
+## Problem 1: Investigating body mass (30 points)
+
+a. What is a point estimate for the population mean body mass of penguins in the Palmer Archipelago? What about for the population variance? 
+
+b. Find a 99% confidence interval for the population mean body mass of penguins in the Palmer Archipelago. 
+
+c. Does your confidence interval in (a) require any additional assumptions on the distribution of body mass of penguins in the Palmer Archipelago? Why or why not? 
+
+d. What is the interpretation of your confidence interval in (a)? 
+
+
+## Problem 2: Investigating bill length (30 points)
+
+a. Construct a binary variable for whether the bill length is greater than 45mm. 
+
+b. Find a 95% confidence interval for the population proportion of penguins with bills longer than 45mm.
+
+c. If we had a sample size of 1000, would the confidence intervals be narrower or wider? Why? 
+
+## Problem 3: Investigating flipper length (30 points)
+a. Construct a 90% confidence interval for the population mean flipper length of penguins in the Palmer Archipelago. What is the interpretation of your confidence interval? 
+
+b. We are interested in testing the hypothesis that the population mean flipper length is 200mm. Conduct a hypothesis test at the 10% level. 
+
+## Appendix
+
+```{r eval = TRUE}
+sessionInfo()
+```
