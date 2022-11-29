@@ -89,7 +89,7 @@ knitr::include_graphics("img/nullDist3.png")
 knitr::include_graphics("img/nullDist3.png")
 ```
 
-- The **test statistic** is $z$ (value on horizontal axis)
+- The value of the **test statistic** is $z$ (value on horizontal axis)
 
 - **p-value** = $P(|Z| \geq |z|)$ under $H_0$ (for a two-sided test; more details coming). It is the probability of getting a result as extreme as what we got, if $H_0$ were true. 
 
@@ -267,7 +267,7 @@ $|z|  = 6.928203 > 1.96$. The test statistic is in the rejection region, so we r
 
 Value of test statistic: $z = \frac{220 - 230}{25 / \sqrt{300}} = -6.928203$ 
 
-The p-value is $P(|Z| \geq |z|)$, in this case $P(|Z| \geq 6.928203) = P(Z \geq 6.928203 \text{ or } Z \leq 6.928203)$
+The p-value is $P(|Z| \geq |z|)$, in this case $P(|Z| \geq 6.928203) = P(Z \geq 6.928203 \text{ or } Z \leq -6.928203)$
 
 ```{r}
 2*pnorm(-6.928203)
