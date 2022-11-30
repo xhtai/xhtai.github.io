@@ -3,7 +3,9 @@ title: "Homework 7"
 author: ""
 date: "DUE: December 2 2022, 9PM"
 output: 
-  pdf_document
+  html_document: 
+    toc: true
+    toc_float: true
 ---
 
 ## Instructions
@@ -27,9 +29,9 @@ a. What is a point estimate for the population mean body mass of penguins in the
 
 b. Find a 99% confidence interval for the population mean body mass of penguins in the Palmer Archipelago. 
 
-c. Does your confidence interval in (a) require any additional assumptions on the distribution of body mass of penguins in the Palmer Archipelago? Why or why not? 
+c. Does your confidence interval in (b) require any additional assumptions on the distribution of body mass of penguins in the Palmer Archipelago? Why or why not? 
 
-d. What is the interpretation of your confidence interval in (a)? 
+d. What is the interpretation of your confidence interval in (b)? 
 
 
 ## Problem 2: Investigating bill length (30 points)
