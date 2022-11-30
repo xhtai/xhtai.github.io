@@ -83,8 +83,6 @@ layout: true
 
   - Critical value approach
 
-  - Inverting a confidence interval to get a hypothesis test
-
 ---
 ## Recall: Hypothesis Testing for the Population Mean
 Say `\(X_i\)` has mean `\(\mu\)` and standard deviation `\(\sigma\)`. The test statistic we will use is `\(Z = \frac{\overline{X} - \mu}{\sigma / \sqrt{n}}\)`. By CLT, `\(Z \approx N(0, 1)\)` when `\(n\)` large.
@@ -434,75 +432,6 @@ For two-sided z-tests:
 - There is a direct correspondence between hypothesis tests and confidence intervals
 
 ---
-## Correspondence between Hypothesis Tests and Confidence Intervals
-
-Consider the following proposal: 
-
-- Given a hypothesis about `\(\mu\)` that we wish to test, we simply check if the value falls within the constructed confidence interval. If it does, do not reject our hypothesis. If it doesn't, reject. 
-
-- Example: suppose we are testing `\(H_0: \mu=0.02\)` versus `\(H_A: \mu \neq 0.02\)` using a significance level of `\(\alpha=0.05\)`. We construct a 95% confidence interval for `\(\mu\)` and use the following decision rule.
-
-  - If `\(0.02\)` falls outside the confidence interval, reject `\(H_0\)`
-  - If `\(0.02\)` falls inside the confidence interval, do not reject `\(H_0\)`
-
----
-## Correspondence between Hypothesis Tests and Confidence Intervals
-
-- Consider the confidence interval `\(\left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)\)`
-  - We proved that P(CI contains true parameter) = `\(1 - \alpha\)`, i.e., `\(P(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \leq \mu \leq \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}) = 1 - \alpha\)`
-
-- Consider a hypothesis test with `\(H_0: \mu = \mu_0\)`. We want a test with level `\(\alpha\)`. This means we need P(reject `\(H_0\)` when `\(H_0\)` true) `\(= \alpha\)`. 
-
-- Proposal: reject `\(H_0\)` if `\(\mu_0 \notin \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)\)`
-
-- For this to be a valid hypothesis test (controls type I error), we need to show that P(reject `\(H_0\)` when `\(H_0\)` true) = `\(.05\)` using our proposed rejection rule 
----
-
-## Proof
-
-We have `\(P(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \leq \mu \leq \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}) = 1 - \alpha\)`
-
-- Proposal: reject `\(H_0\)` if `\(\mu_0 \notin \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)\)`
-
-- Want to show: P(reject `\(H_0\)` when `\(H_0\)` true) `\(= \alpha\)` 
-
-- When `\(H_0\)` is true, `\(\mu = \mu_0\)`, so our first line becomes `\(P(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \leq \mu_0 \leq \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}) = 1 - \alpha\)`, i.e., `\(P(\mu_0 \in \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)) = 1 - \alpha\)`
-
-Hence, 
-$$
-`\begin{aligned}
-P\text{(reject }H_0\text{ when }H_0\text{ true}) &amp;= P(\mu_0 \notin \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)) \\
-&amp; = 1 - (1 - \alpha) \\
-&amp; = \alpha
-\end{aligned}`
-$$
-
----
-
-## Correspondence between Hypothesis Tests and Confidence Intervals
-
-Hence our decision rule for an `\(\alpha\)`-level test for `\(H_0: \mu = \mu_0\)` is reject `\(H_0\)` if `\(\mu_0 \notin \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)\)`
-
-In other words, given a sample, we construct a `\(100(1-\alpha)\)`% confidence interval for `\(\mu\)`. 
-
-Given a hypothesis about `\(\mu\)` that we wish to test, we simply check if the value falls within the constructed confidence interval. If it does, do not reject our hypothesis. If it doesn't, reject. 
-
-- Some intuition: Confidence intervals can be thought of as representing the range of population means that are "compatible with the data". Looking at a confidence interval can hence help us decide if a proposed value for the population mean is reasonable.
-
----
-## Previous Example
-Let `\(X_1, X_2, ..., X_{200}\)` be independent `\(N(\mu, 4)\)` random variables. We collect the sample of size 200, and the resulting sample mean, `\(\overline{x}\)`, is `\(\overline{x} = 24\)`. What is a 95% confidence interval for `\(\mu\)`?
-
-We are 95% confident that `\(\mu\)` falls within the interval (23.72, 24.28).
-
---
-
-Consider the hypothesis that `\(\mu = 24\)`. Do we have sufficient evidence to reject this hypothesis at a 5% level? 
-
-How about `\(\mu = 25\)`? 
-
-
----
 ## Summary
 
 - Hypothesis tests for population mean and proportion 
@@ -510,8 +439,6 @@ How about `\(\mu = 25\)`?
   - p-value approach: reject `\(H_0\)` if `\(P(|Z| \geq |z| \mid H_0) = P(Z \geq |z|\)` or `\(Z \leq -|z| \mid H_0) &lt; \alpha\)`
 
   - Critical value approach: reject if `\(|z| &gt; z_{\alpha/2}\)` 
-
-  - Inverting a confidence interval to get a hypothesis test: reject `\(H_0\)` if `\(\mu_0 \notin \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)\)`
 
 - Test statistics (all approximately standard normal):
 
