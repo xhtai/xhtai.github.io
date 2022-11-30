@@ -45,6 +45,8 @@ library(ggplot2)
   
   - Type II error and power
 
+- Hypothesis test for population mean 
+
 ---
 ## Today
 
@@ -453,3 +455,11 @@ How about $\mu = 25$?
   - Critical value approach: reject if $|z| > z_{\alpha/2}$ 
 
   - Inverting a confidence interval to get a hypothesis test: reject $H_0$ if $\mu_0 \notin \left(\overline{X}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{X}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)$
+
+- Test statistics (all approximately standard normal):
+
+  - Population mean when $\sigma$ known: $Z = \frac{\overline{X} - \mu}{\sigma / \sqrt{n}}$
+  - Population mean when $\sigma$ unknown: $Z = \frac{\overline{X} - \mu}{S / \sqrt{n}}$
+  - Population proportion (option 1): $Z = \frac{\hat{P} - p}{\sqrt{\hat{P}(1-\hat{P})} / \sqrt{n}}$
+  - Population proportion (option 2): $Z = \frac{\hat{P} - p}{\sqrt{p(1-p)} / \sqrt{n}}$
+  
