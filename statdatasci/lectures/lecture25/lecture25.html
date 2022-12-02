@@ -287,7 +287,7 @@ How do we get the p-value in R? `pnorm(z)`, where `z` is the value of the test s
 ## Example 1: test for population mean, `\(\sigma\)` known
 Assume that the heights of redwood trees in California follow a distribution with standard deviation 25 feet. Let the random variable `\(X_i\)` denote the height of the `\(i\)`th redwood tree. 
 
-Now, we are only interested in tall trees, so we would like to do a test with the alternative that `\(\mu &gt; 230\)`. We collect data on the heights of 300 randomly sampled redwood trees. Assume the samples are indepedent. We get a sample mean of 240. Construct a hypothesis test at a 5% significance level. 
+Now, we are only interested in tall trees, so we would like to do a test with the alternative that `\(\mu &gt; 230\)`. We collect data on the heights of 300 randomly sampled redwood trees. Assume the samples are indepedent. We get a sample mean of 240. Conduct a hypothesis test at a 5% significance level. 
 
 ---
 ## Example 1: one-sided z-test for population mean, `\(\sigma\)` known (critical value approach)
@@ -329,7 +329,7 @@ The p-value is less than .05, so we reject `\(H_0\)` that `\(\mu \leq 230\)`. Th
 ## Example 2: one-sided z-test for population mean, `\(\sigma\)` unknown
 Assume that the heights of redwood trees in California follow a distribution with unknown mean and standard deviation. Let the random variable `\(X_i\)` denote the height of the `\(i\)`th redwood tree. 
 
-Now, we are only interested in tall trees, so we would like to do a test with the alternative that `\(\mu &gt; 230\)`. We collect data on the heights of 300 randomly sampled redwood trees. Assume the samples are indepedent. We get a sample mean of 240 and sample standard deviation of 24. Construct a hypothesis test at a 5% significance level. 
+Now, we are only interested in tall trees, so we would like to do a test with the alternative that `\(\mu &gt; 230\)`. We collect data on the heights of 300 randomly sampled redwood trees. Assume the samples are indepedent. We get a sample mean of 240 and sample standard deviation of 24. Conduct a hypothesis test at a 5% significance level. 
 
 ---
 ## Example 2: one-sided z-test for population mean, `\(\sigma\)` unknown
@@ -349,7 +349,7 @@ The rejection region is `\(z &gt; 1.64\)` when `\(\alpha = .05\)`
 
 ---
 ## Example 3: test for population proportion
-We are interested in the population proportion of likely voters that approve of President Biden. We only care about low approval ratings, so our alternative hypothesis is `\(p &lt; .4\)`. We conduct a random sample of 1500 likely voters, and the proportion among them that approve of President Biden is .3. Construct a hypothesis test at a 10% significance level. 
+We are interested in the population proportion of likely voters that approve of President Biden. We only care about low approval ratings, so our alternative hypothesis is `\(p &lt; .4\)`. We conduct a random sample of 1500 likely voters, and the proportion among them that approve of President Biden is .3. Conduct a hypothesis test at a 10% significance level. 
 
 ---
 ## Example 3: test for population proportion
@@ -365,7 +365,7 @@ Value of test statistic: `\(z = \frac{.3 - .4}{\sqrt{.4(1-.4)} / \sqrt{1500}} = 
 
 The rejection region is `\(z &lt; -1.281552\)` when `\(\alpha = .1\)` (we get this using `qnorm(.1)`)
 
-`\(z  = -7.91 &lt; -1.281552\)`. The test statistic is in the rejection region, so we reject `\(H_0\)` that `\(p \geq .4\)`. There is sufficient evidence at a 5% level to reject the null hypothesis that the population proportion of likely voters that approve of President Biden is greater than or equal to .4. 
+`\(z  = -7.91 &lt; -1.281552\)`. The test statistic is in the rejection region, so we reject `\(H_0\)` that `\(p \geq .4\)`. There is sufficient evidence at a 10% level to reject the null hypothesis that the population proportion of likely voters that approve of President Biden is greater than or equal to .4. 
 
 ---
 
@@ -381,7 +381,24 @@ The rejection region is `\(z &lt; -1.281552\)` when `\(\alpha = .1\)` (we get th
 - One-sided vs. two-sided tests 
 
   - Decision rules using critical values and p-values 
-  
+
+---
+## Course content 
+
+1. Fundamentals of R
+  - Overview of data types and structures
+  - Data manipulation and data visualization tools  
+
+2. Descriptive statistics for numerical and categorical data
+
+3. Probability
+  - Rules of probability computation; conditional probability
+  - Basic probability models: Binomial, Normal and Poisson 
+
+4. Statistical inference
+  - Sampling distributions of sample mean and sample proportion
+  - Hypothesis testing and confidence intervals for population mean and population proportion
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
