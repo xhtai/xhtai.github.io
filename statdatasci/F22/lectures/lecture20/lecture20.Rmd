@@ -1,0 +1,411 @@
+---
+title: "Sampling distribution of sample mean and proportion"
+subtitle: "<br><br> STA35A: Statistical Data Science 1"
+author: "Xiao Hui Tai"
+date: November 9, 2022
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      # ratio: "16:9"
+      # highlightLines: true
+      # highlightStyle: solarized-light
+      countIncrementalSlides: false
+---
+
+```{r child = "../setup.Rmd"}
+```
+
+```{css, echo = FALSE}
+.tiny .remark-code { font-size: 70%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+```
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(knitr)
+```
+
+## Recap
+  
+- Introduction to sampling distributions
+
+---
+## Today
+  
+- Central Limit Theorem
+
+- Sampling distribution of the sample mean
+
+- Sampling distribution of the sample proportion 
+
+---
+## Recall: Sampling Distribution of the Sample Mean 
+
+We sample 1000 times from a $N(11, 1.5^2)$ distribution. Now we repeat the experiment, i.e., get a different sample of 1000 observations. If we repeat the experiment an infinite number of times, what distribution of sample means would we get? This is known as the **sampling distribution**.
+
+1. Take a sample of size $n$ and calculate its mean $\overline{x}_1$
+2. Take a second sample of the same size and calculate its mean $\overline{x}_2$
+3. Repeat this many times to get a dataset of sample means $\overline{x}_1, \overline{x}_2, \ldots$
+
+What is the distribution of the *statistics* $\overline{x}_1, \overline{x}_2, \overline{x}_3, \ldots$?
+
+We cannot repeat an infinite number of times, but we do this 10,000 times in R.
+
+---
+
+## Recall: Sampling Distributions in R
+```{r}
+set.seed(0)
+repeat10000 <- t(replicate(n = 10000, rnorm(1000, 11, 1.5)))
+means10000 <- rowMeans(repeat10000)
+
+set.seed(0)
+repeat10000_n50 <- t(replicate(n = 10000, rnorm(50, 11, 1.5)))
+means10000_n50 <- rowMeans(repeat10000_n50)
+```
+
+---
+## Recall: Sampling Distribution of the Sample Mean 
+
+.pull-left[
+```{r echo = FALSE, out.width = "100%"}
+data.frame(shoesMean = means10000, sampleSize = 1000) %>%
+  bind_rows(
+    data.frame(means10000_n50, sampleSize = 50) %>%
+      rename(shoesMean = means10000_n50)
+  )  %>%
+  ggplot(aes(x = shoesMean,
+             fill = as.factor(sampleSize))) +
+  geom_density(alpha = .5) +
+  labs(x = "Mean shoe size",
+       y = "Density",
+       title = "Sampling distribution from N(11, 1.5^2)",
+       fill = "Sample size")  +
+  scale_fill_viridis_d()
+ # guides(fill = "none")
+```
+]
+.small[
+.pull-right[
+How would we describe this distribution?
+
+- Center
+  - The distribution is centered at 11, which is the same as the population parameter
+
+- Spread
+  - The variability looks to be much smaller than the original distribution (the original distribution has standard deviation 1.5)
+  - A larger sample size produces more precise estimates 
+  
+- Shape
+  - The distribution is symmetric and bell-shaped, and it resembles a normal distribution.
+]
+]
+
+---
+## Central Limit Theorem
+
+- The **Central Limit Theorem** says that for any distribution with a well-defined mean and variance, the distribution of **sample means** for a sample of size $n$ is approximately normal. 
+
+- Formally: for a population with mean $\mu$ and standard deviation $\sigma$, taking independent samples $X_1, ..., X_n$, the following three important properties of the distribution of the sample mean $\overline{X} = \frac{\sum_{i = 1}^n X_i}{n}$ hold:
+
+  - The mean of the sampling distribution is identical to the population mean $\mu$, i.e., $E(\overline{X}) = \mu$
+
+  - The standard deviation of the sampling distribution is $\frac{\sigma}{\sqrt{n}}$, i.e., $Var(\overline{X}) = \frac{\sigma^2}{n}$
+
+  - For $n$ large enough (in the limit as $n \rightarrow \infty$), the shape of the sampling distribution is approximately normal (Gaussian), i.e., $\overline{X} \approx N(\mu, \frac{\sigma^2}{n})$ 
+
+- This result has strong implications in many areas of statistics, including in construction of confidence intervals and in hypothesis testing.
+
+---
+## Intuition
+
+- The average of many measurements of the same unknown quantity tends to give a better estimate than a single measurement
+
+  - If we want to know the population mean test score of the class, getting information from a sample of 10 students is better than asking a single student
+  
+- Recall the law of large numbers: as the sample size grows, the sample mean gets closer to the expected value, or population mean
+
+```{r echo = FALSE}
+set.seed(0) # so results are reproducible 
+inputP <- .3
+bernoulliDraws <- rbinom(n = 5000, size = 1, prob = inputP)
+myMeans <- data.frame(sampleSize = 1:5000, myMean = NA)
+meanFun <- function(inputSampSize, outcomes) {
+  return(mean(outcomes[1:inputSampSize]))
+}
+myMeans$myMean <- sapply(myMeans$sampleSize, meanFun, bernoulliDraws)
+```
+
+```{r echo = FALSE}
+myMeans %>%
+  ggplot(aes(x = sampleSize, y = myMean)) +
+  geom_line() +
+  labs(x = "Sample size",
+       y = "Sample mean",
+       title = "Illustration of law of large numbers with p = .3")
+```
+
+---
+## Intuition
+.pull-left[
+```{r echo = FALSE, out.width = "100%"}
+myMeans %>%
+  ggplot(aes(x = sampleSize, y = myMean)) +
+  geom_line() +
+  labs(x = "Sample size",
+       y = "Sample mean",
+       title = "Illustration of law of large numbers with p = .3")
+```
+
+- Note that here we are using Bernoulli(.3), so $\mu = p = .3$ and $\sigma^2 = p(1-p) = .3(.7)$
+]
+
+.pull-right[
+- In this illustration, you can think of each point plotted as a single draw from $\overline{X} \sim N(\mu, \frac{\sigma^2}{n})$, as we vary $n$, the sample size, plotted on the horizontal axis.
+
+- The Central Limit Theorem tells us the distribution of $\overline{X}$, at each value of $n$.
+
+- For large values of $n$, we see that $Var(\overline{X}) = \frac{\sigma^2}{n}$ gets very small, so any draw from this distribution will be very close to $E(\overline{X}) = \mu$.
+
+]
+
+---
+## Intuition
+
+- We can see the same narrowing distribution (smaller variance) with our shoes example:
+
+```{r echo = FALSE, out.width = "70%"}
+data.frame(shoesMean = means10000, sampleSize = 1000) %>%
+  bind_rows(
+    data.frame(means10000_n50, sampleSize = 50) %>%
+      rename(shoesMean = means10000_n50)
+  )  %>%
+  ggplot(aes(x = shoesMean,
+             fill = as.factor(sampleSize))) +
+  geom_density(alpha = .5) +
+  labs(x = "Mean shoe size",
+       y = "Density",
+       title = "Sampling distribution from N(11, 1.5^2)",
+       fill = "Sample size")  +
+  scale_fill_viridis_d()
+ # guides(fill = "none")
+```
+
+
+- Nice applet where you can adjust the sample size and other parameters and see the impact on the sampling distribution: http://demonstrations.wolfram.com/SamplingDistributionOfTheSampleMean/
+
+
+---
+## Central Limit Theorem
+
+For a population with mean $\mu$ and standard deviation $\sigma$, taking independent samples $X_1, ..., X_n$, the following three important properties of the distribution of the sample mean $\overline{X}  = \frac{\sum_{i = 1}^n X_i}{n}$ hold:
+
+  - The mean of the sampling distribution is identical to the population mean $\mu$, i.e., $E(\overline{X}) = \mu$
+
+  - The standard deviation of the sampling distribution is $\frac{\sigma}{\sqrt{n}}$, i.e., $Var(\overline{X}) = \frac{\sigma^2}{n}$
+
+  - For $n$ large enough (in the limit as $n \rightarrow \infty$), the shape of the sampling distribution is approximately normal (Gaussian), i.e., $\overline{X} \approx N(\mu, \frac{\sigma^2}{n})$ 
+
+
+Notice that this does not restrict the distribution of the underlying $X_1, ..., X_n$ in any way. These can be normal, binomial, Poisson, ... 
+
+---
+## Central Limit Theorem with different underlying distributions
+
+- All we need to know is $E(X_i)$ or $\mu$, and $Var(X_i)$ or $\sigma^2$
+
+- For normally distributed random variables with mean $\mu$ and variance $\sigma^2$, $\overline{X} \sim N(\mu, \frac{\sigma^2}{n})$ (actually, we don't need CLT for this. Why?)
+
+- For Bernoulli distributed random variables with probability of success $p$, $Var(X_i)= p(1-p)$, $\overline{X} = \hat{P} \approx N(p, \frac{p(1-p)}{n})$ 
+
+- For Poisson( $\lambda$ ) distributed random variables with $E(X_i) = \lambda$ and $Var(X_i) = \lambda$, $\overline{X} \approx N(\lambda, \frac{\lambda}{n})$ 
+---
+
+## How Large is Large Enough for n?
+
+- A commonly used rule of thumb is $n > 50$
+
+- For Bernoulli data, one rule of thumb is that $n$ should be large enough that $n p>5$ and $n(1- p)>5$. Sometimes you also see $n p>10$ and $n(1- p)> 10$. These are just rules of thumb and approximations!
+
+  - So if p is around a half, you need a smaller sample size than if p is close to the boundaries of 0 or 1.
+  
+  - We will see this again when we talk about the normal approximation for the binomial
+
+
+---
+
+## Example: Normal data
+
+In the shoe size example, we have $X_1, ..., X_n \sim N(11, 1.5^2)$. Say we collected 1000 samples, so the sample size $n = 1000$. What distribution does the sampling distribution of the sample mean follow? What is $P(\overline{X} < 10.9)$? Calculate this in two ways: using the original distribution, and using the standard normal distribution. 
+
+--
+
+By the Central Limit Theorem, $\overline{X} \approx N(\mu, \frac{\sigma^2}{n})$, in this case $N(11, \frac{1.5^2}{1000})$. 
+
+Standardizing, we have $P(\overline{X} < 10.9) = P(\frac{\overline{X} - 11}{1.5/\sqrt{1000}} < \frac{10.9 - 11}{1.5/\sqrt{1000}}) = P(Z < \frac{-.1}{1.5/\sqrt{1000}})$
+
+```{r}
+pnorm(10.9, mean = 11, sd = sqrt(1.5^2/1000))
+pnorm((10.9 - 11)/(1.5/sqrt(1000)) ) # standardized version
+```
+
+---
+
+## Example: Bernoulli data
+
+Assume that 67% of the population in India has had a prior COVID infection. Define the variable $X_i$ to take value 1 if the $i$th randomly sampled Indian resident has been infected, and let it be 0 otherwise. Assume the samples are independent. 
+
+What distribution does $X_i$ follow? What are the parameters? What is the mean? What is the variance? 
+
+--
+- The random variable $X_i$ follows a Bernoulli distribution. A Bernoulli random variable has mean $p$ and variance $p(1- p)$. Here $p=0.67$.
+
+- If we take a random sample, the sample mean $\overline{x}=\hat{p}$ is an *estimate* of this probability (it's just the fraction of 1's)
+
+- If we take repeated samples of Indian residents and compute the proportion with prior infection in each, what values will we see?  Will we get 0.67 each time?
+
+---
+
+## Simulation: Prior Infections
+
+Again, we perform 10000 experiments where each time we sample from a Bernoulli distribution with `prob = 0.67` and different values of `n`.
+
+```{r}
+set.seed(0)
+n10 <- t(replicate(n = 10000, rbinom(10, size = 1, prob = .67)))
+n10 <- rowMeans(n10)
+
+set.seed(0)
+n50 <- t(replicate(n = 10000, rbinom(50, size = 1, prob = .67)))
+n50 <- rowMeans(n50)
+
+set.seed(0)
+n100 <- t(replicate(n = 10000, rbinom(100, size = 1, prob = .67)))
+n100 <- rowMeans(n100)
+
+set.seed(0)
+n500 <- t(replicate(n = 10000, rbinom(500, size = 1, prob = .67)))
+n500 <- rowMeans(n500)
+
+```
+
+---
+## Simulation: Prior Infections
+
+.small[
+.pull-left[
+```{r eval = FALSE}
+data.frame(propCovid = n10, sampleSize = 10) %>%
+  bind_rows(
+    data.frame(n50, sampleSize = 50) %>%
+      rename(propCovid = n50)
+  ) %>%
+  bind_rows(
+    data.frame(n100, sampleSize = 100) %>%
+      rename(propCovid = n100)
+  )%>%
+  bind_rows(
+    data.frame(n500, sampleSize = 500) %>%
+      rename(propCovid = n500)
+  ) %>%
+  ggplot(aes(x = propCovid,
+             fill = as.factor(sampleSize))) +
+  geom_density(alpha = .5) +
+  labs(x = "Proportion of people with prior infection",
+       y = "Density",
+       title = "Sampling distribution from Bernoulli(.67)",
+       fill = "Sample size")  +
+  scale_fill_viridis_d()
+```
+]
+]
+
+.pull-right[
+```{r echo = FALSE, out.width = "100%"}
+data.frame(propCovid = n10, sampleSize = 10) %>%
+  bind_rows(
+    data.frame(n50, sampleSize = 50) %>%
+      rename(propCovid = n50)
+  ) %>%
+  bind_rows(
+    data.frame(n100, sampleSize = 100) %>%
+      rename(propCovid = n100)
+  )%>%
+  bind_rows(
+    data.frame(n500, sampleSize = 500) %>%
+      rename(propCovid = n500)
+  ) %>%
+  ggplot(aes(x = propCovid,
+             fill = as.factor(sampleSize))) +
+  geom_density(alpha = .5) +
+  labs(x = "Proportion of people with prior infection",
+       y = "Density",
+       title = "Sampling distribution from Bernoulli(.67)",
+       fill = "Sample size")  +
+  scale_fill_viridis_d()
+```
+]
+
+
+---
+## Sampling distribution of the sample proportion
+
+- The sample proportion is the same as the sample mean, when the distribution is Bernoulli
+
+- The sample proportion is $\hat{P} = \frac{1}{n}\sum_{i = 1}^n X_i$, where $X_i \sim$ Bernoulli(p).
+
+- Earlier example: 
+
+Assume that 67% of the population in India has had a prior COVID infection. Define the variable $X_i$ to take value 1 if the $i$th randomly sampled Indian resident has been infected, and let it be 0 otherwise. Assume the samples are independent. 
+
+- The random variable $X$ is Bernoulli. A Bernoulli random variable has mean $p$ and variance $p(1- p)$. Here $p=0.67$.
+
+- The sample proportion that had a prior infection is just the fraction of 1's
+
+- The sample mean is defined as $\overline{X} = \frac{\sum_{i = 1}^n{X_i}}{n}$. When $X_i$ is Bernoulli, it can only take the values 0 and 1, and the sample mean is the same as the sample proportion. $\overline{X} = \hat{P}$.
+
+
+---
+## Sampling distribution of the sample proportion
+
+- Recall: the Central Limit Theorem does not restrict the distribution of the underlying $X_1, ..., X_n$ in any way. They can be normal, binomial, Poisson, ... 
+
+- $\overline{X}  \approx N(\mu, \frac{\sigma^2}{n})$ 
+
+- We get the sampling distribution of the sample proportion for free!
+
+- When $X_i \sim$ Bernoulli(p), $\mu = p$ and $\sigma^2 = p(1-p)$.
+
+- By the Central Limit Theorem,
+$\overline{X} = \hat{P} \approx N(p, \frac{p(1-p)}{n})$ 
+
+
+---
+## Example: cats
+We ask a random sample of 435 people if they like cats. Assume that the probability that a randomly selected person likes cats is 75%. Let $X_i$ be the Bernoulli variable representing whether or not the $i$th person likes cats. What is the sampling distribution of the sample proportion? What is the probability that the sample proportion is smaller than .7? 
+
+--
+
+By the Central Limit Theorem, $\overline{X} = \hat{P} = \frac{\sum_{i = 1}^n{X_i}}{n} \approx N(p, \frac{p(1-p)}{n})$.
+
+In this case, $\overline{X} = \hat{P} = \frac{\sum_{i = 1}^{435}{X_i}}{435} \approx N(.75, \frac{.75(1-.75)}{435})$.
+
+```{r}
+pnorm(.7, mean = .75, sd = sqrt(.75*(1-.75)/435))
+```
+
+---
+## Summary
+  
+- Central Limit Theorem: $\overline{X} \approx N(\mu, \frac{\sigma^2}{n})$ 
+
+- Sampling distribution of the sample mean
+
+- Sampling distribution of the sample proportion: $\overline{X} = \hat{P} \approx N(p, \frac{p(1-p)}{n})$ 
+
+
+

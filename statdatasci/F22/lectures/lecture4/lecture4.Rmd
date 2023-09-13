@@ -1,0 +1,359 @@
+---
+title: "Fundamentals of R: More Data Structures"
+subtitle: "<br><br> STA35A: Statistical Data Science 1"
+author: "Xiao Hui Tai"
+date: September 28, 2022
+output:
+  xaringan::moon_reader:
+    # css: ["../xaringan-themer.css", "../slides.css"]
+    lib_dir: libs
+    nature:
+      # ratio: "16:9"
+      # highlightLines: true
+      # highlightStyle: solarized-light
+      countIncrementalSlides: false
+---
+
+```{r child = "../setup.Rmd"}
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+```
+
+## Recap: Vectors and arrays 
+
+--
+- Vectors: 
+  - Additional attributes: Factors, dates
+  - Vector arithmetic
+  - Other functions on vectors
+    - Comparison operators 
+    - Indexing operators
+  - Named components
+
+- Arrays
+  - Vectors with dimension
+
+
+---
+## Today
+- More on arrays
+
+- Matrices
+
+- Introduction to lists
+
+---
+
+## Arrays with more than two dimensions
+- A $4 \times 3 \times 2$ array has `dim` length 3, elements are 4, 3 and 2
+
+```{r}
+myArr <- array(1:24, dim = c(4, 3, 2))
+myArr
+```
+
+---
+
+## Arrays with more than two dimensions
+- A $4 \times 3 \times 2$ array has `dim` length 3, elements are 4, 3 and 2
+
+```{r}
+dim(myArr)
+```
+
+Some other properties of the array:
+```{r}
+is.vector(myArr)
+is.array(myArr)
+```
+
+---
+```{r}
+typeof(myArr)
+str(myArr)
+attributes(myArr)
+```
+`typeof()` returns the type of the _elements_
+
+`str()` gives the **structure**: here, a numeric array, with three dimensions, size/indices, and then the actual numbers
+
+---
+
+## Arrays: Accessing and operating on arrays
+
+Can access a 2-D array either by pairs of indices or by the underlying vector:
+```{r}
+x <- c(7, 8, 10, 45)
+(x.arr <- array(x, dim = c(2, 2)))
+x.arr[1, 2]
+x.arr[3]
+```
+Remember that arrays are filled column-wise
+
+---
+## Arrays: Accessing and operating on arrays
+Changing array values:
+```{r}
+x.arr
+x.arr[3] <- 0
+x.arr
+```
+
+---
+## Arrays: Accessing and operating on arrays
+Omitting an index means "all of it":
+```{r}
+x.arr[c(1:2), 2]
+x.arr[, 2]
+```
+
+---
+## Functions on arrays
+Using a vector-style function on an array structure will go down to the underlying vector, *unless* the function is set up to handle arrays specially:
+```{r}
+which(x.arr > 9)
+```
+
+Many functions _do_ preserve array structure:
+```{r}
+y.arr <- -x.arr
+y.arr + x.arr
+```
+
+---
+Other functions specifically act on each row or column of the array separately:
+```{r}
+x.arr
+rowSums(x.arr)
+colSums(x.arr)
+```
+
+---
+## Matrices
+In R, a matrix is a specialization of a 2D array
+
+```{r}
+(myMat <- matrix(c(40, 1, 60, 3), nrow = 2))
+is.array(myMat)
+is.matrix(myMat)
+```
+
+Other arguments to `matrix()`:
+- `ncol`
+- `byrow = TRUE` to fill by rows.
+
+---
+## Matrices
+- Element-wise operations with the usual arithmetic and comparison operators work
+```{r}
+myMat / 3
+```
+
+Compare whole matrices with `identical()` or `all.equal()`
+```{r}
+identical(myMat, x.arr)
+```
+
+---
+## Matrix multiplication
+Gets a special operator
+
+```{r}
+six.sevens <- matrix(rep(7, 6), ncol = 3)
+six.sevens
+myMat %*% six.sevens # [2x2] * [2x3]
+```
+
+<small>What happens if you try `six.sevens %*% myMat`?</small>
+
+---
+## Multiplying matrices and vectors
+Numeric vectors can act like proper vectors:
+```{r}
+myVec <- c(10, 20)
+myMat %*% myVec
+myVec %*% myMat
+```
+<small>R silently casts the vector as either a row or a column matrix (to make the matrix multiplication operation make sense)</small>
+
+---
+## Other matrix operators
+
+Transpose:
+```{r}
+t(myMat)
+```
+
+Determinant:
+```{r}
+det(myMat)
+```
+
+Diagonal:
+The `diag()` function can extract the diagonal entries of a matrix:
+```{r}
+diag(myMat)
+```
+
+---
+## Other matrix operators
+Inverting a matrix:
+```{r}
+solve(myMat)
+myMat %*% solve(myMat)
+```
+
+---
+## Doing the same thing to each row or column
+- We already saw this with arrays:
+  - `rowSums()`, `colSums()` return the row and column sums
+  - Also the mean: `rowMeans()`, `colMeans()`
+  - Input is a matrix, output is a vector
+
+```{r}
+myMat; colMeans(myMat)
+```
+
+---
+- `summary()`: vector-style summary of *column*
+```{r}
+myMat; summary(myMat)
+```
+---
+`apply()`, takes 3 arguments, `X`, `MARGIN`, `FUN`
+- `X`: the array or matrix
+- `MARGIN`: 1 for rows and 2 for columns
+- `FUN`: name of the function to apply to each
+
+```{r}
+rowMeans(myMat)
+apply(myMat, 1, mean)
+```
+
+<small>What would `apply(myMat, 1, max)` do?</small>
+---
+## Lists
+- Lists are a generic container
+- Sequence of values, _not_ necessarily all of the same type
+
+```{r}
+my.distribution <- list("exponential", 7, FALSE)
+my.distribution
+```
+
+- Most of what you can do with vectors you can also do with lists
+- This is an unnamed list
+---
+## Lists
+- Elements can be vectors of any type, or other data structures like matrices
+- This is a named list
+
+```{r}
+l <- list(
+  x = 1:4,
+  y = c("hi", "hello", "jello"),
+  z = matrix(c(TRUE, FALSE, FALSE, FALSE), nrow = 2)
+)
+l
+```
+
+
+---
+## Lists
+Make an empty list to fill in later
+```{r}
+myList <- vector(mode = "list", length = 4)
+myList
+```
+---
+## Accessing pieces of lists
+Can use `[ ]` as with vectors  
+or use `[[ ]]`, but only with a single index  
+`[[ ]]` drops names and structures, `[ ]` does not
+
+```{r}
+l[1]
+l[[1]]
+```
+<small>Does `l[[1:2]]` work?</small>
+
+
+---
+## Accessing pieces of lists
+Helpful illustration from R for Data Science (Chapter 20.5.3):
+
+.pull-left[
+```{r echo=FALSE, out.width="110%"}
+knitr::include_graphics("img/pepperShaker1.png")
+```
+]
+
+.pull-right[
+```{r echo=FALSE, out.width="110%"}
+knitr::include_graphics("img/pepperShaker2.png")
+```
+]
+---
+## Working with lists 
+.pull-left[
+```{r}
+my.distribution
+```
+]
+
+.pull-right[
+```{r}
+is.character(my.distribution)
+is.character(my.distribution[[1]])
+my.distribution[[2]]^2
+```
+]
+
+<small>What happens if you try `my.distribution[2]^2`?</small>
+<small>What happens if you try `[[ ]]` on a vector?</small>
+
+---
+## Filling in lists 
+```{r}
+myList[[1]] <- 1:10
+myList
+```
+<small>What happens if you try `myList[1] <- 1:10`?</small>
+
+---
+## Expanding and contracting lists
+Add to lists with `c()` (also works with vectors):
+```{r}
+my.distribution <- c(my.distribution, 7)
+my.distribution
+```
+
+---
+Chop off the end of a list by setting the length to something smaller (also works with vectors):
+```{r}
+length(my.distribution)
+length(my.distribution) <- 3
+my.distribution
+```
+
+---
+## Summary
+--
+
+- More on arrays
+  - Accessing array values
+  - Operating on arrays
+  - Array functions 
+
+- Matrices
+  - Matrix multiplication
+  - Other matrix operators 
+
+- Introduction to lists 
+  - Accessing pieces of lists 
+  - Working with lists 
+
+

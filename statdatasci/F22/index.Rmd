@@ -1,0 +1,190 @@
+---
+output: html_document
+title: >
+  Statistical Data Science 1: Fall 2022
+author: "STA 35A"
+
+---
+
+**Instructor**: Xiao Hui Tai (xtai [at] ucdavis [dot] edu)
+
+**TA**: Jedidiah Harwood (jedharwood [at] ucdavis [dot] edu)
+
+**Class time**:   
+Lectures are Mondays, Wednesdays and Fridays, 11-11:50 AM at Hunt 100.  
+Discussions (labs) are run by Jedidiah Harwood on Thursdays 12:10-1 PM (Section A01), 1:10-2 PM (Section A02) at TLC 2212.
+
+**Office hours**:  
+Jedidiah Harwood: Tuesdays 10-11 AM, Thursdays 10:30-11:30 AM at MSB 1117   
+Xiao Hui Tai: Mondays 9:30-10:30 AM at MSB 4242
+
+**Syllabus**: [here](https://xhtai.github.io/statdatasci/F22/syllabus.html).
+
+**Piazza**: [here](https://piazza.com/class/l81yk31iqv85wu). 
+
+**Textbooks**:
+There are three required textbooks. They are all available online and are free. 
+
+1. R for Data Science by Hadley Wickham and Garrett Grolemund. 1st Edition, 2017. Available [here](https://r4ds.had.co.nz/index.html).
+2. Introduction to Modern Statistics by Mine Çetinkaya-Rundel and Johanna Hardin. 1st Edition, 2021. Available [here](https://openintro-ims.netlify.app/index.html).
+3. OpenIntro Statistics by David Diez, Mine Cetinkaya-Rundel and Christopher Barr. 4th Edition, 2019. Available [here](https://www.openintro.org/book/os/).
+
+There will sometimes be additional (optional) reading from: 
+
+1. Art of R Programming by Norman Matloff. 2011. (Look on Google)
+
+## Class Schedule
+
+### Week 1: Introduction, overview of data types	
+- Wed Sept 21: Introduction and R Basics
+  - Notes: [Lecture 1](https://xhtai.github.io/statdatasci/F22/lectures/lecture1/lecture1.html)
+  - Reading: 
+    - R for Data Science Chapters 1, 2, 27
+
+- Fri Sept 23: Overview of data types and data structures, vectors
+  - Notes: [Lecture 2](https://xhtai.github.io/statdatasci/F22/lectures/lecture2/lecture2.html)
+  - Reading: 
+    - R for Data Science Chapter 4, 20
+    - Additional reading: Matloff Chapter 2
+
+
+
+### Week 2: Overview of data types
+- Mon Sept 26: More on vectors, arrays
+  - Notes: [Lecture 3](https://xhtai.github.io/statdatasci/F22/lectures/lecture3/lecture3.html)
+  - Reading: 
+    - R for Data Science Chapter 20
+    - Additional reading: Matloff Chapter 3
+  
+- Wed Sept 28: Arrays, matrices, lists
+  - Notes: [Lecture 4](https://xhtai.github.io/statdatasci/F22/lectures/lecture4/lecture4.html)
+  - Reading: 
+    - R for Data Science Chapter 20 
+    - Additional reading: Matloff Chapters 3, 4 
+
+- Fri Sept 30: Lists, data frames, exploratory data analysis
+  - Notes: [Lecture 5](https://xhtai.github.io/statdatasci/F22/lectures/lecture5/lecture5.html)
+  - Reading: 
+    - Additional reading: Matloff Chapter 5
+  - Homework 1: [Html](https://xhtai.github.io/statdatasci/F22/homework/homework1/HW1.html) [Rmd](https://xhtai.github.io/statdatasci/F22/homework/homework1/HW1.Rmd)
+  
+  
+  
+### Week 3: Data manipulation and data visualization tools
+- Mon Oct 3: Exploratory data analysis, data manipulation tools 
+  - Notes: [Lecture 6](https://xhtai.github.io/statdatasci/F22/lectures/lecture6/lecture6.html)
+  - Reading: 
+    - R for Data Science Chapter 5
+
+- Wed Oct 5: Data manipulation and visualization tools 
+  - Notes: [Lecture 7](https://xhtai.github.io/statdatasci/F22/lectures/lecture7/lecture7.html)
+  - Reading: 
+    - R for Data Science Chapter 3 
+
+- Fri Oct 7: Data visualization tools 
+  - Notes: [Lecture 8](https://xhtai.github.io/statdatasci/F22/lectures/lecture8/lecture8.html)
+  - Reading: 
+    - R for Data Science Chapter 3 
+  - Homework 2: [Html](https://xhtai.github.io/statdatasci/F22/homework/homework2/HW2.html) [Rmd](https://xhtai.github.io/statdatasci/F22/homework/homework2/HW2.Rmd)
+  
+
+### Week 4: Data visualization tools, Descriptive statistics
+- Mon Oct 10: Data visualization tools, descriptive statistics 
+  - Notes: [Lecture 9](https://xhtai.github.io/statdatasci/F22/lectures/lecture9/lecture9.html)
+  - Reading: 
+    - Open Intro Statistics Chapter 1
+
+- Wed Oct 12: Describing numerical distributions
+  - Notes: [Lecture 10](https://xhtai.github.io/statdatasci/F22/lectures/lecture10/lecture10.html)
+  - Reading: 
+    - Open Intro Statistics Chapter 2 
+
+- Fri Oct 14: Numerical and categorical data 
+  - Notes: [Lecture 11](https://xhtai.github.io/statdatasci/F22/lectures/lecture11/lecture11.html)
+  - Reading: 
+    - R for Data Science Chapter 7
+  - Homework 3: [Html](https://xhtai.github.io/statdatasci/F22/homework/homework3/HW3.html) [Rmd](https://xhtai.github.io/statdatasci/F22/homework/homework3/HW3.Rmd)
+  
+
+### Week 5: Descriptive statistics
+- Mon Oct 17: Numerical and categorical data
+  - Notes: [Lecture 12](https://xhtai.github.io/statdatasci/F22/lectures/lecture12/lecture12.html)
+  
+- Wed Oct 19: Review
+
+- Fri Oct 21: Midterm 1
+
+### Week 6: Introduction to probability
+- Mon Oct 24: Introduction to probability 
+  - Notes: [Lecture 13](https://xhtai.github.io/statdatasci/F22/lectures/lecture13/lecture13.html)
+  - Reading: 
+    - Open Intro Statistics Chapter 3.1
+  
+- Wed Oct 26: Conditional, marginal and joint probability; Bayes' Theorem
+  - Notes: [Lecture 14](https://xhtai.github.io/statdatasci/F22/lectures/lecture14/lecture14.html)
+  - Reading: 
+    - Open Intro Statistics Chapter 3.2
+
+- Fri Oct 28: Random variables and common distributions
+  - Notes: [Lecture 15](https://xhtai.github.io/statdatasci/F22/lectures/lecture15/lecture15.html)
+  - Reading: 
+    - Open Intro Statistics Chapter 3.4, 3.5
+  - Homework 4: [Html](https://xhtai.github.io/statdatasci/F22/homework/homework4/HW4.html) [Pdf](https://xhtai.github.io/statdatasci/F22/homework/homework4/HW4.pdf)
+  
+### Week 7: Common distributions
+- Mon Oct 31: Bernoulli and binomial distribution
+  - Notes: [Lecture 16](https://xhtai.github.io/statdatasci/F22/lectures/lecture16/lecture16.html)
+  - Reading: 
+    - Open Intro Statistics Chapter 4.3
+  
+- Wed Nov 2: Binomial and Poisson distribution
+  - Notes: [Lecture 17](https://xhtai.github.io/statdatasci/F22/lectures/lecture17/lecture17.html)
+  - Reading:
+    - Open Intro Statistics Chapter 4.5
+
+- Fri Nov 4: Poisson and Normal distribution
+  - Notes: [Lecture 18](https://xhtai.github.io/statdatasci/F22/lectures/lecture18/lecture18.html)
+  - Reading: 
+    - Open Intro Statistics Chapter 4.1
+  - Homework 5: [Html](https://xhtai.github.io/statdatasci/F22/homework/homework5/HW5.html) [Pdf](https://xhtai.github.io/statdatasci/F22/homework/homework5/HW5.pdf) [Rmd](https://xhtai.github.io/statdatasci/F22/homework/homework5/HW5.Rmd)
+
+### Week 8: Normal distribution, sampling distributions 
+- Mon Nov 7: Normal distribution, sampling distributions
+  - Notes: [Lecture 19](https://xhtai.github.io/statdatasci/F22/lectures/lecture19/lecture19.html)
+  - Reading: 
+    - Open Intro Statistics Chapter 5.1 
+  
+- Wed Nov 9: Sampling distribution of sample mean and proportion
+  - Notes: [Lecture 20](https://xhtai.github.io/statdatasci/F22/lectures/lecture20/lecture20.html)
+
+- Fri Nov 11: Veterans Day
+
+### Week 9: Confidence intervals 
+- Mon Nov 14: Introduction to confidence intervals 
+  - Notes: [Lecture 21](https://xhtai.github.io/statdatasci/F22/lectures/lecture21/lecture21.html)
+  - Reading:
+    - Open Intro Statistics Chapter 5.2 
+  - Homework 6: [Html](https://xhtai.github.io/statdatasci/F22/homework/homework6/HW6.html) [Pdf](https://xhtai.github.io/statdatasci/F22/homework/homework6/HW6.pdf) [Rmd](https://xhtai.github.io/statdatasci/F22/homework/homework6/HW6.Rmd)
+- Wed Nov 16: Review
+- Fri Nov 18: Midterm 2
+
+### Week 10: Confidence intervals 
+- Mon Nov 21: Confidence intervals for population mean and proportion 
+  - Notes: [Lecture 22](https://xhtai.github.io/statdatasci/F22/lectures/lecture22/lecture22.html)
+  - Reading:
+    - Open Intro Statistics Chapter 7.1.1-7.1.4
+- Wed Nov 23, Fri Nov 25: Thanksgiving 
+
+### Week 11: Hypothesis testing 
+- Mon Nov 28: Hypothesis testing framework and errors 
+  - Notes: [Lecture 23](https://xhtai.github.io/statdatasci/F22/lectures/lecture23/lecture23.html)
+  - Reading:
+    - Open Intro Statistics Chapter 5.3
+  - Homework 7: [Html](https://xhtai.github.io/statdatasci/F22/homework/homework7/HW7.html) [Pdf](https://xhtai.github.io/statdatasci/F22/homework/homework7/HW7.pdf) [Rmd](https://xhtai.github.io/statdatasci/F22/homework/homework7/HW7.Rmd)
+- Wed Nov 30: Hypothesis testing for population mean and proportion 
+  - Notes: [Lecture 24](https://xhtai.github.io/statdatasci/F22/lectures/lecture24/lecture24.html)
+  - Reading:
+    - Open Intro Statistics Chapter 6.1
+- Fri Dec 2: Confidence intervals and one-sided tests 
+  - Notes: [Lecture 25](https://xhtai.github.io/statdatasci/F22/lectures/lecture25/lecture25.html)
+

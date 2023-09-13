@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Descriptive Statistics: Numerical and Categorical Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Xiao Hui Tai" />
+    <meta name="date" content="2022-10-14" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Descriptive Statistics: Numerical and Categorical Data
+]
+.subtitle[
+## <br><br> STA35A: Statistical Data Science 1
+]
+.author[
+### Xiao Hui Tai
+]
+.date[
+### October 14, 2022
+]
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &lt;a href="https://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt;  --&gt;
+
+---
+
+&lt;style type="text/css"&gt;
+.tiny .remark-code { font-size: 60%; }
+.small .remark-code { font-size: 80%; }
+&lt;/style&gt;
+
+
+
+
+## Reminders
+
+- Lab 4 due Monday at 9pm, participation survey closes at the same time
+
+- Homework 3 assigned this afternoon, due Thursday 9pm
+
+- Midterm next Friday, October 21
+  - Midterm will cover material until Monday, October 17
+  - Closed-book
+  - You don't need your computers
+  - Wednesday review (JH), Thursday no lab, instead office hours (XHT, virtual), no homework assigned on Friday
+
+---
+## Recap
+--
+
+- Describing numerical distributions
+
+  - Histograms
+  
+  - Measures of central tendency: mean, median, mode
+
+  - Shape: skewness and modality
+  
+  - Spread: variance and standard deviation, range and interquartile range
+
+  - Boxplots
+    - Unusual observations
+  
+  - Density plot
+ 
+  
+---
+## Today
+- Relationships between numerical variables 
+
+  - Scatterplot
+  
+  - Hex plot
+
+  - Correlation coefficient
+  
+  - Line graph
+
+- Describing categorical distributions
+
+  - Bar plot
+
+- Relationships between categorical data
+
+  - Contingency tables
+
+
+
+---
+
+
+
+
+
+## Data: Lending Club
+
+- Lending Club is a platform that allows individuals to lend to other individuals
+
+
+```r
+loans &lt;- loans_full_schema %&gt;%
+  select(loan_amount, interest_rate, term, grade, 
+         state, annual_income, homeownership, debt_to_income,
+         issue_month)
+glimpse(loans)
+```
+
+```
+## Rows: 10,000
+## Columns: 9
+## $ loan_amount    &lt;int&gt; 28000, 5000, 2000, 21600, 23000, 5000, 2…
+## $ interest_rate  &lt;dbl&gt; 14.07, 12.61, 17.09, 6.72, 14.07, 6.72, …
+## $ term           &lt;dbl&gt; 60, 36, 36, 36, 36, 36, 60, 60, 36, 36, …
+## $ grade          &lt;fct&gt; C, C, D, A, C, A, C, B, C, A, C, B, C, B…
+## $ state          &lt;fct&gt; NJ, HI, WI, PA, CA, KY, MI, AZ, NV, IL, …
+## $ annual_income  &lt;dbl&gt; 90000, 40000, 40000, 30000, 35000, 34000…
+## $ homeownership  &lt;fct&gt; MORTGAGE, RENT, RENT, RENT, RENT, OWN, M…
+## $ debt_to_income &lt;dbl&gt; 18.01, 5.04, 21.15, 10.16, 57.96, 6.46, …
+## $ issue_month    &lt;fct&gt; Mar-2018, Feb-2018, Feb-2018, Jan-2018, …
+```
+
+---
+## Relationships between numerical variables
+
+- Paired or bivariate data
+
+  - Scatterplot 
+
+  - Hexplot
+
+  - Correlation
+  
+  - Line graph 
+
+---
+
+## Scatterplot
+We have seen many examples of scatterplots 
+
+--
+- UN Votes
+
+- Star Wars
+
+- Anscombe's quartet
+
+- Palmer Penguins
+
+---
+
+## Scatterplot
+Each point is a single observation with two characteristics, or variables, plotted on the x- and y-axis respectively 
+
+
+```r
+ggplot(loans, aes(x = debt_to_income, y = interest_rate)) +
+  geom_point()
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-5-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Scatterplot in base R
+
+
+.tiny[
+.pull-left[
+
+```r
+ggplot(loans, aes(x = debt_to_income, y = interest_rate)) +
+  geom_point()
+```
+
+```
+## Warning: Removed 24 rows containing missing values (geom_point).
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+```r
+plot(loans$debt_to_income, loans$interest_rate)
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+]
+
+---
+
+## Overplotting and hex plots
+
+- Overplotting is when points are plotted on top of each other
+
+- Common in large data sets 
+
+- A few ways to deal with this include using `alpha`, or `jitter()`
+
+- Alternatively, hex plots or hexbin plots
+
+.tiny[
+.pull-left[
+
+```r
+ggplot(loans, aes(x = debt_to_income, y = interest_rate)) +
+  geom_point()
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+```r
+ggplot(loans, aes(x = debt_to_income, y = interest_rate)) +
+  geom_hex()
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+]
+
+---
+
+## Hex plot
+
+- Hex plots divide the graphing surface into hexagons 
+
+  - All points are grouped into their respective hexagonal regions 
+  
+  - Color gradient indicates the number of observations (count) in each hexagonal area.
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-10-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Correlation
+
+- Correlation is the association between two variables 
+
+- (Pearson) Correlation coefficient is a measure of **linear** correlation between two sets of data
+
+- Ranges from -1 to 1
+
+&lt;img src="img/corr.svg" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Correlation
+
+Recall:
+- Sample mean: `\(\bar{x} = \frac{x_1 + x_2 + ... + x_n}{n} = \frac{\sum_{i = 1}^{n} x_i}{n}\)`
+- Sample variance: `\(s^2 = \frac{(x_1 - \bar{x})^2 + (x_2 - \bar{x})^2 + ... + (x_n - \bar{x})^2}{n - 1} = \frac{\sum_{i=1}^{n} (x_i-\bar{x})^2}{n-1}\)`
+
+- Population mean: `\(\mu\)`
+- Population variance: `\(\sigma^2\)`
+
+- When talking about a population parameter for a variable `\(x\)`, might use subscript `\(x\)`, e.g., `\(\mu_x\)`, `\(\sigma^2_x\)`; similarly for a sample statistic, e.g., `\(s_x^2\)`
+
+---
+## Correlation
+- Sample correlation: `\(r_{xy} = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2}}\)`
+
+- Population correlation: `\(\rho\)`
+
+- `cor()` in R
+
+---
+## Correlation
+- Sample correlation: `\(r_{xy} = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2}}\)`
+
+&lt;img src="img/corr1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## Correlation
+- Sample correlation: `\(r_{xy} = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2}}\)`
+
+&lt;img src="img/corr2.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Correlation
+- Sample correlation: `\(r_{xy} = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2}}\)`
+
+&lt;img src="img/corr3.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## Correlation
+- Sample correlation: `\(r_{xy} = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2}}\)`
+
+- What does the denominator look like? 
+
+--
+  - Recall: Sample variance `\(s^2 = \frac{(x_1 - \bar{x})^2 + (x_2 - \bar{x})^2 + ... + (x_n - \bar{x})^2}{n - 1} = \frac{\sum_{i=1}^{n} (x_i-\bar{x})^2}{n-1}\)`
+  
+  - Denominator: `\(\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2} = \sqrt{(n-1)s_x^2 (n - 1)s_y^2} = (n-1)s_xs_y\)`
+
+- Pearson correlation coefficient is scale and location-invariant
+  
+  - You can think of the denominator as a scaling factor 
+  
+  - Subtract sample means, `\(\bar{x}\)` and `\(\bar{y}\)`
+
+---
+## Guess the correlation
+http://guessthecorrelation.com/
+
+&lt;img src="img/corrGame.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## Line graphs
+
+Line graphs are most commonly used for data over time, *time series data*
+
+.tiny[
+.panelset[
+.panel[.panel-name[Plot]
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-16-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+.panel[.panel-name[Code]
+
+```r
+loans %&gt;%
+  group_by(issue_month) %&gt;%
+  summarize(count = n()) %&gt;%
+  ggplot(aes(x = as.Date(paste0("01-", issue_month), format = "%d-%b-%Y"), y = count)) +
+  geom_point() + 
+  geom_line() +
+  scale_x_date(labels = scales::date_format(format = "%m/%Y"), 
+               breaks = scales::date_breaks(width = "1 month"), 
+               expand = c(.02, .02)) +
+  labs(title = "Number of monthly loans", 
+    y = "Number of loans",
+    x = "Month")
+```
+]
+]
+]
+
+---
+## Line graphs
+- Be careful of `geom_path()` vs. `geom_line()`: 
+
+  - `geom_path()` connects the observations in the order in which they appear in the data
+  
+  - `geom_line()` connects them in order of the variable on the x axis.
+
+- In base R: `plot(x, y, type = "l")`. Also see `lines()`
+
+---
+## Line graphs in base R
+.tiny[
+.panelset[
+.panel[.panel-name[Plot]
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+.panel[.panel-name[Code]
+
+```r
+tmpDF &lt;- loans %&gt;%
+  group_by(issue_month) %&gt;%
+  summarize(count = n()) %&gt;%
+  mutate(issue_month = as.Date(paste0("01-", issue_month), format = "%d-%b-%Y")) %&gt;%
+  arrange(issue_month)
+plot(tmpDF$issue_month, tmpDF$count, type = "l",
+     main = "Number of monthly loans",
+     xlab = "Month",
+     ylab = "Number of loans")
+```
+]
+]
+]
+
+---
+
+## Describing categorical data 
+
+- Describing categorical distributions
+
+  - Bar plot
+
+- Relationships between categorical data
+
+  - Contingency tables
+  
+  - Stacked bar plot 
+
+---
+## Bar plot
+
+A bar plot is common way to display a single categorical variable.
+
+.tiny[
+.pull-left[
+
+```r
+ggplot(loans, aes(x = homeownership)) +
+  geom_bar()
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+```r
+barplot(table(loans$homeownership)
+        [table(loans$homeownership) &gt; 0])
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-19-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+]
+
+---
+## Bar plot with proportions
+
+.tiny[
+.pull-left[
+
+```r
+ggplot(loans, aes(x = homeownership)) +
+  geom_bar()
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-20-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+```r
+ggplot(loans, aes(x = homeownership)) +
+  geom_bar(aes(y = ..count../sum(..count..)))
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+]
+
+
+`..count..` is an internal variable that ggplot creates to store the count values (https://stackoverflow.com/questions/36604127/creating-a-bar-plot-with-proportions-on-ggplot)
+
+---
+## Contingency tables
+A contingency table summarizes data for two categorical variables
+
+
+```r
+xtabs(~ homeownership + grade, data = loans_full_schema)
+```
+
+```
+##              grade
+## homeownership         A    B    C    D    E    F    G
+##                  0    0    0    0    0    0    0    0
+##      ANY         0    0    0    0    0    0    0    0
+##      MORTGAGE    0 1285 1499 1234  587  148   32    4
+##      OWN         0  347  414  335  211   38    5    3
+##      RENT        0  827 1124 1084  648  149   21    5
+```
+
+Each value in the table represents the number of times a particular combination of variable outcomes occurred, in other words the **frequency distribution** of the variables
+
+---
+## Contingency tables
+
+```r
+xtabs(~ homeownership + grade, data = loans_full_schema)
+```
+
+```
+##              grade
+## homeownership         A    B    C    D    E    F    G
+##                  0    0    0    0    0    0    0    0
+##      ANY         0    0    0    0    0    0    0    0
+##      MORTGAGE    0 1285 1499 1234  587  148   32    4
+##      OWN         0  347  414  335  211   38    5    3
+##      RENT        0  827 1124 1084  648  149   21    5
+```
+
+- An additional row for column totals is often included
+- Similarly, an additional column for row totals
+- How do we code this in R?
+
+---
+## Contingency tables with row and column totals
+
+```r
+outTable &lt;- xtabs(~ homeownership + grade, data = loans_full_schema)
+outTableTotals &lt;- outTable %&gt;%
+  cbind(rowTotal = rowSums(outTable)) 
+outTableTotals &lt;- outTableTotals %&gt;%
+  rbind(columnTotal = colSums(outTableTotals))
+outTableTotals
+```
+
+```
+##                  A    B    C    D   E  F  G rowTotal
+##             0    0    0    0    0   0  0  0        0
+## ANY         0    0    0    0    0   0  0  0        0
+## MORTGAGE    0 1285 1499 1234  587 148 32  4     4789
+## OWN         0  347  414  335  211  38  5  3     1353
+## RENT        0  827 1124 1084  648 149 21  5     3858
+## columnTotal 0 2459 3037 2653 1446 335 58 12    10000
+```
+
+---
+## Contingency tables with proportions
+- Sometimes, proportions might be more useful than totals
+
+- Row proportions are the proportion out of **row totals**
+
+- Column proportions are the proportion out of **column totals**
+
+- How do we code **row proportions** in R?
+
+- How about **column proportions**?
+
+
+---
+## Summary
+
+--
+- Relationships between numerical variables 
+
+  - Scatterplot
+  
+  - Hex plot
+
+  - Correlation coefficient
+  
+  - Line graph
+
+- Describing categorical distributions
+
+  - Bar plot
+
+- Relationships between categorical data
+
+  - Contingency tables
+  
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

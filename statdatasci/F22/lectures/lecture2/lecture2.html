@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Fundamentals of R: Overview and data structures</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Xiao Hui Tai" />
+    <meta name="date" content="2022-09-23" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Fundamentals of R: Overview and data structures
+]
+.subtitle[
+## <br><br> STA35A: Statistical Data Science 1
+]
+.author[
+### Xiao Hui Tai
+]
+.date[
+### September 23, 2022
+]
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &lt;a href="https://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt;  --&gt;
+
+---
+
+
+
+## Recap
+
+--
+.pull-left[
+&lt;img src="img/r-logo.png" width="25%" style="display: block; margin: auto;" /&gt;
+- R is a free, open-source statistical programming language
+
+- R is also an environment for statistical computing and graphics
+
+- It is easily extensible with packages
+]
+.pull-right[
+&lt;img src="img/rstudio-logo.png" width="50%" style="display: block; margin: auto;" /&gt;
+- RStudio is a convenient interface for R called an **IDE** (integrated development environment)
+
+- RStudio is not a requirement for programming with R, but it's very commonly used by R programmers and data scientists
+
+]
+
+---
+## R Markdown
+
+&lt;img src="img/tour-rmarkdown.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+Hopefully you would have made your first R Markdown document and first visualization! 
+
+---
+## Today
+
+- Data types
+
+- Operators
+
+- Data structures
+
+- Vectors
+
+---
+## Course content 
+
+1. **Fundamentals of R**
+  - **Overview of data types and structures**
+  - Data manipulation and data visualization tools 
+
+2. Descriptive statistics for numerical and categorical data 
+
+3. Probability
+  - Rules of probability computation; conditional probability
+  - Basic probability models: Binomial, Normal and Poisson 
+
+4. Statistical inference
+  - Sampling distributions of sample mean and sample proportion 
+  - Hypothesis testing and confidence intervals for population mean and population proportion
+
+---
+## Data types
+
+- **Logical/Booleans**: binary values: `TRUE` or `FALSE` in R
+
+- **Integers**: whole numbers (positive, negative or zero)
+
+- **Double**: a floating point number, like `\(1.87 \times {10}^{6}\)`
+
+- **Characters**: e.g., letters; R displays it using double quotes. **strings** = sequences of characters
+
+- **Complex**: complex numbers, e.g., 1 + 2i (rarely used in data analysis)
+
+- **Raw**: raw bytes (very rare)
+
+--
+### Note: 
+- each of these data types can have missing or ill-defined values: NA, NaN, etc.
+- Integers and doubles are both *numeric*
+
+---
+## Functions related to data types
+
+`typeof()` function returns the type
+
+`is.`_foo_`()` functions return Booleans for whether the argument is of type _foo_
+
+`as.`_foo_`()` (tries to) "cast" its argument to type _foo_ --- to translate it sensibly into a _foo_-type value
+
+`is.na()` checks if the value is NA
+
+
+```r
+typeof(7)
+```
+
+```
+## [1] "double"
+```
+
+```r
+is.numeric(7)
+```
+
+```
+## [1] TRUE
+```
+
+---
+## Functions related to data types
+
+
+```r
+is.character(7)
+is.character("7")
+is.character("seven")
+is.na("7")
+```
+
+---
+## Functions related to data types
+
+
+```r
+is.character(7)
+```
+
+```
+## [1] FALSE
+```
+
+```r
+is.character("7")
+```
+
+```
+## [1] TRUE
+```
+
+```r
+is.character("seven")
+```
+
+```
+## [1] TRUE
+```
+
+```r
+is.na("7")
+```
+
+```
+## [1] FALSE
+```
+
+---
+## Functions related to data types
+
+
+```r
+as.character(5/6)
+as.numeric(as.character(5/6))
+6*as.numeric(as.character(5/6))
+5/6 == as.numeric(as.character(5/6))
+```
+
+---
+## Functions related to data types
+
+
+```r
+as.character(5/6)
+```
+
+```
+## [1] "0.833333333333333"
+```
+
+
+```r
+as.numeric(as.character(5/6))
+6*as.numeric(as.character(5/6))
+5/6 == as.numeric(as.character(5/6))
+```
+
+---
+## Functions related to data types
+
+
+```r
+as.character(5/6)
+```
+
+```
+## [1] "0.833333333333333"
+```
+
+```r
+as.numeric(as.character(5/6))
+```
+
+```
+## [1] 0.8333333
+```
+
+
+```r
+6*as.numeric(as.character(5/6))
+5/6 == as.numeric(as.character(5/6))
+```
+---
+## Functions related to data types
+
+
+```r
+as.character(5/6)
+```
+
+```
+## [1] "0.833333333333333"
+```
+
+```r
+as.numeric(as.character(5/6))
+```
+
+```
+## [1] 0.8333333
+```
+
+```r
+6*as.numeric(as.character(5/6))
+```
+
+```
+## [1] 5
+```
+
+
+```r
+5/6 == as.numeric(as.character(5/6))
+```
+
+---
+## Functions related to data types
+
+
+```r
+as.character(5/6)
+```
+
+```
+## [1] "0.833333333333333"
+```
+
+```r
+as.numeric(as.character(5/6))
+```
+
+```
+## [1] 0.8333333
+```
+
+```r
+6*as.numeric(as.character(5/6))
+```
+
+```
+## [1] 5
+```
+
+```r
+5/6 == as.numeric(as.character(5/6))
+```
+
+```
+## [1] FALSE
+```
+&lt;small&gt;(why is that last FALSE?)&lt;/small&gt;
+
+---
+## Functions related to data types
+To see what's going on:
+
+```r
+print(5/6, digits = 20)
+```
+
+```
+## [1] 0.83333333333333337034
+```
+
+```r
+print(as.numeric(as.character(5/6)), digits = 20)
+```
+
+```
+## [1] 0.83333333333333303727
+```
+
+`as.character()` rounds to 15 significant digits. For more, see https://stackoverflow.com/questions/64131808/can-as-numericas-characterx-where-x-is-originally-a-numeric-ever-change-x.
+
+
+```r
+all.equal(5/6, as.numeric(as.character(5/6)))
+```
+
+```
+## [1] TRUE
+```
+
+
+---
+## Operators
+
+- **Unary** operators take a single input, e.g., `-` for arithmetic negation, `!` for Boolean
+- **Binary** operators take two inputs and give a output, e.g., usual arithmetic operators, modulo 
+- See https://stat.ethz.ch/R-manual/R-devel/library/base/html/Arithmetic.html for more details
+
+
+```r
+7 + 5
+```
+
+```
+## [1] 12
+```
+
+```r
+7 - 5
+```
+
+```
+## [1] 2
+```
+
+```r
+7*5
+```
+
+```
+## [1] 35
+```
+
+---
+
+```r
+7^5
+```
+
+```
+## [1] 16807
+```
+
+```r
+7/5
+```
+
+```
+## [1] 1.4
+```
+
+```r
+7 %% 5
+```
+
+```
+## [1] 2
+```
+
+```r
+7 %/% 5
+```
+
+```
+## [1] 1
+```
+
+---
+## Arithmetic Operators vs. Logical Operators
+
+- Operators on previous slides were arithmetic operators
+
+- **Logical operators** are **comparisons** (also binary operators; they take two objects, like numbers, and give a Boolean)
+
+```r
+7 &gt; 5
+```
+
+```
+## [1] TRUE
+```
+
+```r
+7 &lt; 5
+```
+
+```
+## [1] FALSE
+```
+
+```r
+7 &gt;= 7
+```
+
+```
+## [1] TRUE
+```
+
+---
+
+```r
+7 &lt;= 5
+```
+
+```
+## [1] FALSE
+```
+
+```r
+7 == 5
+```
+
+```
+## [1] FALSE
+```
+
+```r
+7 != 5
+```
+
+```
+## [1] TRUE
+```
+
+- "and" and "or" are also logical operators
+
+```r
+(5 &gt; 7) &amp; (6*7 == 42)
+(5 &gt; 7) | (6*7 == 42)
+```
+&lt;small&gt;(what should these give?)&lt;/small&gt;
+
+&lt;!-- &lt;small&gt;(we will see special doubled forms, `&amp;&amp;` and `||`, later)&lt;/small&gt; --&gt;
+---
+
+```r
+7 &lt;= 5
+```
+
+```
+## [1] FALSE
+```
+
+```r
+7 == 5
+```
+
+```
+## [1] FALSE
+```
+
+```r
+7 != 5
+```
+
+```
+## [1] TRUE
+```
+
+- "and" and "or" are also logical operators
+
+```r
+(5 &gt; 7) &amp; (6*7 == 42)
+```
+
+```
+## [1] FALSE
+```
+
+```r
+(5 &gt; 7) | (6*7 == 42)
+```
+
+```
+## [1] TRUE
+```
+
+---
+## Assignment operators: Data can have names
+
+We can give names to data objects; these give us **variables**
+
+A few variables are built in:
+
+```r
+pi
+```
+
+```
+## [1] 3.141593
+```
+
+```r
+letters
+```
+
+```
+##  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o"
+## [16] "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z"
+```
+
+Variables can be arguments to functions or operators, just like constants:
+
+```r
+pi*10
+```
+
+```
+## [1] 31.41593
+```
+
+---
+
+Most variables are created with the **assignment operator**, `&lt;-` or `=`  
+
+```r
+myVar &lt;- 100
+myVar
+```
+
+```
+## [1] 100
+```
+
+```r
+myVar2 &lt;- 10
+myVar*myVar2
+```
+
+```
+## [1] 1000
+```
+
+---
+The assignment operator also changes values:
+
+```r
+myVar3 &lt;- myVar*myVar2
+myVar3
+```
+
+```
+## [1] 1000
+```
+
+```r
+myVar3 &lt;- 30
+myVar3
+```
+
+```
+## [1] 30
+```
+--
+
+Using names and variables makes code easier to design, easier to debug, less prone to bugs, easier to improve, and easier for others to read
+
+Avoid "magic constants" (using numbers directly in source code); use named variables
+
+---
+## The workspace/environment
+
+What names have you defined values for?
+
+```r
+ls()
+```
+
+```
+## [1] "myVar"  "myVar2" "myVar3"
+```
+
+```r
+objects()
+```
+
+```
+## [1] "myVar"  "myVar2" "myVar3"
+```
+
+---
+## The workspace/environment
+
+Getting rid of variables:
+
+```r
+rm("myVar3")
+ls()
+```
+
+```
+## [1] "myVar"  "myVar2"
+```
+
+```r
+rm(list = ls()) # removes all variables in workspace
+ls()
+```
+
+```
+## character(0)
+```
+
+---
+
+## Aside: R markdown
+The environment of your R Markdown document is separate from the Console!
+
+.pull-left[
+First, run the following in the console
+
+.small[
+
+```r
+x &lt;- 2
+x * 3
+```
+]
+]
+
+--
+
+.pull-right[
+Then, add the following in an R chunk in your R Markdown document
+
+.small[
+
+```r
+x * 3
+```
+]
+
+.question[
+What happens? Why the error?
+]
+]
+
+---
+## First data structure: vectors
+
+Group related data values into one object, a **data structure**
+
+A **vector** is a sequence of values, *all of the same type*
+&lt;small&gt;(what are data types?)&lt;/small&gt;
+
+
+```r
+x &lt;- c(7, 8, 10, 45)
+x
+```
+
+```
+## [1]  7  8 10 45
+```
+
+```r
+is.vector(x)
+```
+
+```
+## [1] TRUE
+```
+
+`c()` function returns a vector containing all its arguments in order
+
+---
+## Indexing and length
+`x[1]` is the first element, `x[4]` is the 4th element  
+`x[-4]` is a vector containing all but the fourth element
+
+Vector of indices:
+
+```r
+x
+```
+
+```
+## [1]  7  8 10 45
+```
+
+```r
+x[c(2, 4)]
+```
+
+```
+## [1]  8 45
+```
+
+Vector of negative indices
+
+```r
+x[c(-1, -3)]
+```
+
+```
+## [1]  8 45
+```
+&lt;small&gt;(why that, and not  `8 10`?)&lt;/small&gt;
+
+---
+## Indexing and length
+
+To get the length of the vector, use `length()`
+
+```r
+length(x)
+```
+
+```
+## [1] 4
+```
+
+---
+## Creating vectors
+`vector(length = 7)` returns an empty vector of length 7; helpful for filling things up later
+
+```r
+weeklyHours &lt;- vector(length = 7)
+weeklyHours[5] &lt;- 8
+weeklyHours
+```
+
+```
+## [1] 0 0 0 0 8 0 0
+```
+
+The colon operator produces a sequence
+
+```r
+mySeq &lt;- 2:5
+mySeq
+```
+
+```
+## [1] 2 3 4 5
+```
+
+---
+## Creating vectors
+Many other ways to produce sequences, e.g., 
+
+```r
+(mySeq &lt;- seq(from = 1, to = 10, by = 2))
+```
+
+```
+## [1] 1 3 5 7 9
+```
+&lt;small&gt;(Enclosing an assignment statement in parentheses prints the result)&lt;/small&gt;
+
+---
+## Summary
+
+--
+
+- We write programs by composing functions to manipulate data
+
+- The basic data types represent Booleans, numbers, and characters
+
+- Data structures group related values together
+
+- Vectors group values of the same type
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
