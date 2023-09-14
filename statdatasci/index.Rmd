@@ -37,7 +37,7 @@ There will sometimes be additional (optional) reading from:
 
 ### Week 1: Introduction, overview of data types	
 - Wed Sept 27: Introduction and R Basics
-  - Notes: [Lecture 1](https://xhtai.github.io/statdatasci/F22/lectures/lecture1/lecture1.html)
+  - Notes: [Lecture 1](https://xhtai.github.io/statdatasci/lectures/lecture1/lecture1.html)
   - Reading: 
     - R for Data Science Chapters 1, 2, 27
 
