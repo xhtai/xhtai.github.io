@@ -1,0 +1,194 @@
+---
+output: html_document
+title: >
+  Statistical Data Science 1: Fall 2023
+author: "STA 35A"
+
+---
+
+**Instructor**: Xiao Hui Tai (xtai [at] ucdavis [dot] edu)
+
+**TA**: Jedidiah Harwood (jedharwood [at] ucdavis [dot] edu)
+
+**Class time**:   
+Lectures are Mondays, Wednesdays and Fridays, 11-11:50 AM at Wellman Hall 216.  
+Discussions (labs) are run by Jedidiah Harwood on Thursdays 12:10-1 PM (Section A01), 1:10-2 PM (Section A02) at TLC 2212.
+
+**Office hours**:  
+Jedidiah Harwood: Tuesdays and Thursdays 10-11 AM at MSB 1117   
+Xiao Hui Tai: Mondays 9:30-10:30 AM at MSB 4242
+
+**Syllabus**: [here](https://xhtai.github.io/statdatasci/syllabus_35A_F23.html).
+
+**Piazza**: [here](https://piazza.com/ucdavis/fall2023/sta035aa01a02fq2023/). 
+
+**Textbooks**:
+There are three required textbooks. They are all available online and are free. 
+
+1. R for Data Science by Hadley Wickham and Garrett Grolemund. 1st Edition, 2017. Available [here](https://r4ds.had.co.nz/index.html).
+2. Introduction to Modern Statistics by Mine Çetinkaya-Rundel and Johanna Hardin. 1st Edition, 2021. Available [here](https://openintro-ims.netlify.app/index.html).
+3. OpenIntro Statistics by David Diez, Mine Cetinkaya-Rundel and Christopher Barr. 4th Edition, 2019. Available [here](https://www.openintro.org/book/os/).
+
+There will sometimes be additional (optional) reading from: 
+
+1. Art of R Programming by Norman Matloff. 2011. (Look on Google)
+
+## Class Schedule
+
+### Week 1: Introduction, overview of data types	
+- Wed Sept 27: Introduction and R Basics
+  - Notes: [Lecture 1](https://xhtai.github.io/statdatasci/F22/lectures/lecture1/lecture1.html)
+  - Reading: 
+    - R for Data Science Chapters 1, 2, 27
+
+<!-- - Fri Sept 29: Overview of data types and data structures, vectors -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - R for Data Science Chapter 4, 20 -->
+<!--     - Additional reading: Matloff Chapter 2 -->
+
+
+
+<!-- ### Week 2: Overview of data types -->
+<!-- - Mon Oct 2: More on vectors, arrays -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - R for Data Science Chapter 20 -->
+<!--     - Additional reading: Matloff Chapter 3 -->
+
+<!-- - Wed Oct 4: Arrays, matrices, lists -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - R for Data Science Chapter 20  -->
+<!--     - Additional reading: Matloff Chapters 3, 4  -->
+
+<!-- - Fri Oct 6: Lists, data frames, exploratory data analysis -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - Additional reading: Matloff Chapter 5 -->
+<!--   - Homework 1:  -->
+
+
+
+<!-- ### Week 3: Data manipulation and data visualization tools -->
+<!-- - Mon Oct 9: Exploratory data analysis, data manipulation tools  -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - R for Data Science Chapter 5 -->
+
+<!-- - Wed Oct 11: Data manipulation and visualization tools  -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - R for Data Science Chapter 3  -->
+
+<!-- - Fri Oct 13: Data visualization tools  -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - R for Data Science Chapter 3  -->
+<!--   - Homework 2:  -->
+
+
+<!-- ### Week 4: Data visualization tools, Descriptive statistics -->
+<!-- - Mon Oct 16: Data visualization tools, descriptive statistics  -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - Open Intro Statistics Chapter 1 -->
+
+<!-- - Wed Oct 18: Review -->
+
+<!-- - Fri Oct 20: Midterm 1  -->
+
+
+<!-- ### Week 5: Descriptive statistics -->
+<!-- - Mon Oct 23: Describing numerical distributions -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - Open Intro Statistics Chapter 2  -->
+
+<!-- - Wed Oct 25: Numerical and categorical data  -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - R for Data Science Chapter 7 -->
+
+<!-- - Fri Oct 27: Numerical and categorical data -->
+<!--   - Notes:  -->
+<!--   - Homework 3:  -->
+
+<!-- ### Week 6: Introduction to probability -->
+<!-- - Mon Oct 30: Introduction to probability  -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - Open Intro Statistics Chapter 3.1 -->
+
+<!-- - Wed Nov 1: Conditional, marginal and joint probability; Bayes' Theorem -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - Open Intro Statistics Chapter 3.2 -->
+
+<!-- - Fri Nov 3: Random variables and common distributions -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - Open Intro Statistics Chapter 3.4, 3.5 -->
+<!--   - Homework 4:  -->
+
+<!-- ### Week 7: Common distributions -->
+<!-- - Mon Nov 6: Bernoulli and binomial distribution -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - Open Intro Statistics Chapter 4.3 -->
+
+<!-- - Wed Nov 8: Binomial and Poisson distribution -->
+<!--   - Notes:  -->
+<!--   - Reading: -->
+<!--     - Open Intro Statistics Chapter 4.5 -->
+
+<!-- - Fri Nov 10: Veterans Day -->
+<!--   - Homework 5:  -->
+
+<!-- ### Week 8: Normal distribution -->
+<!-- - Mon Nov 13: Poisson and Normal distribution -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - Open Intro Statistics Chapter 4.1 -->
+
+<!-- - Wed Nov 15: Review -->
+
+<!-- - Fri Nov 17: Midterm 2 -->
+
+
+<!-- ### Week 9: Sampling distributions  -->
+<!-- - Mon Nov 20: Normal distribution, sampling distributions -->
+<!--   - Notes:  -->
+<!--   - Reading:  -->
+<!--     - Open Intro Statistics Chapter 5.1  -->
+
+<!-- - Wed Nov 22, Fri Nov 24: Thanksgiving -->
+
+<!-- ### Week 10: Sampling distributions, confidence intervals  -->
+<!-- - Mon Nov 27: Sampling distribution of sample mean and proportion -->
+<!--   - Notes:  -->
+<!--   - Homework 6:  -->
+
+<!-- - Wed Nov 29: Introduction to confidence intervals  -->
+<!--   - Notes:  -->
+<!--   - Reading: -->
+<!--     - Open Intro Statistics Chapter 5.2  -->
+
+<!-- - Fri Dec 1: Confidence intervals for population mean and proportion  -->
+<!--   - Notes:  -->
+<!--   - Reading: -->
+<!--     - Open Intro Statistics Chapter 7.1.1-7.1.4 -->
+
+<!-- ### Week 11: Hypothesis testing  -->
+<!-- - Mon Dec 4: Hypothesis testing framework and errors  -->
+<!--   - Notes:  -->
+<!--   - Reading: -->
+<!--     - Open Intro Statistics Chapter 5.3 -->
+<!--   - Homework 7:  -->
+<!-- - Wed Dec 6: Hypothesis testing for population mean and proportion  -->
+<!--   - Notes:  -->
+<!--   - Reading: -->
+<!--     - Open Intro Statistics Chapter 6.1 -->
+<!-- - Fri Dec 8: Confidence intervals and one-sided tests  -->
+<!--   - Notes:  -->
+
