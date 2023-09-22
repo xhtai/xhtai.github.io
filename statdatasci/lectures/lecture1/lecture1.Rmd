@@ -113,7 +113,7 @@ knitr::include_graphics("img/data-science-cycle.006.png")
 
 - **Office hours**
   - Jedidiah Harwood: Tuesdays and Thursdays 10-11 AM at MSB 1117
-  - Xiao Hui Tai: Mondays 9:30-10:30 AM at MSB 4242
+  - Xiao Hui Tai: Mondays 2:30-3:30 PM at MSB 4242
 
 - **Course website**: https://xhtai.github.io/statdatasci/
   - Lecture notes, homework, supplementary materials, etc.

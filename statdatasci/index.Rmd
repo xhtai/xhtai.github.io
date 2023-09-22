@@ -16,7 +16,7 @@ Discussions (labs) are run by Jedidiah Harwood on Thursdays 12:10-1 PM (Section 
 
 **Office hours**:  
 Jedidiah Harwood: Tuesdays and Thursdays 10-11 AM at MSB 1117   
-Xiao Hui Tai: Mondays 9:30-10:30 AM at MSB 4242
+Xiao Hui Tai: Mondays 2:30-3:30 PM at MSB 4242
 
 **Syllabus**: [here](https://xhtai.github.io/statdatasci/syllabus_35A_F23.html).
 
