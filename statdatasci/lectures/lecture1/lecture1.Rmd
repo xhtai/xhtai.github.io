@@ -122,6 +122,8 @@ knitr::include_graphics("img/data-science-cycle.006.png")
 
 - **Piazza** for announcements and discussion
 
+- **Email** for personal matters only (**do not** send me messages on Canvas)
+
 ---
 
 ## Course logistics 
@@ -313,7 +315,6 @@ un_votes %>%
 
 - Labs will be at TLC 2212; either use computers available in the lab, or your own laptops (make sure your laptop is charged before class)
 
-- For lectures, I will sometimes do additional exercises at the end of class, so laptops are encouraged but not required. 
 
 ---
 
