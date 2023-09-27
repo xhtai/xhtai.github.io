@@ -41,11 +41,11 @@ There will sometimes be additional (optional) reading from:
   - Reading: 
     - R for Data Science Chapters 1, 2, 27
 
-<!-- - Fri Sept 29: Overview of data types and data structures, vectors -->
-<!--   - Notes:  -->
-<!--   - Reading:  -->
-<!--     - R for Data Science Chapter 4, 20 -->
-<!--     - Additional reading: Matloff Chapter 2 -->
+- Fri Sept 29: Overview of data types and data structures, vectors
+  - Notes: [Lecture 2](https://xhtai.github.io/statdatasci/lectures/lecture2/lecture2.html)
+  - Reading:
+    - R for Data Science Chapter 4, 20
+    - Additional reading: Matloff Chapter 2
 
 
 

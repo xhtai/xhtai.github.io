@@ -1,0 +1,18 @@
+Reading: 
+R for Data Science Chapter 4 Coding Basics 
+R for Data Science Chapter 20 Vectors
+
+
+---
+Additional reading: Matloff Chapter 2
+
+
+
+------------------
+Discussion:
+- start of class recap + any difficulties + questions 
+- questions in slides
+- end of class 
+	what you learned and what you found difficult 
+
+Additional time: additional exercises 
