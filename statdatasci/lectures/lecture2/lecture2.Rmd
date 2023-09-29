@@ -423,6 +423,22 @@ length(x)
 ```
 
 ---
+## Creating vectors
+`vector(length = 7)` returns a logical vector of length 7, initialized with FALSEs; helpful for filling things up later (see help page: `vector(mode = "logical", length = 0)`)
+
+```{r}
+weeklyHours <- vector(length = 7)
+weeklyHours[5] <- 8
+weeklyHours
+```
+
+The colon operator produces a sequence
+```{r}
+mySeq <- 2:5
+mySeq
+```
+
+---
 ## Summary
 
 --

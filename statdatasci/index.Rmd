@@ -49,12 +49,12 @@ There will sometimes be additional (optional) reading from:
 
 
 
-<!-- ### Week 2: Overview of data types -->
-<!-- - Mon Oct 2: More on vectors, arrays -->
-<!--   - Notes:  -->
-<!--   - Reading:  -->
-<!--     - R for Data Science Chapter 20 -->
-<!--     - Additional reading: Matloff Chapter 3 -->
+### Week 2: Overview of data types
+- Mon Oct 2: More on vectors, arrays
+  - Notes: [Lecture 3](https://xhtai.github.io/statdatasci/lectures/lecture3/lecture3.html)
+  - Reading:
+    - R for Data Science Chapter 20
+    - Additional reading: Matloff Chapter 3
 
 <!-- - Wed Oct 4: Arrays, matrices, lists -->
 <!--   - Notes:  -->
