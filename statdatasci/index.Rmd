@@ -56,11 +56,11 @@ There will sometimes be additional (optional) reading from:
     - R for Data Science Chapter 20
     - Additional reading: Matloff Chapter 3
 
-<!-- - Wed Oct 4: Arrays, matrices, lists -->
-<!--   - Notes:  -->
-<!--   - Reading:  -->
-<!--     - R for Data Science Chapter 20  -->
-<!--     - Additional reading: Matloff Chapters 3, 4  -->
+- Wed Oct 4: Arrays, matrices, lists
+  - Notes: [Lecture 4](https://xhtai.github.io/statdatasci/lectures/lecture4/lecture4.html)
+  - Reading:
+    - R for Data Science Chapter 20
+    - Additional reading: Matloff Chapters 3, 4
 
 <!-- - Fri Oct 6: Lists, data frames, exploratory data analysis -->
 <!--   - Notes:  -->
