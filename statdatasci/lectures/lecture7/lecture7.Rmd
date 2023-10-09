@@ -34,7 +34,7 @@ library(palmerpenguins)
 
 - HW 2 will be posted on Friday afternoon on the course website 
 
-- Schedule for next week (week 5):
+- Schedule for next week (week 4):
   - Monday: regular lecture; 2:30-3:30 OH (XHT); lab 3 due 9pm
   - Tuesday: 10-11 OH (JH)
   - Wednesday: Jed Harwood will do review during regular lecture time (same room)
