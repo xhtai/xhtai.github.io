@@ -497,6 +497,54 @@ hotels %&gt;%
 ]
 
 ---
+## Exercise: NYC Flights data
+This data frame contains data on all 336,776 flights that departed from New York City in 2013. It is available as part of the `dplyr` package. 
+
+
+```r
+nycflights13::flights
+```
+
+```
+## # A tibble: 336,776 × 19
+##    year month   day dep_time sched_dep_…¹ dep_d…² arr_t…³ sched…⁴
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;        &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt;
+## 1  2013     1     1      517          515       2     830     819
+## 2  2013     1     1      533          529       4     850     830
+## 3  2013     1     1      542          540       2     923     850
+## 4  2013     1     1      544          545      -1    1004    1022
+## 5  2013     1     1      554          600      -6     812     837
+## 6  2013     1     1      554          558      -4     740     728
+## # … with 336,770 more rows, 11 more variables: arr_delay &lt;dbl&gt;,
+## #   carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;,
+## #   dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, and abbreviated variable
+## #   names ¹​sched_dep_time, ²​dep_delay, ³​arr_time,
+## #   ⁴​sched_arr_time
+```
+
+
+---
+## Exercise: NYC Flights data
+
+Select the `carrier` column.
+
+Select the `carrier` and `tailnum` columns.
+
+Sort the data by origin.
+
+Filter only flights with carrier `OO`.
+
+Filter only flights with carrier `OO`, originating in `LGA`.
+
+Create a new variable that indicates whether or not the flight departed late. 
+
+Create a new variable for the mean departure delay by day.
+
+
+Repeat all the operations using base R. 
+
+---
 ## Data visualization using `ggplot2` 
 
 .pull-left[
@@ -528,7 +576,7 @@ ggplot(data = starwars,
        y = "Weight (kg)")
 ```
 
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-20-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 .pull-right[
 
@@ -539,7 +587,7 @@ plot(starwars$height, starwars$mass,
      ylab = "Weight (kg)")
 ```
 
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-19-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 ]
 
@@ -652,7 +700,7 @@ dplyr::glimpse(penguins)
 
 .panelset[
 .panel[.panel-name[Plot]
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-25-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-27-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 ]
 .panel[.panel-name[Code]
 
@@ -694,7 +742,7 @@ ggplot(data = penguins) #&lt;&lt;
 ]
 ]
 .pull-right[
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-26-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-28-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -714,7 +762,7 @@ ggplot(data = penguins,
 ]
 ]
 .pull-right[
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-27-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-29-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -736,7 +784,7 @@ ggplot(data = penguins,
 ]
 ]
 .pull-right[
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-28-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-30-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -760,7 +808,7 @@ ggplot(data = penguins,
 ]
 ]
 .pull-right[
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-29-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-31-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -786,7 +834,7 @@ ggplot(data = penguins,
 ]
 ]
 .pull-right[
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-30-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-32-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -814,7 +862,7 @@ ggplot(data = penguins,
 ]
 ]
 .pull-right[
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-31-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-33-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -844,7 +892,7 @@ ggplot(data = penguins,
 ]
 ]
 .pull-right[
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-32-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-34-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -877,7 +925,7 @@ ggplot(data = penguins,
 ]
 ]
 .pull-right[
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-33-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-35-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -912,7 +960,7 @@ ggplot(data = penguins,
 ]
 ]
 .pull-right[
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-34-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-36-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -949,7 +997,7 @@ ggplot(data = penguins,
 ]
 ]
 .pull-right[
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-35-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-37-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -988,14 +1036,14 @@ ggplot(data = penguins,
 ]
 ]
 .pull-right[
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-36-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-38-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
 
 .panelset[
 .panel[.panel-name[Plot]
-&lt;img src="lecture7_files/figure-html/unnamed-chunk-37-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture7_files/figure-html/unnamed-chunk-39-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 ]
 .panel[.panel-name[Code]
 

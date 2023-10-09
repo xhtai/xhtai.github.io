@@ -284,6 +284,39 @@ knitr::include_graphics("img/dplyr-part-of-tidyverse.png")
 ]
 
 ---
+## Exercise: NYC Flights data
+This data frame contains data on all 336,776 flights that departed from New York City in 2013. It is available as part of the `dplyr` package. 
+
+```{r}
+nycflights13::flights
+```
+
+
+---
+## Exercise: NYC Flights data
+
+Select the `carrier` column.
+
+Select the `carrier` and `tailnum` columns.
+
+Sort the data by origin.
+
+Filter only flights with carrier `OO`.
+
+Filter only flights with carrier `OO`, originating in `LGA`.
+
+Create a new variable that indicates whether or not the flight departed late. 
+
+Create a new variable for the mean departure delay by day.
+```{r include = FALSE}
+nycflights13::flights %>%
+  group_by(year, month, day) %>%
+  summarize(meanDepDelay = mean(dep_delay, na.rm = TRUE))
+```
+
+Repeat all the operations using base R. 
+
+---
 ## Data visualization using `ggplot2` 
 
 .pull-left[
