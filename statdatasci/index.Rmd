@@ -81,11 +81,11 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - R for Data Science Chapter 3
 
-<!-- - Fri Oct 13: Data visualization tools  -->
-<!--   - Notes:  -->
-<!--   - Reading:  -->
-<!--     - R for Data Science Chapter 3  -->
-<!--   - Homework 2:  -->
+- Fri Oct 13: Data visualization tools
+  - Notes: [Lecture 8](https://xhtai.github.io/statdatasci/lectures/lecture8/lecture8.html)
+  - Reading:
+    - R for Data Science Chapter 3
+  - Homework 2:
 
 
 <!-- ### Week 4: Data visualization tools, Descriptive statistics -->
