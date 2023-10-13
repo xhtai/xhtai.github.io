@@ -1,0 +1,647 @@
+---
+title: "Data visualization and Descriptive Statistics"
+subtitle: "<br><br> STA35A: Statistical Data Science 1"
+author: "Xiao Hui Tai"
+date: October 16, 2023
+output:
+  xaringan::moon_reader:
+    # css: ["../xaringan-themer.css", "../slides.css"]
+    lib_dir: libs
+    nature:
+      # ratio: "16:9"
+      # highlightLines: true
+      # highlightStyle: solarized-light
+      countIncrementalSlides: false
+---
+
+```{r child = "../setup.Rmd"}
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(openintro)
+library(palmerpenguins)
+```
+
+```{css, echo = FALSE}
+.tiny .remark-code { font-size: 60%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+```
+
+## Reminders/announcements
+
+- Lab 3 is due today at 9pm
+
+- HW 2 posted on course website, due Thursday at 9pm
+  - Note: no late work, solutions will be released at 9pm
+
+- Schedule for rest of this week:
+  - Tuesday: 10-11 OH (JH)
+  - Wednesday: Jed Harwood will do review during regular lecture time (same room)
+  - Thursday: 10-11 OH (JH); **no lab**, instead 2-3PM OH (XHT; virtual, will post link on Piazza)
+  - Friday: midterm during regular lecture time (same room); **no homework**
+
+---
+## Midterm
+- Midterm will cover material until today
+
+- Closed-book
+
+- You don't need your computers
+
+- There will be no make-up exams
+
+- Drop policy for exams: 1 midterm may be dropped or used with 50% penalty on the final 
+
+---
+## Recap
+--
+
+- More on `ggplot()` 
+  - Data, mapping, geom, labels 
+
+  - Mapping vs. setting
+  
+  - Faceting using `facet_wrap()` and `facet_grid()`
+
+---
+## Today
+
+- Finishing up on `ggplot()`
+
+  - Faceting using `facet_grid()`
+
+  - Misc. items
+  
+- Descriptive statistics 
+
+---
+## Going back to the UN Votes example:
+
+```{r echo = FALSE, out.width = '100%'}
+library(unvotes)
+un_votes %>%
+  filter(country %in% c("United States", "United Kingdom", "China", "Singapore")) %>%
+  inner_join(un_roll_calls, by = "rcid") %>%
+  inner_join(un_roll_call_issues, by = "rcid") %>%
+  mutate(year = lubridate::year(date)) %>%
+  group_by(country, year, issue) %>%
+  summarize(votes = n(),
+            percent_yes = mean(vote == "yes")) %>%
+  filter(votes > 5) %>%  # Only use records where there are more than 5 votes
+  ggplot(mapping = aes(x = year, y = percent_yes, color = country)) +
+    geom_point(alpha = 0.4) +
+    geom_smooth(method = "loess", se = FALSE) +
+    facet_wrap(~ issue) +
+    scale_y_continuous(labels = scales::percent) +
+    labs(
+      title = "Percentage of 'Yes' votes in the UN General Assembly",
+      subtitle = "1946 to 2019",
+      y = "% Yes",
+      x = "Year",
+      color = "Country"
+    ) +
+    scale_color_viridis_d() +
+    theme(text = element_text(size = 9))   
+```
+
+---
+
+.small[
+```{r eval = FALSE}
+un_votes %>%
+  filter(country %in% c("United States", "United Kingdom", "China", "Singapore")) %>%
+  inner_join(un_roll_calls, by = "rcid") %>%
+  inner_join(un_roll_call_issues, by = "rcid") %>%
+  mutate(year = lubridate::year(date)) %>%
+  group_by(country, year, issue) %>%
+  summarize(votes = n(),
+            percent_yes = mean(vote == "yes")) %>%
+  filter(votes > 5) %>%  # Only use records where there are more than 5 votes
+  ggplot(mapping = aes(x = year, y = percent_yes, color = country)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE) +
+  facet_wrap(~ issue) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Percentage of 'Yes' votes in the UN General Assembly",
+    subtitle = "1946 to 2019",
+    y = "% Yes",
+    x = "Year",
+    color = "Country"
+  ) +
+  scale_color_viridis_d() +
+  theme(text = element_text(size = 9))   
+```
+]
+
+How can we reduce the size of all points? 
+
+What if we just want to group by country? 
+
+---
+```{r echo = FALSE, out.width = '100%'}
+un_votes %>%
+  filter(country %in% c("United States", "United Kingdom", "China", "Singapore")) %>%
+  inner_join(un_roll_calls, by = "rcid") %>%
+  inner_join(un_roll_call_issues, by = "rcid") %>%
+  mutate(year = lubridate::year(date)) %>%
+  group_by(country, year, issue) %>%
+  summarize(votes = n(),
+            percent_yes = mean(vote == "yes")) %>%
+  filter(votes > 5) %>%  # Only use records where there are more than 5 votes
+  ggplot(mapping = aes(x = year, y = percent_yes, color = country)) +
+    geom_point(alpha = 0.4, size = 0.5) +
+    geom_smooth(method = "loess", se = FALSE) +
+    facet_wrap(~ issue) +
+    scale_y_continuous(labels = scales::percent) +
+    labs(
+      title = "Percentage of 'Yes' votes in the UN General Assembly",
+      subtitle = "1946 to 2019",
+      y = "% Yes",
+      x = "Year",
+      color = "Country"
+    ) +
+    scale_color_viridis_d() +
+    theme(text = element_text(size = 9))   
+```
+
+---
+
+.small[
+```{r eval = FALSE}
+un_votes %>%
+  filter(country %in% c("United States", "United Kingdom", "China", "Singapore")) %>%
+  inner_join(un_roll_calls, by = "rcid") %>%
+  inner_join(un_roll_call_issues, by = "rcid") %>%
+  mutate(year = lubridate::year(date)) %>%
+  group_by(country, year, issue) %>%
+  summarize(votes = n(),
+            percent_yes = mean(vote == "yes")) %>%
+  filter(votes > 5) %>%  # Only use records where there are more than 5 votes
+  ggplot(mapping = aes(x = year, y = percent_yes, color = country)) +
+  geom_point(alpha = 0.4, size = 0.5) +
+  geom_smooth(method = "loess", se = FALSE) +
+  facet_wrap(~ issue) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Percentage of 'Yes' votes in the UN General Assembly",
+    subtitle = "1946 to 2019",
+    y = "% Yes",
+    x = "Year",
+    color = "Country"
+  ) +
+  scale_color_viridis_d() +
+  theme(text = element_text(size = 9))   
+```
+]
+
+---
+```{r echo = FALSE, out.width = '100%'}
+library(unvotes)
+un_votes %>%
+  filter(country %in% c("United States", "United Kingdom", "China", "Singapore")) %>%
+  inner_join(un_roll_calls, by = "rcid") %>%
+  inner_join(un_roll_call_issues, by = "rcid") %>%
+  mutate(year = lubridate::year(date)) %>%
+  group_by(country, year) %>%
+  summarize(votes = n(),
+            percent_yes = mean(vote == "yes")) %>%
+  filter(votes > 5) %>%  # Only use records where there are more than 5 votes
+  ggplot(mapping = aes(x = year, y = percent_yes, color = country)) +
+    geom_point(alpha = 0.4) +
+    geom_smooth(method = "loess", se = FALSE) +
+    # facet_wrap(~ issue) +
+    scale_y_continuous(labels = scales::percent) +
+    labs(
+      title = "Percentage of 'Yes' votes in the UN General Assembly",
+      subtitle = "1946 to 2019",
+      y = "% Yes",
+      x = "Year",
+      color = "Country"
+    ) +
+    scale_color_viridis_d() +
+    theme(text = element_text(size = 9))   
+```
+
+---
+
+.small[
+```{r eval = FALSE}
+un_votes %>%
+  filter(country %in% c("United States", "United Kingdom", "China", "Singapore")) %>%
+  inner_join(un_roll_calls, by = "rcid") %>%
+  inner_join(un_roll_call_issues, by = "rcid") %>%
+  mutate(year = lubridate::year(date)) %>%
+  group_by(country, year) %>%
+  summarize(votes = n(),
+            percent_yes = mean(vote == "yes")) %>%
+  filter(votes > 5) %>%  # Only use records where there are more than 5 votes
+  ggplot(mapping = aes(x = year, y = percent_yes, color = country)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE) +
+  # facet_wrap(~ issue) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Percentage of 'Yes' votes in the UN General Assembly",
+    subtitle = "1946 to 2019",
+    y = "% Yes",
+    x = "Year",
+    color = "Country"
+  ) +
+  scale_color_viridis_d() +
+  theme(text = element_text(size = 9))   
+```
+]
+
+---
+
+## Facet and color
+
+.pull-left[
+```{r facet-color-legend, fig.show = "hide", warning = FALSE}
+ggplot(
+  penguins, 
+  aes(x = bill_depth_mm, 
+      y = bill_length_mm, 
+      color = species)) + #<<
+  geom_point() +
+  facet_grid(species ~ sex) +
+  scale_color_viridis_d() #<<
+```
+]
+
+.pull-right[
+```{r ref.label = "facet-color-legend", echo = FALSE, warning = FALSE, out.width = "100%"}
+```
+]
+
+---
+
+## Facet and color, no legend
+
+.pull-left[
+```{r facet-color-no-legend, fig.show = "hide", warning = FALSE}
+ggplot(
+  penguins, 
+  aes(x = bill_depth_mm, 
+      y = bill_length_mm, 
+      color = species)) +
+  geom_point() +
+  facet_grid(species ~ sex) +
+  scale_color_viridis_d() +
+  guides(color = "none") #<<
+```
+]
+
+.pull-right[
+```{r ref.label = "facet-color-no-legend", echo = FALSE, warning = FALSE, out.width = "100%"}
+```
+]
+
+---
+## A note on piping and layering
+
+- Pipe `%>%` used mainly in `dplyr` pipelines
+  - Pipe the output of the previous line of code as the first input of the next line of code
+
+- `+` used in `ggplot2` plots is used for "layering"
+  - Create the plot in layers, separated by `+`
+
+---
+```{r message=FALSE, echo = FALSE}
+hotels <- readr::read_csv("../lecture6_manipulation2/data/hotels.csv")
+```
+
+## dplyr
+
+`r emo::ji("x")`
+
+```{r error=TRUE}
+hotels +
+  select(hotel, lead_time)
+```
+
+`r emo::ji("white_check_mark")`
+
+```{r eval=FALSE}
+hotels %>%
+  select(hotel, lead_time)
+```
+
+.tiny[
+```{r echo=FALSE, output.lines=6}
+hotels %>%
+  select(hotel, lead_time)
+```
+]
+
+---
+
+## ggplot2
+
+`r emo::ji("x")`
+
+.small[
+```{r error=TRUE}
+ggplot(hotels, aes(x = hotel, fill = deposit_type)) %>%
+  geom_bar()
+```
+]
+
+`r emo::ji("white_check_mark")`
+
+```{r out.width="25%"}
+ggplot(hotels, aes(x = hotel, fill = deposit_type)) +
+  geom_bar()
+```
+
+
+---
+## Code styling
+
+Many of the styling principles are consistent across `%>%` and `+`:
+
+- always a space before
+- always a line break after (for pipelines with more than 2 lines)
+
+`r emo::ji("x")`
+
+```{r eval=FALSE}
+ggplot(hotels,aes(x=hotel,y=deposit_type))+geom_bar()
+```
+
+`r emo::ji("white_check_mark")`
+
+```{r eval=FALSE}
+ggplot(hotels, aes(x = hotel, y = deposit_type)) + 
+  geom_bar()
+```
+
+---
+## Course content 
+
+1. Fundamentals of R
+  - Overview of data types and structures
+  - Data manipulation and data visualization tools  
+
+2. **Descriptive statistics for numerical and categorical data**
+
+3. Probability
+  - Rules of probability computation; conditional probability
+  - Basic probability models: Binomial, Normal and Poisson 
+
+4. Statistical inference
+  - Sampling distributions of sample mean and sample proportion 
+  - Hypothesis testing and confidence intervals for population mean and population proportion
+
+---
+## Descriptive statistics
+
+- We've now learned about data manipulation and visualization tools
+
+- What visualizations to do and what summary statistics to actually calculate?
+
+- **Descriptive statistics** are numbers that are used to summarize and describe data
+
+- **Numerical** or **graphical** ways to display the data
+
+- Why is this a useful thing to do?
+
+**Ages of students**: 18, 19, 20, 18, 20, 20, 19, 18, 19, 20, 18, 20, 20, 19, 18, 19, 20, 18, 20, 20, 19, 18, 19, 20, 18, 20, 20, 19, 18, 19, 20, 18, 20, 20, 19, 18, 19, 20, 18, 20, 20, 19, 18, 19, 20, 18, 20, 20, 19, 18, 19, 20, 18, 20, 20, 19, 18, 19, 20, 18, 20, 20, 19, 18, 19, 20, 18, 20, 20, 19, 18, 19, 20, 18, 20, 20, 19, 18, 19, 20, 18, 20, 20, 19, 18, 19, 20, 18, 20, 20, 19
+
+---
+
+## Terminology: Number of variables involved
+
+- **Univariate** data analysis: distribution of single variable
+
+- **Bivariate** data analysis: relationship between two variables
+
+- **Multivariate** data analysis: relationship between many variables at once, usually focusing on the relationship between two while conditioning for others
+
+---
+
+## Terminology: Types of variables
+
+- **Numerical** variables
+  - E.g., age, length, temperature
+  
+  - **Continuous** variables can take on an infinite number of values
+  
+  - **Discrete** variables only take on non-negative whole numbers
+
+- **Categorical** variables
+
+  - E.g., year in college, type of bike, meal 
+  
+  - **Ordinal** variables have levels that have a natural ordering
+
+---
+## Data: Lending Club
+
+- Lending Club is a platform that allows individuals to lend to other individuals
+
+- Data are available in the `openintro` package, called `loans_full_schema`
+
+- Includes 10,000 loans made through the Lending Club; has 55 columns
+
+.tiny[
+```{r }
+library(openintro)
+dplyr::glimpse(loans_full_schema) 
+```
+]
+---
+
+## Selected variables
+
+```{r}
+loans <- loans_full_schema %>%
+  select(loan_amount, interest_rate, term, grade, 
+         state, annual_income, homeownership, debt_to_income,
+         issue_month)
+glimpse(loans)
+```
+
+---
+
+## Selected variables
+
+.small[
+Variable        | Description
+----------------|-------------
+`loan_amount`   |	Amount of the loan received, in US dollars
+`interest_rate` |	Interest rate on the loan, in an annual percentage
+`term`	        | The length of the loan, which is always set as a whole number of months
+`grade`	        | Loan grade, which takes a values A through G and represents the quality of the loan and its likelihood of being repaid
+`state`         |	US state where the borrower resides
+`annual_income` |	Borrower’s annual income, including any second income, in US dollars
+`homeownership`	| Indicates whether the person owns, owns but has a mortgage, or rents
+`debt_to_income` | Debt-to-income ratio
+`issue_month` | Month the loan was issued
+]
+
+---
+
+## Variable types
+
+.small[
+Variable        | Description
+----------------|-------------
+`loan_amount`   |	Amount of the loan received, in US dollars
+`interest_rate` |	Interest rate on the loan, in an annual percentage
+`term`	        | The length of the loan, which is always set as a whole number of months
+`grade`	        | Loan grade, which takes a values A through G and represents the quality of the loan and its likelihood of being repaid
+`state`         |	US state where the borrower resides
+`annual_income` |	Borrower’s annual income, including any second income, in US dollars
+`homeownership`	| Indicates whether the person owns, owns but has a mortgage, or rents
+`debt_to_income` | Debt-to-income ratio
+`issue_month` | Month the loan was issued
+]
+
+- Numerical variables: Continuous or discrete?
+- Categorical: Ordinal or not? 
+
+---
+
+## Variable types
+
+Variable        | Type
+----------------|-------------
+`loan_amount`   |	numerical, continuous
+`interest_rate` |	numerical, continuous
+`term`	        | numerical, discrete
+`grade`	        | categorical, ordinal
+`state`         |	categorical, not ordinal
+`annual_income` |	numerical, continuous
+`homeownership`	| categorical, not ordinal
+`debt_to_income` | numerical, continuous
+`issue_month` | date 
+
+
+---
+
+## Describing numerical distributions
+
+- **Visual summaries**:
+  - Histogram
+  - Boxplot
+  - Density plot
+  - Line graph 
+  
+- Measures of **central tendency**: mean, median, mode 
+
+- **Shape**:
+    - Skewness: right-skewed, left-skewed, symmetric 
+    - Modality: unimodal, bimodal, multimodal, uniform
+
+- **Spread**: variance and standard deviation, range and interquartile range
+
+- **Unusual observations**
+
+- A **summary statistic** is a single number summarizing a large amount of data
+
+---
+
+## Histogram
+
+- Shows **shape, center, and spread** of the data
+
+- Contiguous (adjoining) boxes
+  - Horizontal axis: what the data represents
+  - Vertical axis: frequency or relative frequency 
+
+.tiny[
+.pull-left[
+```{r message = TRUE, out.width = "100%"}
+ggplot(loans, aes(x = loan_amount)) +
+  geom_histogram()
+```
+]
+
+.pull-right[
+```{r out.width = "100%"}
+hist(loans_full_schema$loan_amount)
+```
+]
+]
+
+---
+## Histograms and binwidth
+
+.panelset[
+.panel[.panel-name[binwidth = 1000]
+```{r out.width = "50%"}
+ggplot(loans, aes(x = loan_amount)) +
+  geom_histogram(binwidth = 1000)
+```
+]
+.panel[.panel-name[binwidth = 5000]
+```{r out.width = "50%"}
+ggplot(loans, aes(x = loan_amount)) +
+  geom_histogram(binwidth = 5000)
+```
+]
+.panel[.panel-name[binwidth = 20000]
+```{r out.width = "50%"}
+ggplot(loans, aes(x = loan_amount)) +
+  geom_histogram(binwidth = 20000)
+```
+]
+]
+
+---
+
+## Adding labels 
+
+.panelset[
+.panel[.panel-name[Plot]
+```{r ref.label = "hist-custom", echo = FALSE, warning = FALSE}
+```
+]
+.panel[.panel-name[Code]
+```{r hist-custom, fig.show = "hide", warning = FALSE}
+ggplot(loans, aes(x = loan_amount)) +
+  geom_histogram(binwidth = 5000) +
+  labs( #<<
+    x = "Loan amount ($)", #<<
+    y = "Frequency", #<<
+    title = "Amounts of Lending Club loans" #<<
+  ) #<<
+```
+]
+]
+
+
+---
+## Summary
+--
+
+- Descriptive statistics
+
+  - Types of variables (numerical and categorical)
+  
+- Describing numerical distributions
+
+  - Histograms
+  
+  
+
+---
+
+## Midterm essentials
+
+- What `dplyr` function filters only observations that fulfill some condition? 
+
+- What function returns the number of rows in a data frame? 
+
+- What `dplyr` function creates new variables? 
+
+- How to create a binary variable that depends on whether a variable fulfills some condition? (e.g., `nycflights13` example: Create a new variable that indicates whether or not the flight departed late.)
+
+- `group_by` and `summarize`
+
+- How to make scatterplots
