@@ -53,7 +53,7 @@ library(palmerpenguins)
 
 - There will be no make-up exams
 
-- Drop policy for exams: 1 midterm may be dropped or used with 50% penalty on the final 
+- Drop policy for exams: 1 midterm may be dropped 
 
 ---
 ## Recap
@@ -139,7 +139,7 @@ un_votes %>%
 
 How can we reduce the size of all points? 
 
-What if we just want to group by country? 
+What if we just want to group by country and year (not issue)? 
 
 ---
 ```{r echo = FALSE, out.width = '100%'}
