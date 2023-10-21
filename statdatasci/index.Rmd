@@ -99,11 +99,11 @@ There will sometimes be additional (optional) reading from:
 - Fri Oct 20: Midterm 1
 
 
-<!-- ### Week 5: Descriptive statistics -->
-<!-- - Mon Oct 23: Describing numerical distributions -->
-<!--   - Notes:  -->
-<!--   - Reading:  -->
-<!--     - Open Intro Statistics Chapter 2  -->
+### Week 5: Descriptive statistics
+- Mon Oct 23: Describing numerical distributions
+  - Notes: [Lecture 10](https://xhtai.github.io/statdatasci/lectures/lecture10/lecture10.html)
+  - Reading:
+    - Open Intro Statistics Chapter 2
 
 <!-- - Wed Oct 25: Numerical and categorical data  -->
 <!--   - Notes:  -->
