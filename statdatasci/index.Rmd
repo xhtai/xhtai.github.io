@@ -105,10 +105,10 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - Open Intro Statistics Chapter 2
 
-<!-- - Wed Oct 25: Numerical and categorical data  -->
-<!--   - Notes:  -->
-<!--   - Reading:  -->
-<!--     - R for Data Science Chapter 7 -->
+- Wed Oct 25: Numerical and categorical data
+  - Notes: [Lecture 11](https://xhtai.github.io/statdatasci/lectures/lecture11/lecture11.html)
+  - Reading:
+    - R for Data Science Chapter 7
 
 <!-- - Fri Oct 27: Numerical and categorical data -->
 <!--   - Notes:  -->
