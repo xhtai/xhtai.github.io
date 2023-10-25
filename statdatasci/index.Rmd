@@ -110,9 +110,9 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - R for Data Science Chapter 7
 
-<!-- - Fri Oct 27: Numerical and categorical data -->
-<!--   - Notes:  -->
-<!--   - Homework 3:  -->
+- Fri Oct 27: Numerical and categorical data
+  - Notes: [Lecture 12](https://xhtai.github.io/statdatasci/lectures/lecture12/lecture12.html)
+  - Homework 3:
 
 <!-- ### Week 6: Introduction to probability -->
 <!-- - Mon Oct 30: Introduction to probability  -->
