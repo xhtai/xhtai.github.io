@@ -114,11 +114,11 @@ There will sometimes be additional (optional) reading from:
   - Notes: [Lecture 12](https://xhtai.github.io/statdatasci/lectures/lecture12/lecture12.html)
   - Homework 3: [Html](https://xhtai.github.io/statdatasci/homework/homework3/HW3.html) [Rmd](https://xhtai.github.io/statdatasci/homework/homework3/HW3.Rmd)
 
-<!-- ### Week 6: Introduction to probability -->
-<!-- - Mon Oct 30: Introduction to probability  -->
-<!--   - Notes:  -->
-<!--   - Reading:  -->
-<!--     - Open Intro Statistics Chapter 3.1 -->
+### Week 6: Introduction to probability
+- Mon Oct 30: Introduction to probability
+  - Notes: [Lecture 13](https://xhtai.github.io/statdatasci/lectures/lecture13/lecture13.html)
+  - Reading:
+    - Open Intro Statistics Chapter 3.1
 
 <!-- - Wed Nov 1: Conditional, marginal and joint probability; Bayes' Theorem -->
 <!--   - Notes:  -->
