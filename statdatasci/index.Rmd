@@ -120,16 +120,16 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - Open Intro Statistics Chapter 3.1
 
-- Wed Nov 1: Conditional, marginal and joint probability; Bayes' Theorem
+- Wed Nov 1: Conditional, marginal and joint probability
   - Notes: [Lecture 14](https://xhtai.github.io/statdatasci/lectures/lecture14/lecture14.html)
   - Reading:
     - Open Intro Statistics Chapter 3.2
 
-<!-- - Fri Nov 3: Random variables and common distributions -->
-<!--   - Notes:  -->
-<!--   - Reading:  -->
-<!--     - Open Intro Statistics Chapter 3.4, 3.5 -->
-<!--   - Homework 4:  -->
+- Fri Nov 3: Bayes' Theorem; Random variables and common distributions
+  - Notes: [Lecture 15](https://xhtai.github.io/statdatasci/lectures/lecture15/lecture15.html)
+  - Reading:
+    - Open Intro Statistics Chapter 3.4, 3.5
+  - Homework 4:
 
 <!-- ### Week 7: Common distributions -->
 <!-- - Mon Nov 6: Bernoulli and binomial distribution -->
