@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Bernoulli and Binomial Distribution</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Xiao Hui Tai" />
+    <meta name="date" content="2023-11-06" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.min.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Bernoulli and Binomial Distribution
+]
+.subtitle[
+## <br><br> STA35A: Statistical Data Science 1
+]
+.author[
+### Xiao Hui Tai
+]
+.date[
+### November 6, 2023
+]
+
+---
+
+
+
+
+
+
+layout: true
+  
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &lt;a href="https://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt;  --&gt;
+
+---
+
+&lt;style type="text/css"&gt;
+.tiny .remark-code { font-size: 60%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+&lt;/style&gt;
+
+
+
+
+
+## Recap
+--
+
+- Random variables
+
+  - Expectation and variance
+  
+  - Discrete random variables
+
+
+---
+## Today
+- Continuous random variables 
+
+- Common probability distributions
+
+  - Bernoulli 
+  
+  - Binomial 
+
+- Law of large numbers 
+
+---
+## Continuous random variables
+
+- Sample version: start with a histogram and decrease the bin size
+
+&lt;img src="img/continuous.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+## Continuous random variables
+
+- As the bin size goes to zero, we end up with a density plot
+
+&lt;img src="img/density.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Continuous random variables
+
+- The population versions are **probability mass functions** and **probability density functions**
+
+- Recall: A **probability distribution** is a table of all **disjoint** outcomes and their associated probabilities.
+
+  - Discrete random variables: probability distribution = **probability mass function**
+  
+  - Continuous random variables: probability distribution = **probability density function**
+
+- Total probability needs to be 1
+
+&lt;!-- - We saw that in a probability distribution, the probabilities must total 1. In the continuous version, the total area under the density's curve needs to be 1. --&gt;
+
+
+---
+
+## Continuous random variables
+
+- Probability that the random variable takes on any exact value is **zero**
+
+- E.g., if `\(X\)` is a random variable representing the height of an individual, `\(P(X = 180) = 0\)`
+
+- Why? 
+&lt;!-- - This is because there are an infinite number of values the variable can take on, and the total probability needs to sum to 1. --&gt;
+
+- Instead: `\(P(a \leq X \leq b)\)` is the **area under the density function** between `\(a\)` and `\(b\)`.
+
+---
+## Course content 
+
+1. Fundamentals of R
+  - Overview of data types and structures
+  - Data manipulation and data visualization tools  
+
+2. Descriptive statistics for numerical and categorical data
+
+3. Probability
+  - Rules of probability computation; conditional probability
+  - **Basic probability models: Binomial, Normal and Poisson**
+
+4. Statistical inference
+  - Sampling distributions of sample mean and sample proportion 
+  - Hypothesis testing and confidence intervals for population mean and population proportion
+
+---
+## Common probability distributions
+
+- Discrete 
+
+  - **Bernoulli**
+  
+  - **Binomial**
+
+  - **Poisson**
+  
+  - Geometric
+
+- Continuous
+
+  - **Normal or Gaussian**
+  
+  - **Student's `\(t\)`**
+  
+  - Uniform
+  
+  - Exponential
+
+---
+
+## Bernoulli random variable
+
+&lt;!-- - Note on terminology: when we say we have a Bernoulli random variable, we mean that the random variable follows a Bernoulli distribution --&gt;
+
+&lt;!-- - Same with normal (or Gaussian) random variable, ...  --&gt;
+
+- Consider a **binary random variable** `\(Y\)`. Two possible values, e.g.
+
+  - failure or success
+  - dead or alive
+  - UC Davis student or not
+  - current smoker or not
+  - heads or tails (coin flip)
+  - Y chromosome or not 
+
+- A random variable of this type is known as a **Bernoulli** random variable
+
+- Probability of response has parameter `\(\pi\)` or `\(p\)`. 
+
+---
+## Bernoulli random variable
+
+- `\(Y=1\)` is often called a **success**, `\(Y=0\)` is called a **failure** and `\(\pi\)` or `\(p\)` is defined as the probability of a success, i.e., `\(P(Y = 1)\)`.
+
+- The probability of a "failure," `\(P(Y = 0)\)` is then `\(1 - p\)`
+
+--
+
+- Examples:
+
+  - Coin flip: let `\(Y=1\)` if heads and `\(Y=0\)` if tails, then `\(P(Y=1) = p=0.5\)`
+
+  - Vegetarian in US: `\(Y=1\)` if vegetarian and `\(Y=0\)` if not, then `\(P(Y=1) = p=0.05\)` and `\(P(Y=0)=1-p=1-0.05=0.95\)`
+
+  - Vegetarian in India: `\(Y=1\)` if vegetarian and `\(Y=0\)` if not, then `\(P(Y=1)=p=0.31\)` and `\(P(Y=0)=1-p=1-0.31=0.69\)`
+
+---
+## Bernoulli random variable
+- **Probability mass function** for a Bernoulli distributed random variable is `\(P(Y=y)=p^y(1-p)^{1-y}\)`
+
+  - `\(P(Y=1)=p^1(1-p)^0=p\)` (remember `\(x^0=1\)` for any `\(x\)`)
+  
+  - `\(P(Y=0)=p^0(1-p)^1=1-p\)`
+  
+- `\(E(Y) = \sum_{i=1}^k y_i P(Y = y_i) = p\)` and `\(Var(Y) = p(1-p)\)`
+
+---
+## Sampling from a Bernoulli distribution in R
+
+- When `\(p = .5\)`, we can use the `sample()` function
+
+
+```r
+set.seed(0) # so results are reproducible 
+bernoulliDraws &lt;- sample(0:1, size = 100, replace = TRUE)
+bernoulliDraws
+```
+
+```
+##   [1] 1 0 1 0 0 1 0 0 0 1 1 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 1 0 0
+##  [31] 1 1 1 0 1 0 0 1 0 1 1 1 1 0 1 1 1 1 1 0 0 1 0 1 1 0 0 1 1 1
+##  [61] 0 0 1 1 1 1 1 1 0 1 1 1 1 0 0 0 1 1 0 0 1 1 1 0 0 0 1 0 1 0
+##  [91] 1 0 0 1 1 0 0 0 1 1
+```
+
+---
+## Sampling from a Bernoulli distribution in R
+
+
+```r
+data.frame(outcome = bernoulliDraws) %&gt;%
+  ggplot(aes(x = outcome)) +
+    geom_bar()
+```
+
+&lt;img src="lecture16_files/figure-html/unnamed-chunk-6-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Sampling from a Bernoulli distribution in R
+
+What happens when we increase the sample size? 
+
+.small[
+.pull-left[
+`\(n = 100\)`
+
+```r
+set.seed(0) # so results are reproducible 
+bernoulliDraws &lt;- sample(0:1, size = 100, 
+                         replace = TRUE)
+data.frame(outcome = bernoulliDraws) %&gt;%
+  ggplot(aes(x = outcome)) +
+    geom_bar()
+```
+
+&lt;img src="lecture16_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+
+.pull-right[
+`\(n = 1000\)`
+
+```r
+set.seed(0) # so results are reproducible 
+bernoulliDraws &lt;- sample(0:1, size = 1000, 
+                         replace = TRUE)
+data.frame(outcome = bernoulliDraws) %&gt;%
+  ggplot(aes(x = outcome)) +
+    geom_bar()
+```
+
+&lt;img src="lecture16_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+]
+
+---
+## Sampling from a Bernoulli distribution in R
+
+What happens when we increase the sample size? 
+
+.small[
+.pull-left[
+`\(n = 1000\)`
+
+```r
+set.seed(0) # so results are reproducible 
+bernoulliDraws &lt;- sample(0:1, size = 1000, 
+                         replace = TRUE)
+data.frame(outcome = bernoulliDraws) %&gt;%
+  ggplot(aes(x = outcome)) +
+    geom_bar()
+```
+
+&lt;img src="lecture16_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+`\(n = 10000\)`
+
+```r
+set.seed(0) # so results are reproducible 
+bernoulliDraws &lt;- sample(0:1, size = 10000, 
+                         replace = TRUE)
+data.frame(outcome = bernoulliDraws) %&gt;%
+  ggplot(aes(x = outcome)) +
+    geom_bar()
+```
+
+&lt;img src="lecture16_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+]
+
+---
+## Law of Large Numbers
+
+The Law of Large Numbers states that as a sample size grows, the sample mean gets closer to the expected value, or population mean
+
+.small[
+
+```r
+myMeans &lt;- data.frame(sampleSize = 1:10000, myMean = NA)
+meanFun &lt;- function(inputSampSize, outcomes) {
+  return(mean(outcomes[1:inputSampSize]))
+}
+myMeans$myMean &lt;- sapply(myMeans$sampleSize, meanFun, bernoulliDraws)
+head(myMeans)
+```
+
+```
+##   sampleSize    myMean
+## 1          1 1.0000000
+## 2          2 0.5000000
+## 3          3 0.6666667
+## 4          4 0.5000000
+## 5          5 0.4000000
+## 6          6 0.5000000
+```
+
+```r
+tail(myMeans)
+```
+
+```
+##       sampleSize    myMean
+## 9995        9995 0.5011506
+## 9996        9996 0.5011004
+## 9997        9997 0.5010503
+## 9998        9998 0.5010002
+## 9999        9999 0.5010501
+## 10000      10000 0.5010000
+```
+]
+---
+## Law of Large Numbers
+
+```r
+myMeans %&gt;%
+  ggplot(aes(x = sampleSize, y = myMean)) +
+  geom_line() +
+  labs(x = "Sample size",
+       y = "Sample mean",
+       title = "Illustration of Law of Large Numbers")
+```
+
+&lt;img src="lecture16_files/figure-html/unnamed-chunk-12-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Sampling from a Bernoulli distribution in R
+
+- For any value of `\(0 \leq p \leq 1\)` (including .5): `rbinom()` 
+
+- Arguments `n, size, prob`
+    - `n` is the number of draws from the distribution
+    - `prob` is the probability of success
+    - `size` is the "number of trials (zero or more)" -- for the Bernoulli distribution, we use `size = 1` (more later)
+
+
+```r
+set.seed(0) # so results are reproducible 
+inputP &lt;- .3
+bernoulliDraws.3 &lt;- rbinom(n = 100, size = 1, prob = inputP)
+bernoulliDraws.3
+```
+
+```
+##   [1] 1 0 0 0 1 0 1 1 0 0 0 0 0 0 0 1 0 1 1 0 1 1 0 0 0 0 0 0 0 1
+##  [31] 0 0 0 0 0 1 0 1 0 1 0 1 0 1 0 0 1 0 0 1 0 0 1 0 0 0 0 0 0 0
+##  [61] 0 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 1 1 0 1 1 0 1 0 0 1 0 1 0 0
+##  [91] 0 0 0 0 1 1 1 0 0 1
+```
+
+---
+## Sampling from a Bernoulli distribution in R
+
+
+```r
+mean(bernoulliDraws.3)
+```
+
+```
+## [1] 0.33
+```
+
+```r
+data.frame(outcome = bernoulliDraws.3) %&gt;%
+  ggplot(aes(x = outcome)) +
+    geom_bar()
+```
+
+&lt;img src="lecture16_files/figure-html/unnamed-chunk-14-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Effect of changing parameter p
+
+.small[
+.pull-left[
+
+```r
+set.seed(0) # so results are reproducible 
+inputP &lt;- .3
+bernoulliDraws.3 &lt;- rbinom(n = 100, size = 1, prob = inputP)
+data.frame(outcome = bernoulliDraws.3) %&gt;%
+  ggplot(aes(x = outcome)) +
+    geom_bar() +
+    labs(title = "100 Bernoulli draws, p = .3")
+```
+
+&lt;img src="lecture16_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+```r
+set.seed(0) # so results are reproducible 
+inputP &lt;- .7
+bernoulliDraws.7 &lt;- rbinom(n = 100, size = 1, prob = inputP)
+data.frame(outcome = bernoulliDraws.7) %&gt;%
+  ggplot(aes(x = outcome)) +
+    geom_bar() +
+    labs(title = "100 Bernoulli draws, p = .7")
+```
+
+&lt;img src="lecture16_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+]
+---
+## Law of large numbers
+
+As the sample size grows, the sample mean gets closer to the expected value, or population mean
+
+- **Sample size** is the number of draws from the distribution 
+
+- **Sample mean** is the mean among those samples 
+
+
+
+
+&lt;img src="lecture16_files/figure-html/unnamed-chunk-18-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+.small[
+
+```r
+set.seed(0) # so results are reproducible 
+inputP &lt;- .3
+bernoulliDraws &lt;- rbinom(n = 5000, size = 1, prob = inputP)
+myMeans &lt;- data.frame(sampleSize = 1:5000, myMean = NA)
+meanFun &lt;- function(inputSampSize, outcomes) {
+  return(mean(outcomes[1:inputSampSize]))
+}
+myMeans$myMean &lt;- sapply(myMeans$sampleSize, meanFun, bernoulliDraws)
+```
+
+
+```r
+head(myMeans)
+```
+
+```
+##   sampleSize    myMean
+## 1          1 1.0000000
+## 2          2 0.5000000
+## 3          3 0.3333333
+## 4          4 0.2500000
+## 5          5 0.4000000
+## 6          6 0.3333333
+```
+
+```r
+tail(myMeans)
+```
+
+```
+##      sampleSize    myMean
+## 4995       4995 0.3053053
+## 4996       4996 0.3052442
+## 4997       4997 0.3051831
+## 4998       4998 0.3051220
+## 4999       4999 0.3050610
+## 5000       5000 0.3050000
+```
+]
+
+---
+
+```r
+myMeans %&gt;%
+  ggplot(aes(x = sampleSize, y = myMean)) +
+  geom_line() +
+  labs(x = "Sample size",
+       y = "Sample mean",
+       title = "Illustration of law of large numbers with p = .3")
+```
+
+&lt;img src="lecture16_files/figure-html/unnamed-chunk-21-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## From Bernoulli to binomial... 
+
+- `\(Y\)` takes value 1 with probability `\(p\)` and value 0 with probability `\(1-p\)`
+
+- `\(P(Y=y)=p^y(1-p)^{1-y}\)`
+
+  - `\(P(Y=1)=p^1(1-p)^0=p\)` (remember `\(x^0=1\)` for any `\(x\)`)
+  
+  - `\(P(Y=0)=p^0(1-p)^1=1-p\)`
+  
+- Now consider: in a randomly-selected group of 3 high school students, how surprising would it be to get 2 who have smoked e-cigarettes in the past month?
+
+  - **Three draws** from a **Bernoulli** distribution 
+
+---
+
+## Case Study: E-Cigarettes
+
+- The [CDC reports](https://www.cdc.gov/tobacco/data_statistics/fact_sheets/youth_data/tobacco_use/index.htm) that around 20% of high school students have smoked e-cigarettes in the past 30 days.
+
+- `\(P(Y=1)=P(Smoker)=p=0.2\)` and `\(P(Y=0)=0.8\)`
+
+- Randomly select two high school students 
+
+- `\(X\)` = the number of smokers, out of 2. X can take the values 0, 1, or 2. 
+
+- `\(Y_1\)` = smoking status of first student and `\(Y_2\)` = smoking status of second student, where `\(Y_j = 1\)` if student `\(j\)` smokes and 0 otherwise.
+
+.pull-left[
+How to get **probability distribution** of `\(X\)`?
+
+]
+.pull-right[
+| `\(Y_1\)` | `\(Y_2\)` | `\(X\)` | `\(P(X)\)` |
+|:----:|:----:|:----:|:----:|
+| 0 | 0 | 0 | |
+| 1 | 0 | 1 | |
+| 0 | 1 | 1 | |
+| 1 | 1 | 2 | |
+]
+
+---
+## Case Study: E-Cigarettes
+
+- Recall: If events A and B are independent, then `\(P(A \cap B)=P(A)\times P(B).\)`
+
+- Let `\(A_1\)` be the event that `\(Y_1=1\)` and let `\(A_2\)` be the event that `\(Y_2=1\)`. 
+
+- Since the students are independent, 
+
+$$
+`\begin{aligned}
+P(Y_1=Y_2=1) &amp; = P(A_1 \cap A_2) \\
+ &amp; = P(A_1) P(A_2) \\
+ &amp; = p \times p  \\
+ &amp;= 0.2(0.2)\\
+ &amp;=0.04. 
+\end{aligned}`
+$$
+
+---
+## Case Study: E-Cigarettes
+
+
+| `\(Y_1\)` | `\(Y_2\)` | `\(X\)` | `\(P(X)\)` |
+|:----:|:----:|:----:|:----:|
+| 0 | 0 | 0 | |
+| 1 | 0 | 1 | |
+| 0 | 1 | 1 | |
+| 1 | 1 | 2 |  `\(0.02 \times 0.02 =0.04\)` |
+
+
+---
+## Case Study: E-Cigarettes
+
+
+| `\(Y_1\)` | `\(Y_2\)` | `\(X\)` | `\(P(X)\)` |
+|:----:|:----:|:----:|:----:|
+| 0 | 0 | 0 | `\(0.8 \times 0.8 = 0.64\)` |
+| 1 | 0 | 1 | `\(0.2 \times 0.8 = 0.16\)` |
+| 0 | 1 | 1 | `\(0.8 \times 0.2 = 0.16\)` |
+| 1 | 1 | 2 | `\(0.2 \times 0.2 =0.04\)` |
+
+
+---
+
+## Case Study: E-Cigarettes
+
+.pull-left[
+
+| `\(Y_1\)` | `\(Y_2\)` | `\(X\)` | `\(P(X)\)` |
+|:----:|:----:|:----:|:----:|
+| 0 | 0 | 0 | `\(0.8 \times 0.8 = 0.64\)` |
+| 1 | 0 | 1 | `\(0.2 \times 0.8 = 0.16\)` |
+| 0 | 1 | 1 | `\(0.8 \times 0.2 = 0.16\)` |
+| 1 | 1 | 2 | `\(0.2 \times 0.2 =0.04\)` |
+]
+.pull-right[
+Probability distribution of `\(X\)`:
+
+| | | | |
+|:--:|:--:|:--:|:--:|
+| `\(X\)` | 0 | 1 | 2 |
+| `\(P(X=x)\)` | 0.64 | 0.32 | 0.04 |
+
+]
+
+---
+## Case Study: E-Cigarettes
+
+Now suppose we randomly sample 3 independent high school students
+
+| `\(Y_1\)` | `\(Y_2\)` | `\(Y_3\)` | `\(X\)` | `\(P(X)\)` |
+|:----:|:----:|:----:|:----:|:----:|
+| 0 | 0 | 0 | 0 |  |
+| 1 | 0 | 0 | 1 |  |
+| 0 | 1 | 0 | 1 |  |
+| 0 | 0 | 1 | 1 |  |
+| 1 | 1 | 0 | 2 |  |
+| 1 | 0 | 1 | 2 |  |
+| 0 | 1 | 1 | 2 |  |
+| 1 | 1 | 1 | 3 |  |
+
+---
+
+## Case Study: E-Cigarettes
+
+Because these are independent high school students, we can calculate the probabilities in the same manner as before.
+
+
+| `\(Y_1\)` | `\(Y_2\)` | `\(Y_3\)` | `\(X\)` | `\(P(X)\)` |
+|:----:|:----:|:----:|:----:|:----:|
+| 0 | 0 | 0 | 0 | 0.8(0.8)(0.8)=0.512 |
+| 1 | 0 | 0 | 1 | 0.2(0.8)(0.8)=0.128 |
+| 0 | 1 | 0 | 1 | 0.8(0.2)(0.8)=0.128 |
+| 0 | 0 | 1 | 1 | 0.8(0.8)(0.2)=0.128 |
+| 1 | 1 | 0 | 2 | 0.2(0.2)(0.8)=0.032 |
+| 1 | 0 | 1 | 2 | 0.2(0.8)(0.2)=0.032 |
+| 0 | 1 | 1 | 2 | 0.8(0.2)(0.2)=0.032 |
+| 1 | 1 | 1 | 3 | 0.2(0.2)(0.2)=0.008 |
+
+The probability that 2 of 3 are recent e-cig smokers is `\(0.032+0.032+0.032=0.096\)` or 9.6%
+
+---
+
+## Case Study: E-Cigarettes
+
+.pull-left[
+| `\(Y_1\)` | `\(Y_2\)` | `\(Y_3\)` | `\(X\)` | `\(P(X)\)` |
+|:----:|:----:|:----:|:----:|:----:|
+| 0 | 0 | 0 | 0 | 0.8(0.8)(0.8)=0.512 |
+| 1 | 0 | 0 | 1 | 0.2(0.8)(0.8)=0.128 |
+| 0 | 1 | 0 | 1 | 0.8(0.2)(0.8)=0.128 |
+| 0 | 0 | 1 | 1 | 0.8(0.8)(0.2)=0.128 |
+| 1 | 1 | 0 | 2 | 0.2(0.2)(0.8)=0.032 |
+| 1 | 0 | 1 | 2 | 0.2(0.8)(0.2)=0.032 |
+| 0 | 1 | 1 | 2 | 0.8(0.2)(0.2)=0.032 |
+| 1 | 1 | 1 | 3 | 0.2(0.2)(0.2)=0.008 |
+]
+
+.pull-right[
+Probability distribution of `\(X\)`, the number of recent e-cig smokers out of three high school students:
+ 
+| | | | | |
+|:--:|:--:|:--:|:--:|:---:|
+| `\(X\)` | 0 | 1 | 2 | 3|
+| `\(P(X=x)\)` | 0.512 | 0.384 | 0.096 | 0.008 |
+ 
+ ]
+
+---
+
+## Case Study: E-Cigarettes
+
+- Extending to 4 and more students, ... 
+
+- We can use the **binomial distribution** to describe this random variable 
+
+
+
+---
+## Summary
+- Law of Large Numbers 
+
+- Common probability distributions
+
+  - Bernoulli 
+  
+  - Binomial 
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

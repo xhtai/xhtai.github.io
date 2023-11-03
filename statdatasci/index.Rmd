@@ -125,17 +125,17 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - Open Intro Statistics Chapter 3.2
 
-- Fri Nov 3: Bayes' Theorem; Random variables and common distributions
+- Fri Nov 3: Bayes' Theorem; Random variables
   - Notes: [Lecture 15](https://xhtai.github.io/statdatasci/lectures/lecture15/lecture15.html)
   - Reading:
     - Open Intro Statistics Chapter 3.4, 3.5
-  - Homework 4:
+  - Homework 4: [Html](https://xhtai.github.io/statdatasci/homework/homework4/HW4.html) [Rmd](https://xhtai.github.io/statdatasci/homework/homework4/HW4.Rmd)
 
-<!-- ### Week 7: Common distributions -->
-<!-- - Mon Nov 6: Bernoulli and binomial distribution -->
-<!--   - Notes:  -->
-<!--   - Reading:  -->
-<!--     - Open Intro Statistics Chapter 4.3 -->
+### Week 7: Common distributions
+- Mon Nov 6: Bernoulli and binomial distribution
+  - Notes: [Lecture 16](https://xhtai.github.io/statdatasci/lectures/lecture16/lecture16.html)
+  - Reading:
+    - Open Intro Statistics Chapter 4.3
 
 <!-- - Wed Nov 8: Binomial and Poisson distribution -->
 <!--   - Notes:  -->

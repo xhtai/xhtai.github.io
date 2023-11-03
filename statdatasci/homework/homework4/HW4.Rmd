@@ -1,0 +1,57 @@
+---
+title: "Homework 4"
+author: ""
+date: "DUE: November 9 2023, 9PM"
+output: 
+  html_document: 
+    toc: true
+    toc_float: true
+---
+
+## Instructions
+Upload a PDF file, named with your UC Davis email ID and homework number (e.g., `xtai_hw1.pdf`), to Gradescope (accessible through Canvas). You may handwrite your answers and scan them, or type them up. 
+
+Students may choose to collaborate with each other on the homework, but must clearly indicate with whom they collaborated. 
+
+## Problem 1 (20 points)
+A student has trouble waking up for class. They have two different old alarm clocks. The first goes off 80% of the time, and the second goes off 50% of the time. Calculate the following probabilities:
+
+a. Neither alarm clock goes off 
+b. One alarm clock goes off
+c. Both alarm clocks go off 
+d. The first alarm clock goes off, given that the second goes off. 
+
+## Problem 2 (20 points)
+The following table represents the joint distribution of $X$ and $Y$:
+
+X \\ Y | 1 | 2
+:--:|:-:|:-:
+1 | 0.2 | 0.1 
+2 | 0.0 | 0.2
+3 | 0.3 | 0.2 
+
+a. Find the marginal distribution of $X$ and the marginal distribution of $Y$.
+b. Find the conditional distribution of $Y|X=1$, $Y|X=2$ and $Y|X=3$.
+c. Are $X$ and $Y$ independent? Why or why not? 
+
+## Problem 3 (15 points)
+On any given day, there is a 10% chance of rain. A person works in a casino with no windows. When it rains, customers wear rain boots 80% of the time. When it doesn't rain, customers wear rain boots 5% of the time. If the casino worker sees a customer in rain boots, what is the chance of rain? 
+
+## Problem 4 (25 points)
+People with the disease D have a 90% probability of testing positive on the D-test. If they do not have disease D, they have a 99% probability that they will test negative. We know that 5% of all people test positive.
+
+a. What is the probability of having disease D?
+b. A person just tested positive on the D-test. What is the probability that they are actually healthy?
+
+## Problem 5 (20 points)
+A random experiment involves rolling a four-sided dice twice. Let X represent the sum of the numbers on the dice's face. 
+
+a. Write the probability mass function of the random variable X.
+b. Find $P(X = 2)$.
+c. Find $P(X \leq 4)$.
+d. Find $P(X = 2 | X \leq 4)$.
+e. Find $E(X)$.
+f. Find $Var(X)$.
+g. If $Y = 2X + 1$, what is $E(Y)$? What is $Var(Y)$?
+
+
