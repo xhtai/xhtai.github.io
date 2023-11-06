@@ -1,0 +1,680 @@
+---
+title: "Binomial and Poisson Distribution"
+subtitle: "<br><br> STA35A: Statistical Data Science 1"
+author: "Xiao Hui Tai"
+date: November 8, 2023
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      # ratio: "16:9"
+      # highlightLines: true
+      # highlightStyle: solarized-light
+      countIncrementalSlides: false
+---
+
+
+```{r child = "../setup.Rmd"}
+```
+
+```{css, echo = FALSE}
+.tiny .remark-code { font-size: 70%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+```
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+## Reminders/announcements
+
+- Friday is a holiday! 
+  - I will post homework by Friday, due Thursday 11/16 at 9pm
+  
+- Midterm next Friday 11/17
+  - Will cover material from 10/23 (after Midterm 1) until next Monday 11/13
+  - Wednesday: review (JH)
+  - Thursday: no lab, XHT OH 2:30-3:30pm
+  - Same rules apply: closed-book, no computers or calculators, no make-up exams
+
+---
+
+## Recap
+--
+
+- Common probability distributions
+
+  - Bernoulli 
+      - Theoretical properties: probability mass function, parameters, mean and variance 
+      - Sampling and law of large numbers; effect of changing parameters 
+  
+  - Binomial
+
+---
+## Today
+- Common probability distributions
+
+  - Binomial 
+      - Theoretical properties: probability mass function, parameters, mean and variance 
+      - More on calculating binomial probabilities
+      - Sampling and law of large numbers; effect of changing parameters 
+  
+  - Poisson
+  
+---
+
+## Binomial random variable
+
+- **Binomial distribution**: probability of $X$ "successes" from a sequence of $n$ independent Bernoulli trials (size $n$)
+
+  - Binomial(n, p)
+
+- E-cigarette example: each student would represent an independent Bernoulli trial 
+
+  - 1 draw from the binomial distribution is made of 3 independent draws from the Bernoulli distribution 
+
+- **Assumptions**:
+
+  - Fixed number $n$ of Bernoulli trials
+  
+  - Outcomes of the $n$ trials are **independent**
+  
+  - Probability of success $p$ is the same for each trial
+
+---
+
+## Binomial distribution
+
+- **Probability mass function**: $P(X=x)=\begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}$ 
+
+- Recall Bernoulli: $P(Y=y)=p^y(1-p)^{1-y}$
+
+- Second part: multiplying the right combination of $p$ and $1-p$ 
+
+  - Total of $n$ terms 
+
+  - For example, for 3 e-cig smokers, $X=3$, $p^x(1-p)^{n-x}=0.2^3(0.8)^0=0.008$
+
+- First part: $\begin{pmatrix}n \\x \end{pmatrix}$: all the possible ways to get the outcome $x$
+
+
+---
+
+## Combinations
+
+- $\begin{pmatrix} n \\ x \end{pmatrix}$, is said in words "n choose x" 
+
+- This is called a **combination**.
+
+- In this particular setting, it is also called the *binomial coefficient*. 
+
+- Represents the number of ways to pick $x$ subjects from a larger group of $n$ and is defined as $$\begin{pmatrix} n \\ x \end{pmatrix} = \frac{n!}{x!(n-x)!}.$$
+
+- n! ("n factorial"): $n!=n(n-1)(n-2)\cdots (1)$. 
+
+  - $3!=3(2)(1)=6$
+  - $4!=4(3)(2)(1)=24$, and so forth. 
+  - We define $0!=1$.
+
+---
+
+## Combinations
+- In R, `choose(n, k)`
+
+- Factorials are `factorial(x)`, e.g., 
+```{r}
+factorial(3)
+```
+
+- How many ways can we pick 3 subjects from a group of 3? Using the binomial coefficient, we see it is $\begin{pmatrix}3 \\ 3 \end{pmatrix}=\frac{3!}{3!0!}=\frac{3(2)(1)}{3(2)(1)1}=1$. In R,
+```{r}
+choose(3, 3)
+```
+
+---
+
+## Combinations
+
+Going back to the table: 3 ways to pick 2 from a group of 3 students.  
+
+.small[
+
+| $Y_1$ | $Y_2$ | $Y_3$ | $X$ | $P(X)$ |
+|:----:|:----:|:----:|:----:|:----:|
+| 0 | 0 | 0 | 0 | 0.8(0.8)(0.8)=0.512 |
+| 1 | 0 | 0 | 1 | 0.2(0.8)(0.8)=0.128 |
+| 0 | 1 | 0 | 1 | 0.8(0.2)(0.8)=0.128 |
+| 0 | 0 | 1 | 1 | 0.8(0.8)(0.2)=0.128 |
+| 1 | 1 | 0 | 2 | 0.2(0.2)(0.8)=0.032 |
+| 1 | 0 | 1 | 2 | 0.2(0.8)(0.2)=0.032 |
+| 0 | 1 | 1 | 2 | 0.8(0.2)(0.2)=0.032 |
+| 1 | 1 | 1 | 3 | 0.2(0.2)(0.2)=0.008 |
+
+]
+
+We can also calculate $\begin{pmatrix}3 \\ 2 \end{pmatrix}=\frac{3!}{2!1!}=\frac{3(2)(1)}{(2)(1)(1)}=3$.
+
+---
+
+## Binomial probabilities
+
+Putting the ingredients together, we have 
+
+$$
+\begin{aligned}
+P(X = 2) &=  \begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}\\
+&= \begin{pmatrix} 3 \\ 2 \end{pmatrix}p^2(1-p)^{3-2}\\
+&=3(0.2)^2(0.8)^{3-2}\\
+&=3(.032) \\
+&=.096
+\end{aligned}
+$$
+This is the same as we saw in the table. 
+
+---
+
+## Binomial probabilities 
+
+- We saw how to calculate $P(X = 2)$. How about $P(X = 3)$?
+
+$$
+\begin{aligned}
+P(X = x) &=\begin{pmatrix} n \\ x \end{pmatrix} p^x(1-p)^{n-x} \\
+&= \frac{n!}{x!(n-x)!}p^x(1-p)^{n-x} 
+\end{aligned}
+$$
+
+--
+
+- Probability of getting 3 recent e-cig smokers in our sample of 3 students,
+
+$$\begin{aligned}
+P(X = 3)& = \begin{pmatrix} 3 \\ 3 \end{pmatrix}0.2^3(1-0.2)^{3-3}  \\
+& = \frac{3!}{3!(3-3)!}0.2^3(1-0.2)^{3-3} \\
+ & = \frac{3(2)(1)}{3(2)(1)1}0.2^3(0.8)^{0}=0.2^3 \\
+ & = 0.008.
+ \end{aligned}$$
+
+- Derive the probability distribution
+
+---
+## Binomial probabilites in R
+
+- In R, we can use `dbinom()`
+
+- From the help page: `dbinom()` has the arguments `x, size, prob, log = FALSE`
+  - `x` are the values of $x$ that we want probabilities for; here it is 0, 1, 2 and 3
+  - `size` is the number of Bernoulli trials; here it is 3
+  - `prob` is the probability of success; here it is .2
+
+.pull-left[
+```{r}
+dbinom(x = 0:3, size = 3, 
+       prob = .2)
+```
+]
+
+.pull-right[
+
+| | | | | |
+|:--:|:--:|:--:|:--:|:---:|
+| $X$ | 0 | 1 | 2 | 3|
+| $P(X=x)$ | 0.512 | 0.384 | 0.096 | 0.008 |
+ 
+ ]
+
+
+---
+## Bernoulli vs. binomial random variable
+
+- Recall: The **binomial distribution** gives us the probability of $X$ "successes" from a sequence of $n$ independent Bernoulli trials. 
+
+- In our example, each student would be an independent Bernoulli trial (either an e-cig smoker, or not).
+
+  - **Bernoulli**: whether or not a student is a recent e-cigarette smoker 
+
+  - **Binomial**: number of students, out of 3, who are recent e-cigarette smokers
+
+  - One observation of this binomial random variable is composed of 3 Bernoulli trials ("size 3")
+
+- Bernoulli distribution = special case of the binomial distribution, with 1 "trial"
+
+---
+## Mean and variance of binomial random variable
+
+For a binomial random variable with number of trials $n$ and probability of success $p$, $E(X) = np$ and $Var(X) = n(p)(1-p)$
+
+- How to get this? 
+
+--
+
+- From Bernoulli!
+
+- In our example, $p = .2$, $n = 3$, so $E(X) = .6$ and $Var(X) = 3*.2*.8 = .48$
+
+--
+
+- The Bernoulli distribution is a special case of the binomial distribution, with $n = 1$. Recall: $E(X) = p$ and $Var(X) = p(1-p)$.
+
+---
+
+## Case Study: E-Cigarettes
+
+- The [CDC reports](https://www.cdc.gov/tobacco/data_statistics/fact_sheets/youth_data/tobacco_use/index.htm) that about 20% of high school students have smoked e-cigarettes in the past 30 days
+
+- $P(Y=1)=P(Smoker)=p=0.2$ and $P(Y=0)=0.8$
+
+- Previously: 3 Bernoulli trials
+  
+
+---
+## More examples of calculating binomial probabilities 
+- What if we are interested in the probability that there is at least 1 student, out of 500, that has recent e-cigarette use? 
+
+- $X =$? 
+
+- What is the probability of interest? 
+
+- $n =$? $p =$?
+
+---
+## More examples of calculating binomial probabilities 
+- What if we are interested in the probability that there are more than 2 students, out of 500, who have recent e-cigarette use? 
+
+--
+
+Binomial distribution: $P(X = x)=\begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}$
+
+- Quick trick: $P(X \geq 1) = 1 - P(X=0)$ (either no students with recent e-cigarette use, or one or more students with recent e-cigarette use)
+
+- Similarly, $P(X > 2)=1-P(X=0)-P(X=1)-P(X=2)$ 
+
+
+---
+## More examples of calculating binomial probabilities 
+
+Binomial distribution: $P(X = x)=\begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}$
+
+So we have
+
+.small[
+$$
+\begin{aligned}
+P(X \geq 1) & =1-P(X = 0) \\
+&=1-\begin{pmatrix}500 \\ 0 \end{pmatrix} 0.2^0 (0.8)^{500-0} \\
+&=1-0.8^{500} \\
+&= 1\\
+ P(X>2) & = 1-P(X=0)-P(X=1)-P(X=2) \\ 
+ & = 1 - 0.8^{500} - \begin{pmatrix} 500 \\ 1 \end{pmatrix}0.2^1(0.8)^{500-1} - \begin{pmatrix} 500 \\ 2 \end{pmatrix}0.2^2(0.8)^{500-2} \\
+ & = 1 - 0.8^{500} - 500(0.2)(0.8)^{500-1} - \frac{500!}{2!(500-2)!}0.2^2(0.8)^{500-2} \\
+ & = 1 - 0.8^{500} - 500(0.2)(0.8)^{500-1} - \frac{500(500-1)}{2}0.2^2(0.8)^{500-2} \\
+ & = 1
+\end{aligned}
+$$
+]
+
+---
+## In R
+
+- Given the large number of students (500), it is almost certain that at least 1 or 2 would have recent e-cigarette use. 
+
+- We might be interested instead in $P(X \geq 100)$, the probability that at least four-fifths of the students have recent e-cigarette use
+
+- Luckily, we can do this in R
+
+```{r}
+sum(dbinom(x = 100:500, size = 500, prob = .2))
+```
+
+- Also, `pbinom()`: gives us $P(X \leq x)$ directly
+```{r}
+1 - pbinom(q = 99, size = 500, prob = .2)
+```
+
+---
+## Sampling from a binomial distribution in R
+
+- Recall draws from the Bernoulli distribution:
+  
+  - For any value of $0 \leq p \leq 1$ (including .5), we can use the `rbinom()` function
+
+  - `rbinom()` has the arguments `n, size, prob`, where `n` is the number of draws, and `prob` is the probability of success.
+  
+  - `size` is the "number of trials (zero or more)" -- for the Bernoulli distribution, we use `size = 1`. 
+  
+---
+## Sampling from a binomial distribution in R
+
+- `size` = number of Bernoulli trials; in the 3-student e-cigarette example, `size = 3`
+
+- **NOTE**: we use $n$ to denote the number of Bernoulli trials; in R this is the `size` argument
+
+Description | R
+----|--
+Number of draws/samples from Binomial | `n`
+Number of Bernoulli trials, size $n$ | `size`
+Probability of success, $p$ | `prob`
+
+- Bernoulli distribution: `size = 1`
+
+---
+## Sampling from a binomial distribution in R
+
+Example: 100 draws from the binomial distribution; each draw is made of 3 Bernoulli trials (size 3); probability of success = .2
+
+```{r}
+set.seed(0) # so results are reproducible 
+inputP <- .2
+binomDraws <- rbinom(n = 100, size = 3, prob = inputP)
+binomDraws
+```
+
+
+---
+## Sample mean  
+
+- Recall: for a binomial random variable with number of trials $n$ and probability of success $p$, $E(X) = np$ and $Var(X) = n(p)(1-p)$
+
+- In our example, $p = .2$, $n = 3$, so $E(X) = .6$ and $Var(X) = 3*.2*.8 = .48$
+
+- We can calculate the sample mean from our sample of 100:
+```{r}
+mean(binomDraws)
+```
+
+- What should this converge to? 
+
+---
+## Law of Large Numbers again
+As the sample size grows, the sample mean gets closer to the expected value, or population mean
+
+.small[
+```{r}
+set.seed(0) # so results are reproducible 
+binomDraws <- rbinom(n = 5000, size = 3, prob = .2)
+myMeans <- data.frame(sampleSize = 1:5000, myMean = NA)
+meanFun <- function(inputSampSize, outcomes) {
+  return(mean(outcomes[1:inputSampSize]))
+}
+myMeans$myMean <- sapply(myMeans$sampleSize, meanFun, binomDraws)
+head(myMeans)
+tail(myMeans)
+```
+]
+---
+## Law of Large Numbers again 
+.small[
+```{r}
+myMeans %>%
+  ggplot(aes(x = sampleSize, y = myMean)) +
+  geom_line() +
+  labs(x = "Sample size",
+       y = "Sample mean",
+       title = "Illustration of law of large numbers for Binomial distribution\nn = 3, p = .2")
+```
+]
+
+
+---
+
+## Frequency distribution vs. probability distribution 
+
+- Use `rbinom()` to get 5000 draws from the population 
+
+- In R:
+.small[
+```{r}
+set.seed(0) # so results are reproducible 
+binomDraws <- rbinom(n = 5000, size = 3, prob = .2)
+table(binomDraws)/5000
+```
+]
+
+- Compare with the theoretical probabilities:
+.small[
+```{r}
+dbinom(x = 0:3, size = 3, prob = .2)
+```
+]
+---
+
+## Frequency distribution of e-cigarette smokers 
+
+```{r}
+data.frame(binomDraws) %>%
+  ggplot(aes(x = binomDraws)) + 
+    geom_bar() +
+    labs(x = "Number of Smokers",
+         title = "5000 samples from Binomial(3, .2)")
+```
+
+---
+## Varying the number of Bernoulli trials: 100 trials
+
+.small[
+```{r}
+set.seed(0) # so results are reproducible 
+binomDraws100 <- rbinom(n = 5000, size = 100, prob = .2)
+data.frame(binomDraws100) %>%
+  ggplot(aes(x = binomDraws100)) + 
+    geom_bar() +
+    labs(x = "Number of Smokers",
+         title = "5000 samples from Binomial(100, .2)")
+```
+]
+---
+## Varying the number of Bernoulli trials: 500 trials
+
+.small[
+```{r}
+set.seed(0) # so results are reproducible 
+binomDraws500 <- rbinom(n = 5000, size = 500, prob = .2)
+data.frame(binomDraws500) %>%
+  ggplot(aes(x = binomDraws500)) + 
+    geom_bar() +
+    labs(x = "Number of Smokers",
+         title = "5000 samples from Binomial(500, .2)")
+```
+]
+---
+## Frequency distribution of e-cigarette smokers varying number of Bernoulli trials
+
+.small[
+.pull-left[
+```{r eval = FALSE}
+data.frame(binomDraws) %>%
+  bind_cols(size = 3) %>%
+  bind_rows(
+    data.frame(binomDraws100) %>%
+      rename(binomDraws = binomDraws100) %>%
+      bind_cols(size = 100)
+  ) %>%
+  bind_rows(
+    data.frame(binomDraws500) %>%
+      rename(binomDraws = binomDraws500) %>%
+      bind_cols(size = 500)
+  ) %>%
+  ggplot(aes(x = binomDraws, 
+             fill = as.factor(size))) +
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of smokers",
+      y = "Frequency",
+      title = "5000 samples each from Binomial(3, .2), Binomial(100, .2), Binomial(500, .2)",
+      fill = "Size"
+    )
+```
+]
+]
+.pull-right[
+```{r echo = FALSE, out.width = "100%"}
+data.frame(binomDraws) %>%
+  bind_cols(size = 3) %>%
+  bind_rows(
+    data.frame(binomDraws100) %>%
+      rename(binomDraws = binomDraws100) %>%
+      bind_cols(size = 100)
+  ) %>%
+  bind_rows(
+    data.frame(binomDraws500) %>%
+      rename(binomDraws = binomDraws500) %>%
+      bind_cols(size = 500)
+  ) %>%
+  ggplot(aes(x = binomDraws, 
+                    fill = as.factor(size))) + 
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of smokers",
+      y = "Frequency",
+      title = "5000 samples each from \n Binomial(3, .2), Binomial(100, .2), Binomial(500, .2)",
+      fill = "Size"
+    )
+```
+]
+
+---
+## Frequency distribution of e-cigarette smokers varying probability of success
+
+.small[
+```{r }
+set.seed(0) # so results are reproducible 
+binomP.2 <- rbinom(n = 5000, size = 100, prob = .2)
+binomP.5 <- rbinom(n = 5000, size = 100, prob = .5)
+binomP.7 <- rbinom(n = 5000, size = 100, prob = .7)
+```
+]
+```{r echo = FALSE, out.width = "60%"}
+data.frame(binomP.2) %>%
+  rename(outcome = binomP.2) %>%
+  bind_cols(prob = .2) %>%
+  bind_rows(
+    data.frame(binomP.5) %>%
+      rename(outcome = binomP.5) %>%
+      bind_cols(prob = .5)
+  ) %>%
+  bind_rows(
+    data.frame(binomP.7) %>%
+      rename(outcome = binomP.7) %>%
+      bind_cols(prob = .7)
+  ) %>%
+  ggplot(aes(x = outcome, 
+                    fill = as.factor(prob))) +
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of smokers",
+      y = "Frequency",
+      title = "5000 samples each from \nBinomial(100, .2), Binomial(100, .5), Binomial(100, .7)",
+      fill = "Prob"
+    )
+```
+
+
+
+---
+## Poisson distribution
+
+- Useful for estimating the **number of events in a large population over a unit of time**. 
+
+- For example:
+  - The number of people having heart attacks in New York City every year
+  - The number of accidents occurring at an intersection per hour
+  - The number of typos in every 100 pages of a book 
+  
+- It is named after French mathematician Siméon Denis Poisson
+
+---
+## Poisson distribution
+- E.g.: Number of people having heart attacks in New York City every year
+
+- **Key ingredients**
+  - **Fixed interval** of time or space
+  
+  - Events happen with a **known average rate**, independently of time since the last event ("memoryless" property)
+      - One person having a heart attack does not change the probability of another person having a heart attack, hence the timing of the next heart attack 
+
+- The parameter that defines a Poisson distributed random variable is the **rate** $\lambda$, where $\lambda > 0$
+
+  - Rate = **average number of occurrences per unit of time**
+
+- Often used to model rare events
+
+---
+## Probability mass function, mean and variance
+
+- $P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}$, defined over non-negative integer values of $x$
+
+  - Recall: $n! = n(n - 1)(n - 2)\cdots (1)$. 
+
+- No upper limit, i.e., $x$ can take very large non-negative integer values 
+
+- $E(X) = \lambda$
+
+- $Var(X) = \lambda$
+
+---
+## Poisson probabilities  
+- $P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}$ lets us calculate probabilities of taking a certain value
+
+- For $x = 2$ and $\lambda = 3$, we have 
+
+$$
+\begin{aligned}
+P(X = 2) &= \frac{3^2 e^{-3}}{2!}  = \frac{9(e^{-3})}{2(1)}  = 0.2240418
+\end{aligned}
+$$
+- In R:
+
+```{r}
+dpois(x = 2, lambda = 3)
+```
+
+- For large values of $x$, the probability is very small because of the large denominator
+
+```{r}
+dpois(x = 10, lambda = 3)
+```
+
+---
+## Exercises
+An insurance agency determines that 70% of individuals do not exceed their deductible. 
+
+- Suppose the insurance agency is considering a random sample of four individuals they insure. What is the probability that exactly one of them will exceed the deductible?
+
+--
+
+- What is the probability that 3 of 8 randomly selected individuals will have exceeded the insurance deductible, i.e., that 5 of 8 will not exceed the deductible?
+
+---
+## Exercises
+A very skilled court stenographer makes one typographical error (typo) per hour on average.
+
+- What probability distribution is most appropriate for calculating the probability of a given number of typos this stenographer makes in an hour?
+
+- What are the mean and the standard deviation of the number of typos this stenographer makes?
+
+- Would it be considered unusual if this stenographer made 4 or more typos in a given hour?
+
+- Calculate the probability that this stenographer makes at most 2 typos in a given hour.
+
+
+---
+## Summary
+
+--
+
+- Common probability distributions: Binomial and Poisson 
+
+  - Theoretical properties: probability mass function, parameters, mean and variance, effect of varying parameters
+  
+  - Sampling and law of large numbers; effect of changing parameters 
+
+  - R functions:
+  
+      - `d____()`, e.g., `dbinom()`: for densities (more accurately, for discrete random variables these are probability mass functions, $P(X = x)$)
+      - `p____()`, e.g., `pbinom()`: for $P(X\leq x)$
+      - `r____()`, e.g., `rbinom()`: for random sample
+    

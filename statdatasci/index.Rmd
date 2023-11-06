@@ -137,10 +137,10 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - Open Intro Statistics Chapter 4.3
 
-<!-- - Wed Nov 8: Binomial and Poisson distribution -->
-<!--   - Notes:  -->
-<!--   - Reading: -->
-<!--     - Open Intro Statistics Chapter 4.5 -->
+- Wed Nov 8: Binomial and Poisson distribution
+  - Notes: [Lecture 17](https://xhtai.github.io/statdatasci/lectures/lecture17/lecture17.html)
+  - Reading:
+    - Open Intro Statistics Chapter 4.5
 
 <!-- - Fri Nov 10: Veterans Day -->
 <!--   - Homework 5:  -->
