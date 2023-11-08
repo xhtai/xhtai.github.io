@@ -1,0 +1,59 @@
+---
+title: "Homework 5"
+author: ""
+date: "DUE: November 16 2023, 9PM"
+output: 
+  html_document: 
+    toc: true
+    toc_float: true
+---
+
+## Instructions
+Upload a PDF file, named with your UC Davis email ID and homework number (e.g., `xtai_hw1.pdf`), to Gradescope (accessible through Canvas). You will give the commands to answer each question in its own code block, which will also produce output that will be automatically embedded in the output file. Each answer must be supported by any written statements as well as any code used. 
+
+All code used to produce your results must be shown in your PDF file (e.g., do not use `echo = FALSE` or `include = FALSE` as options anywhere). `Rmd` files do not need to be submitted, but may be requested by the TA and must be available when the assignment is submitted. 
+
+Students may choose to collaborate with each other on the homework, but must clearly indicate with whom they collaborated. 
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
+## Problem 1 (30 points)
+Consider a population in which 80\% of those who are college-educated are employed, and 60\% of those who are not college-educated are employed. In this population, 55\% of individuals are not college-educated. 
+
+a. What is the probability of being employed? (You may handwrite your answer to this part, if you prefer. You can include an image in a code chunk using `knitr::include_graphics("myImg.png")`.) 
+
+b. If I pick five people at random from this population, what is the probability that none of those chosen is employed? (Hint: what random variable can we define? What distribution does this random variable follow?) Calculate the required probability by hand (you may use R as a calculator), then in R using a *single* function.
+
+## Problem 2 (45 points)
+Assume that a college can admit at most 930 freshmen. Assume that it sends out 1500 acceptances and that each student comes to the college with probability .6, and that the students make decisions independently of one another. 
+
+a. What is the probability that the college ends up exactly the number of students it can accommodate?
+
+b. What is the probability that the college ends up with with more students than it can accommodate? 
+
+c. What is the (theoretical) mean and variance of the distribution that you used in (a) and (b)?
+
+d. In R, simulate the 1500 decisions that the accepted students make (i.e., create a binary vector of length 1500, indicating whether or not students attended the college). How many students, out of 1500, attended the college in your simulation? This number represents a single draw from the distribution that you used in (a) and (b). 
+
+e. In (d), what distribution did you use for each of the draws? What is (are) the parameter(s), and what is the theoretical mean and variance? 
+
+f. (Continued from (e)) As the sample size grows, what value do you expect the sample mean to converge to, and why? Does your answer in (d) make sense? If we had a sample size of 10000 (instead of 1500), what value would we expect for the number of students, out of 10000, that attend? 
+
+## Problem 3 (25 points)
+Assume the number of accidents at a busy intersection is one a month on average, and follows a distribution commonly used to model rare events. 
+
+a. What distribution does the number of accidents at that intersection in a year follow, and what is (are) the parameter(s)? What is the mean and variance? 
+
+b. What is the probability that there are 10 or fewer accidents in a year? Show how you would work out the required probability by hand (you don't have to compute the value), and compute it in R.
+
+c. Would it be considered unusual to have 3 or fewer accidents in a year?
+
+
+## Appendix
+
+```{r eval = TRUE}
+sessionInfo()
+```

@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Poisson and Normal (Gaussian) Distribution</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Xiao Hui Tai" />
+    <meta name="date" content="2023-11-13" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.min.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Poisson and Normal (Gaussian) Distribution
+]
+.subtitle[
+## <br><br> STA35A: Statistical Data Science 1
+]
+.author[
+### Xiao Hui Tai
+]
+.date[
+### November 13, 2023
+]
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &lt;a href="https://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt;  --&gt;
+
+---
+
+&lt;style type="text/css"&gt;
+.tiny .remark-code { font-size: 70%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+&lt;/style&gt;
+
+
+
+
+## Reminders: Midterm 2
+
+- Closed-book. These formulas will be provided: 
+  - **Bayes' theorem**: `\(P(A \mid B) =\frac{P(B \mid A)P(A)}{P(B)}\)`.
+  - **Probability mass functions**:  
+      - Binomial: `\(P(X=x)=\begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}\)`  
+      - Poisson: `\(P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}\)`, `\(\lambda &gt; 0\)`
+
+---
+## Recap
+
+--
+
+- Common probability distributions: Binomial  
+
+  - Theoretical properties: probability mass function, parameters, mean and variance, effect of varying parameters
+  
+  - Sampling and law of large numbers; effect of changing parameters 
+
+  - R functions:
+  
+      - `d____()`, e.g., `dbinom()`: for densities (more accurately, for discrete random variables these are probability mass functions, `\(P(X = x)\)`)
+      - `p____()`, e.g., `pbinom()`: for `\(P(X\leq x)\)`
+      - `r____()`, e.g., `rbinom()`: for random sample
+
+---
+## Today
+- Common probability distributions
+
+  - Poisson distribution 
+
+  - Normal or Gaussian
+
+---
+
+## Frequency distribution vs. probability distribution 
+
+- Use `rbinom()` to get 5000 draws from the population 
+
+- In R:
+.small[
+
+```r
+set.seed(0) # so results are reproducible 
+binomDraws &lt;- rbinom(n = 5000, size = 3, prob = .2)
+table(binomDraws)/5000
+```
+
+```
+## binomDraws
+##      0      1      2      3 
+## 0.5246 0.3638 0.1040 0.0076
+```
+]
+
+- Compare with the theoretical probabilities:
+.small[
+
+```r
+dbinom(x = 0:3, size = 3, prob = .2)
+```
+
+```
+## [1] 0.512 0.384 0.096 0.008
+```
+]
+---
+
+## Frequency distribution of e-cigarette smokers 
+
+
+```r
+data.frame(binomDraws) %&gt;%
+  ggplot(aes(x = binomDraws)) + 
+    geom_bar() +
+    labs(x = "Number of Smokers",
+         title = "5000 samples from Binomial(3, .2)")
+```
+
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-5-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Varying the number of Bernoulli trials: 100 trials
+
+.small[
+
+```r
+set.seed(0) # so results are reproducible 
+binomDraws100 &lt;- rbinom(n = 5000, size = 100, prob = .2)
+data.frame(binomDraws100) %&gt;%
+  ggplot(aes(x = binomDraws100)) + 
+    geom_bar() +
+    labs(x = "Number of Smokers",
+         title = "5000 samples from Binomial(100, .2)")
+```
+
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-6-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+---
+## Varying the number of Bernoulli trials: 500 trials
+
+.small[
+
+```r
+set.seed(0) # so results are reproducible 
+binomDraws500 &lt;- rbinom(n = 5000, size = 500, prob = .2)
+data.frame(binomDraws500) %&gt;%
+  ggplot(aes(x = binomDraws500)) + 
+    geom_bar() +
+    labs(x = "Number of Smokers",
+         title = "5000 samples from Binomial(500, .2)")
+```
+
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-7-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+---
+## Frequency distribution of e-cigarette smokers varying number of Bernoulli trials
+
+.small[
+.pull-left[
+
+```r
+data.frame(binomDraws) %&gt;%
+  bind_cols(size = 3) %&gt;%
+  bind_rows(
+    data.frame(binomDraws100) %&gt;%
+      rename(binomDraws = binomDraws100) %&gt;%
+      bind_cols(size = 100)
+  ) %&gt;%
+  bind_rows(
+    data.frame(binomDraws500) %&gt;%
+      rename(binomDraws = binomDraws500) %&gt;%
+      bind_cols(size = 500)
+  ) %&gt;%
+  ggplot(aes(x = binomDraws, 
+             fill = as.factor(size))) +
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of smokers",
+      y = "Frequency",
+      title = "5000 samples each from Binomial(3, .2), Binomial(100, .2), Binomial(500, .2)",
+      fill = "Size"
+    )
+```
+]
+]
+.pull-right[
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## Frequency distribution of e-cigarette smokers varying probability of success
+
+.small[
+
+```r
+set.seed(0) # so results are reproducible 
+binomP.2 &lt;- rbinom(n = 5000, size = 100, prob = .2)
+binomP.5 &lt;- rbinom(n = 5000, size = 100, prob = .5)
+binomP.7 &lt;- rbinom(n = 5000, size = 100, prob = .7)
+```
+]
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-11-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+## Poisson distribution
+
+- Useful for estimating the **number of events in a large population over a unit of time**. 
+
+- For example:
+  - The number of people having heart attacks in New York City every year
+  - The number of accidents occurring at an intersection per hour
+  - The number of typos in every 100 pages of a book 
+  
+- It is named after French mathematician Siméon Denis Poisson
+
+---
+## Poisson distribution
+- E.g.: Number of people having heart attacks in New York City every year
+
+- **Key ingredients**
+  - **Fixed interval** of time or space
+  
+  - Events happen with a **known average rate**, independently of time since the last event ("memoryless" property)
+      - One person having a heart attack does not change the probability of another person having a heart attack, hence the timing of the next heart attack 
+
+- The parameter that defines a Poisson distributed random variable is the **rate** `\(\lambda\)`, where `\(\lambda &gt; 0\)`
+
+  - Rate = **average number of occurrences per unit of time**
+
+- Often used to model rare events
+
+---
+## Probability mass function, mean and variance
+
+- `\(P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}\)`, defined over non-negative integer values of `\(x\)`
+
+  - Recall: `\(n! = n(n - 1)(n - 2)\cdots (1)\)`. 
+
+- No upper limit, i.e., `\(x\)` can take very large non-negative integer values 
+
+- `\(E(X) = \lambda\)`
+
+- `\(Var(X) = \lambda\)`
+
+---
+## Poisson probabilities  
+- `\(P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}\)` lets us calculate probabilities of taking a certain value
+
+- For `\(x = 2\)` and `\(\lambda = 3\)`, we have 
+
+$$
+`\begin{aligned}
+P(X = 2) &amp;= \frac{3^2 e^{-3}}{2!}  = \frac{9(e^{-3})}{2(1)}  = 0.2240418
+\end{aligned}`
+$$
+- In R:
+
+
+```r
+dpois(x = 2, lambda = 3)
+```
+
+```
+## [1] 0.2240418
+```
+
+- For large values of `\(x\)`, the probability is very small because of the large denominator
+
+
+```r
+dpois(x = 10, lambda = 3)
+```
+
+```
+## [1] 0.0008101512
+```
+
+---
+## Probability distribution
+- In the same manner, we can derive the entire probability distribution
+
+.tiny[
+.pull-left[
+
+```r
+dpois(x = 0:10, lambda = 3)
+```
+
+```
+##  [1] 0.0497870684 0.1493612051 0.2240418077 0.2240418077
+##  [5] 0.1680313557 0.1008188134 0.0504094067 0.0216040315
+##  [9] 0.0081015118 0.0027005039 0.0008101512
+```
+
+
+```r
+data.frame(x = 0:10, y = dpois(0:10, lambda = 3)) %&gt;%
+  ggplot(aes(x = x, y = y)) + 
+    geom_bar(stat = "identity") +
+  labs(title = "Probability distribution of Poisson(3)",
+       y = "P(X = x)")
+```
+]
+]
+.pull-right[
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## Probability distribution varying lambda
+
+.small[
+
+```r
+data.frame(x = 0:30, y = dpois(0:30, lambda = 3), lambda = 3) %&gt;%
+  bind_rows(data.frame(x = 0:30, y = dpois(0:30, lambda = 10), lambda = 10)) %&gt;%
+  bind_rows(data.frame(x = 0:30, y = dpois(0:30, lambda = 20), lambda = 20)) %&gt;%
+    ggplot(aes(x = x, y = y, fill = as.factor(lambda))) + 
+      geom_bar(stat = "identity", 
+               position = "identity", 
+               alpha = .5) +
+    labs(title = "Probability distribution of \nPoisson(3), Poisson(10), Poisson(20)",
+         y = "P(X = x)",
+         fill = "Lambda")
+```
+
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## Sampling from Poisson distribution in R
+- Simulate random draws using the `rpois()` function
+
+- `rpois()` has the arguments 
+  - `n`, the number of draws from the distribution 
+  - `lambda`, the mean
+
+
+```r
+set.seed(0) # so results are reproducible 
+inputLambda &lt;- 3
+poissonDraws &lt;- rpois(n = 100, lambda = inputLambda)
+poissonDraws
+```
+
+```
+##   [1] 5 2 2 3 5 2 5 6 4 3 1 2 1 4 2 4 3 4 8 2 4 6 2 4 1 2 2 0 2 5
+##  [31] 2 3 3 3 1 5 4 4 1 4 2 5 3 4 3 3 4 0 3 4 4 3 5 3 2 1 1 2 3 4
+##  [61] 2 5 2 3 2 4 2 3 4 1 5 2 5 2 2 3 5 5 2 4 6 3 4 2 2 4 2 4 1 2
+##  [91] 1 2 1 3 5 4 4 3 2 4
+```
+
+---
+## Frequency distribution varying lambda
+
+.small[
+
+```r
+set.seed(0) # so results are reproducible 
+poissonL3 &lt;- rpois(n = 5000, lambda = 3)
+poissonL10 &lt;- rpois(n = 5000, lambda = 10)
+poissonL20 &lt;- rpois(n = 5000, lambda = 20)
+```
+]
+
+.tiny[
+.pull-left[
+
+```r
+data.frame(poissonL3) %&gt;%
+  rename(outcome = poissonL3) %&gt;%
+  bind_cols(lambda = 3) %&gt;%
+  bind_rows(
+    data.frame(poissonL10) %&gt;%
+      rename(outcome = poissonL10) %&gt;%
+      bind_cols(lambda = 10)
+  ) %&gt;%
+  bind_rows(
+    data.frame(poissonL20) %&gt;%
+      rename(outcome = poissonL20) %&gt;%
+      bind_cols(lambda = 20)
+  ) %&gt;%
+  ggplot(aes(x = outcome, 
+                    fill = as.factor(lambda))) +
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of occurrences",
+      y = "Frequency",
+      title = "5000 samples each from \nPoisson(3), Poisson(10), Poisson(20)",
+      fill = "Lambda"
+    )
+```
+]
+]
+.pull-right[
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+
+
+---
+## Exercises
+An insurance agency determines that 70% of individuals do not exceed their deductible. 
+
+- Suppose the insurance agency is considering a random sample of four individuals they insure. What is the probability that exactly one of them will exceed the deductible?
+
+--
+
+- What is the probability that 3 of 8 randomly selected individuals will have exceeded the insurance deductible, i.e., that 5 of 8 will not exceed the deductible?
+
+---
+## Exercises
+A very skilled court stenographer makes one typographical error (typo) per hour on average.
+
+- What probability distribution is most appropriate for calculating the probability of a given number of typos this stenographer makes in an hour?
+
+- What are the mean and the standard deviation of the number of typos this stenographer makes?
+
+- Would it be considered unusual if this stenographer made 4 or more typos in a given hour?
+
+- Calculate the probability that this stenographer makes at most 2 typos in a given hour.
+
+---
+
+## Recall: Continuous random variables
+
+&lt;img src="img/density.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+- Probability distribution for a discrete random variable: **probability mass function**
+
+- Continuous random variable: **probability density functions**
+
+- For a continuous random variable, probability for any exact value is zero
+
+- Instead, we think about probabilities in ranges. 
+
+- `\(P(a \leq X \leq b)\)` is the area under the density function between `\(a\)` and `\(b\)`.
+
+---
+## Normal Distribution
+
+- The **normal distribution** is an example of a continuous distribution
+
+- It is a very important distribution and one of the primary inferential tools in statistics 
+
+- Many **natural phenomenon** approximate the normal distribution, such as weight, height, blood pressure, annual rainfall
+
+- Commonly called the *Gaussian distribution* after [Carl Friedrich Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss)
+
+- Also sometimes called a *bell curve*
+
+---
+
+## Illustration: Shoe sizes 
+
+- Mickle et al (2010 *Footwear Science*) showed the following bimodal distribution of shoe sizes in the US. 
+
+&lt;img src="img/bimodalshoes.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+Note that standard shoe sizes are discrete.
+
+---
+
+## Illustration: Shoe sizes 
+
+- Let `\(X\)` represent the shoe size for wearers of men's shoes
+
+- (Hypothetical) probability distribution of shoe sizes of wearers of men's shoes.
+
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-24-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Illustration: Shoe sizes 
+
+What is the probability of a customer wanting  a men's shoe size smaller than 9?
+
+
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-25-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Smaller Shoes
+
+.pull-left[
+
+```
+##  size probability
+##   5.5      0.0001
+##   6.0      0.0006
+##   6.5      0.0012
+##   7.0      0.0032
+##   7.5      0.0081
+##   8.0      0.0180
+##   8.5      0.0334
+##   9.0      0.0556
+##   9.5      0.0805
+##  10.0      0.1072
+##  10.5      0.1202
+```
+]
+.pull-right[
+
+```
+##  size probability
+##  11.0      0.1326
+##  11.5      0.1247
+##  12.0      0.1109
+##  12.5      0.0807
+##  13.0      0.0550
+##  13.5      0.0345
+##  14.0      0.0182
+##  14.5      0.0086
+##  15.0      0.0050
+##  15.5      0.0012
+##  16.0      0.0004
+```
+]
+
+The probability of a random men's shoe wearer having a shoe size less than 9 in this population is 0.0646.
+
+What is the probability of shoe size 10-11.5?
+---
+
+## Moving to Continuous Distributions
+
+- Now suppose we could get *really* well-fitting shoes, using quarter sizes (9, 9.25, 9.5, 9.75, ...) or even tenth sizes (9, 9.1, 9.2, ...), or shoes specifically made to fit your feet perfectly.
+
+- As the number of sizes increases, the bar widths become narrower -&gt; probability distribution of continuous random variable
+
+.pull-left[
+&lt;img src="lecture18_files/figure-html/normal-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+This is a **probability density function**.
+]
+---
+## Moving to Continuous Distributions
+
+- Probability density function can be used to get the probability of any range of continuous shoe sizes 
+
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-26-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+E.g., probability of shoe size being less than 9 (shaded area)
+
+---
+## Moving to Continuous Distributions
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-27-1.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+- How do we find this area of interest?
+
+- Calculus! `$$P(a \leq X \leq b)=\text{area between a and b below the curve}=\int_a^b f(x)dx$$` where `\(f(x)\)` represents the density curve
+  - In this course, we will use R
+
+---
+## Normal Distribution
+
+- **Symmetric, bell-shaped**
+
+- Characterized by the mean, `\(\mu\)`, and the standard deviation, `\(\sigma\)` (or variance, `\(\sigma^2\)`)
+
+- For the normal distribution, the **density function** is given by  `$$f(x)=\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{1}{2}\frac{(x-\mu)^2}{\sigma^2}}$$`
+
+- Notation: `\(N(\mu,\sigma^2)\)`
+
+- The normal distribution with mean 0 and standard deviation 1 is called the **standard normal distribution**. It is commonly denoted `\(Z \sim N(0, 1)\)`. 
+
+---
+## Probability density function for Normal Distribution
+- Like `dbinom()` and `dpois()`, `dnorm()` in R gives us the probability density function 
+
+- Here instead of `\(P(X = x)\)`, it is the **value of the probability density function**, `\(f(x)\)` on the previous slide, at values that we input
+
+- `dnorm()` has arguments `x`, `mean` and `sd`, where `mean` and `sd` are the mean and standard deviation of the normal distribution that we want
+
+- **Remember that `\(P(X = x) = 0\)` for a continuous random variable**; the value that `dnorm()` gives us is not a probability but the height of the density function
+
+---
+## Probability density function for Normal Distribution
+
+```r
+dnorm(x = -3:3, mean = 0, sd = 1)
+```
+
+```
+## [1] 0.004431848 0.053990967 0.241970725 0.398942280 0.241970725
+## [6] 0.053990967 0.004431848
+```
+
+.small[
+
+```r
+data.frame(x = c(-3, 3)) %&gt;%
+  ggplot(aes(x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1)) +
+  labs(title = "Probability distribution of N(0, 1)",
+       y = "f(x)")
+```
+
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-29-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## Normal Distribution varying mean 
+- Which of the three distributions have means 0, 1, and 4?
+
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-30-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Normal Distribution varying standard deviation 
+- Which has standard deviation 1, 2, and 4? 
+
+&lt;img src="lecture18_files/figure-html/unnamed-chunk-31-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+## Summary
+
+- Common probability distributions: Poisson and Normal
+
+  - Theoretical properties: probability density function, parameters, mean and variance, effect of varying parameters
+  
+  - R functions, e.g.:
+  
+      - `dnorm()` for densities 
+      - `pnorm()` for `\(P(X\leq x)\)`
+      - `rnorm()` for random sample
+    
+  - Standard normal distribution
+  
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

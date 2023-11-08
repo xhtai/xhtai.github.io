@@ -137,23 +137,23 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - Open Intro Statistics Chapter 4.3
 
-- Wed Nov 8: Binomial and Poisson distribution
+- Wed Nov 8: Binomial distribution
   - Notes: [Lecture 17](https://xhtai.github.io/statdatasci/lectures/lecture17/lecture17.html)
   - Reading:
     - Open Intro Statistics Chapter 4.5
 
-<!-- - Fri Nov 10: Veterans Day -->
-<!--   - Homework 5:  -->
+- Fri Nov 10: Veterans Day
+  - Homework 5: [Html](https://xhtai.github.io/statdatasci/homework/homework5/HW5.html) [Rmd](https://xhtai.github.io/statdatasci/homework/homework5/HW5.Rmd)
 
-<!-- ### Week 8: Normal distribution -->
-<!-- - Mon Nov 13: Poisson and Normal distribution -->
-<!--   - Notes:  -->
-<!--   - Reading:  -->
-<!--     - Open Intro Statistics Chapter 4.1 -->
+### Week 8: Normal distribution
+- Mon Nov 13: Poisson and Normal distribution
+  - Notes: [Lecture 18](https://xhtai.github.io/statdatasci/lectures/lecture18/lecture18.html)
+  - Reading:
+    - Open Intro Statistics Chapter 4.1
 
-<!-- - Wed Nov 15: Review -->
+- Wed Nov 15: Review
 
-<!-- - Fri Nov 17: Midterm 2 -->
+- Fri Nov 17: Midterm 2
 
 
 <!-- ### Week 9: Sampling distributions  -->
