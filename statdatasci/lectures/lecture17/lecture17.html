@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Binomial and Poisson Distribution</title>
+    <title>Binomial Distribution</title>
     <meta charset="utf-8" />
     <meta name="author" content="Xiao Hui Tai" />
     <meta name="date" content="2023-11-08" />
@@ -18,7 +18,7 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# Binomial and Poisson Distribution
+# Binomial Distribution
 ]
 .subtitle[
 ## <br><br> STA35A: Statistical Data Science 1
@@ -91,13 +91,12 @@ layout: true
       - More on calculating binomial probabilities
       - Sampling and law of large numbers; effect of changing parameters 
   
-  - Poisson
   
 ---
 
 ## Binomial random variable
 
-- **Binomial distribution**: probability of `\(X\)` "successes" from a sequence of `\(n\)` independent Bernoulli trials (size `\(n\)`)
+- **Binomial distribution**: `\(X\)` "successes" from a sequence of `\(n\)` independent Bernoulli trials (size `\(n\)`)
 
   - Binomial(n, p)
 
@@ -125,7 +124,7 @@ layout: true
 
   - Total of `\(n\)` terms 
 
-  - For example, for 3 e-cig smokers, `\(X=3\)`, `\(p^x(1-p)^{n-x}=0.2^3(0.8)^0=0.008\)`
+  - For example, for 3 e-cig smokers, `\(x=3\)`, `\(p^x(1-p)^{n-x}=0.2^3(0.8)^0=0.008\)`
 
 - First part: `\(\begin{pmatrix}n \\x \end{pmatrix}\)`: all the possible ways to get the outcome `\(x\)`
 
@@ -365,7 +364,7 @@ $$
 
 - Given the large number of students (500), it is almost certain that at least 1 or 2 would have recent e-cigarette use. 
 
-- We might be interested instead in `\(P(X \geq 100)\)`, the probability that at least four-fifths of the students have recent e-cigarette use
+- We might be interested instead in `\(P(X \geq 100)\)`, the probability that at least one-fifth of the students have recent e-cigarette use
 
 - Luckily, we can do this in R
 
@@ -561,193 +560,11 @@ data.frame(binomDraws) %&gt;%
 &lt;img src="lecture17_files/figure-html/unnamed-chunk-14-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 ---
-## Varying the number of Bernoulli trials: 100 trials
-
-.small[
-
-```r
-set.seed(0) # so results are reproducible 
-binomDraws100 &lt;- rbinom(n = 5000, size = 100, prob = .2)
-data.frame(binomDraws100) %&gt;%
-  ggplot(aes(x = binomDraws100)) + 
-    geom_bar() +
-    labs(x = "Number of Smokers",
-         title = "5000 samples from Binomial(100, .2)")
-```
-
-&lt;img src="lecture17_files/figure-html/unnamed-chunk-15-1.png" width="60%" style="display: block; margin: auto;" /&gt;
-]
----
-## Varying the number of Bernoulli trials: 500 trials
-
-.small[
-
-```r
-set.seed(0) # so results are reproducible 
-binomDraws500 &lt;- rbinom(n = 5000, size = 500, prob = .2)
-data.frame(binomDraws500) %&gt;%
-  ggplot(aes(x = binomDraws500)) + 
-    geom_bar() +
-    labs(x = "Number of Smokers",
-         title = "5000 samples from Binomial(500, .2)")
-```
-
-&lt;img src="lecture17_files/figure-html/unnamed-chunk-16-1.png" width="60%" style="display: block; margin: auto;" /&gt;
-]
----
-## Frequency distribution of e-cigarette smokers varying number of Bernoulli trials
-
-.small[
-.pull-left[
-
-```r
-data.frame(binomDraws) %&gt;%
-  bind_cols(size = 3) %&gt;%
-  bind_rows(
-    data.frame(binomDraws100) %&gt;%
-      rename(binomDraws = binomDraws100) %&gt;%
-      bind_cols(size = 100)
-  ) %&gt;%
-  bind_rows(
-    data.frame(binomDraws500) %&gt;%
-      rename(binomDraws = binomDraws500) %&gt;%
-      bind_cols(size = 500)
-  ) %&gt;%
-  ggplot(aes(x = binomDraws, 
-             fill = as.factor(size))) +
-    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
-    labs(
-      x = "Number of smokers",
-      y = "Frequency",
-      title = "5000 samples each from Binomial(3, .2), Binomial(100, .2), Binomial(500, .2)",
-      fill = "Size"
-    )
-```
-]
-]
-.pull-right[
-&lt;img src="lecture17_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" /&gt;
-]
-
----
-## Frequency distribution of e-cigarette smokers varying probability of success
-
-.small[
-
-```r
-set.seed(0) # so results are reproducible 
-binomP.2 &lt;- rbinom(n = 5000, size = 100, prob = .2)
-binomP.5 &lt;- rbinom(n = 5000, size = 100, prob = .5)
-binomP.7 &lt;- rbinom(n = 5000, size = 100, prob = .7)
-```
-]
-&lt;img src="lecture17_files/figure-html/unnamed-chunk-20-1.png" width="60%" style="display: block; margin: auto;" /&gt;
-
-
-
----
-## Poisson distribution
-
-- Useful for estimating the **number of events in a large population over a unit of time**. 
-
-- For example:
-  - The number of people having heart attacks in New York City every year
-  - The number of accidents occurring at an intersection per hour
-  - The number of typos in every 100 pages of a book 
-  
-- It is named after French mathematician Siméon Denis Poisson
-
----
-## Poisson distribution
-- E.g.: Number of people having heart attacks in New York City every year
-
-- **Key ingredients**
-  - **Fixed interval** of time or space
-  
-  - Events happen with a **known average rate**, independently of time since the last event ("memoryless" property)
-      - One person having a heart attack does not change the probability of another person having a heart attack, hence the timing of the next heart attack 
-
-- The parameter that defines a Poisson distributed random variable is the **rate** `\(\lambda\)`, where `\(\lambda &gt; 0\)`
-
-  - Rate = **average number of occurrences per unit of time**
-
-- Often used to model rare events
-
----
-## Probability mass function, mean and variance
-
-- `\(P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}\)`, defined over non-negative integer values of `\(x\)`
-
-  - Recall: `\(n! = n(n - 1)(n - 2)\cdots (1)\)`. 
-
-- No upper limit, i.e., `\(x\)` can take very large non-negative integer values 
-
-- `\(E(X) = \lambda\)`
-
-- `\(Var(X) = \lambda\)`
-
----
-## Poisson probabilities  
-- `\(P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}\)` lets us calculate probabilities of taking a certain value
-
-- For `\(x = 2\)` and `\(\lambda = 3\)`, we have 
-
-$$
-`\begin{aligned}
-P(X = 2) &amp;= \frac{3^2 e^{-3}}{2!}  = \frac{9(e^{-3})}{2(1)}  = 0.2240418
-\end{aligned}`
-$$
-- In R:
-
-
-```r
-dpois(x = 2, lambda = 3)
-```
-
-```
-## [1] 0.2240418
-```
-
-- For large values of `\(x\)`, the probability is very small because of the large denominator
-
-
-```r
-dpois(x = 10, lambda = 3)
-```
-
-```
-## [1] 0.0008101512
-```
-
----
-## Exercises
-An insurance agency determines that 70% of individuals do not exceed their deductible. 
-
-- Suppose the insurance agency is considering a random sample of four individuals they insure. What is the probability that exactly one of them will exceed the deductible?
-
---
-
-- What is the probability that 3 of 8 randomly selected individuals will have exceeded the insurance deductible, i.e., that 5 of 8 will not exceed the deductible?
-
----
-## Exercises
-A very skilled court stenographer makes one typographical error (typo) per hour on average.
-
-- What probability distribution is most appropriate for calculating the probability of a given number of typos this stenographer makes in an hour?
-
-- What are the mean and the standard deviation of the number of typos this stenographer makes?
-
-- Would it be considered unusual if this stenographer made 4 or more typos in a given hour?
-
-- Calculate the probability that this stenographer makes at most 2 typos in a given hour.
-
-
----
 ## Summary
 
 --
 
-- Common probability distributions: Binomial and Poisson 
+- Common probability distributions: Binomial  
 
   - Theoretical properties: probability mass function, parameters, mean and variance, effect of varying parameters
   
