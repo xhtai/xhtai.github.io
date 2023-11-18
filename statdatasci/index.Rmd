@@ -145,7 +145,7 @@ There will sometimes be additional (optional) reading from:
 - Fri Nov 10: Veterans Day
   - Homework 5: [Html](https://xhtai.github.io/statdatasci/homework/homework5/HW5.html) [Rmd](https://xhtai.github.io/statdatasci/homework/homework5/HW5.Rmd)
 
-### Week 8: Normal distribution
+### Week 8: Poisson and normal distribution
 - Mon Nov 13: Poisson and Normal distribution
   - Notes: [Lecture 18](https://xhtai.github.io/statdatasci/lectures/lecture18/lecture18.html)
   - Reading:
@@ -156,13 +156,13 @@ There will sometimes be additional (optional) reading from:
 - Fri Nov 17: Midterm 2
 
 
-<!-- ### Week 9: Sampling distributions  -->
-<!-- - Mon Nov 20: Normal distribution, sampling distributions -->
-<!--   - Notes:  -->
-<!--   - Reading:  -->
-<!--     - Open Intro Statistics Chapter 5.1  -->
+### Week 9: Normal distribution
+- Mon Nov 20: Normal distribution
+  - Notes: [Lecture 19](https://xhtai.github.io/statdatasci/lectures/lecture19/lecture19.html)
+  - Reading:
+    - Open Intro Statistics Chapter 5.1
 
-<!-- - Wed Nov 22, Fri Nov 24: Thanksgiving -->
+- Wed Nov 22, Fri Nov 24: Thanksgiving
 
 <!-- ### Week 10: Sampling distributions, confidence intervals  -->
 <!-- - Mon Nov 27: Sampling distribution of sample mean and proportion -->
