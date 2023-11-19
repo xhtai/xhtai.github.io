@@ -33,6 +33,8 @@ library(knitr)
 
 - No class the rest of the week, Happy Thanksgiving! 
 
+- No office hours today (apologies! OH by appointment, please send me email)
+
 - Homework 6 and 7 will be assigned on Monday (11/27 and 12/4) and due Sunday 9pm
 
 ---
