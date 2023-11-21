@@ -164,12 +164,12 @@ There will sometimes be additional (optional) reading from:
 
 - Wed Nov 22, Fri Nov 24: Thanksgiving
 
-<!-- ### Week 10: Sampling distributions, confidence intervals  -->
-<!-- - Mon Nov 27: Sampling distribution of sample mean and proportion -->
-<!--   - Notes:  -->
-<!--   - Homework 6:  -->
+### Week 10: Sampling distributions, confidence intervals
+- Mon Nov 27: Sampling distribution of sample mean
+  - Notes: [Lecture 20](https://xhtai.github.io/statdatasci/lectures/lecture20/lecture20.html)
+  - Homework 6:
 
-<!-- - Wed Nov 29: Introduction to confidence intervals  -->
+<!-- - Wed Nov 29: Sample proportion, Confidence intervals  -->
 <!--   - Notes:  -->
 <!--   - Reading: -->
 <!--     - Open Intro Statistics Chapter 5.2  -->
