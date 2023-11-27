@@ -167,7 +167,7 @@ There will sometimes be additional (optional) reading from:
 ### Week 10: Sampling distributions, confidence intervals
 - Mon Nov 27: Sampling distribution of sample mean
   - Notes: [Lecture 20](https://xhtai.github.io/statdatasci/lectures/lecture20/lecture20.html)
-  - Homework 6:
+  - Homework 6: [Html](https://xhtai.github.io/statdatasci/homework/homework6/HW6.html) [Rmd](https://xhtai.github.io/statdatasci/homework/homework6/HW6.Rmd)
 
 <!-- - Wed Nov 29: Sample proportion, Confidence intervals  -->
 <!--   - Notes:  -->

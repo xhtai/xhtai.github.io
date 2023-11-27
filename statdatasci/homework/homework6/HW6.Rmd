@@ -1,0 +1,58 @@
+---
+title: "Homework 6"
+author: ""
+date: "DUE: December 3 2023, 9PM"
+output: 
+  html_document: 
+    toc: true
+    toc_float: true
+---
+
+## Instructions
+Upload a PDF file, named with your UC Davis email ID and homework number (e.g., `xtai_hw1.pdf`), to Gradescope (accessible through Canvas). You will give the commands to answer each question in its own code block, which will also produce output that will be automatically embedded in the output file. Each answer must be supported by any written statements as well as any code used. 
+
+All code used to produce your results must be shown in your PDF file (e.g., do not use `echo = FALSE` or `include = FALSE` as options anywhere). `Rmd` files do not need to be submitted, but may be requested by the TA and must be available when the assignment is submitted. 
+
+Students may choose to collaborate with each other on the homework, but must clearly indicate with whom they collaborated. 
+
+## Problem 1 (20 points)
+Assume that tree heights follow a symmetric, bell-shaped distribution with average 100 feet and standard deviation 25. 
+
+a. What common probability distribution do tree heights follow, and what are the parameters? 
+
+b. We find a tree with height 25 feet. What is the probability of a tree being taller than this tree? 
+
+c. What is the probability of heights between 120 and 180 feet? 
+
+## Problem 2 (25 points)
+Recall that in class (lecture 10), we learned the following rules of thumb for symmetric, bell-shaped distributions: 68%, 95%, and 99.7% of the values lie within one, two, and three standard deviations of the mean, respectively. This is actually derived from the normal distribution. 
+
+a. Use differences of two `pnorm()` values to derive each of the above three percentages.
+
+b. For the two standard deviation version, do the same as in (a) using symmetry of the normal distribution (i.e., you should only use a single call of `pnorm()`).
+
+## Problem 3 (25 points)
+
+Suppose $X_1, X_2, ..., X_n$ are independent $N(\mu, \sigma^2)$ random variables. Let $Y = \frac{\sum_{i = 1}^n X_i}{2n}$. 
+
+a. What is the distribution of $Y$? Include information about the values of the population mean and variance. 
+
+b. Now assume $n$ is large. Use the Central Limit Theorem to get an approximate distribution for $Y$, and derive its mean and variance. 
+
+## Problem 4 (30 points)
+Assume that the number of branches on a redwood tree follows a normal distribution with mean 150 and standard deviation 30. Let the random variable $X_i$ denote the number of branches on the $i$th redwood tree, where $i = 1, ..., n$. Then, $X_i \sim N(150, 30^2)$. 
+
+a. What is the probability of a tree having more than 180 branches? Calculate this in R using the original $X_i \sim N(150, 30^2)$ distribution, and after standardizing to a standard normal distribution. 
+
+b. Assume the samples are independent. What is the approximate distribution of the sampling distribution of the sample mean, $\overline{X}$?
+
+c. Simulate 1000 draws, $X_1$ to $X_{1000}$, and calculate the sample mean. 
+
+d. Repeat (c) 5000 times and calculate the 5000 sample means. What are the mean and standard deviation of these 5000 sample means? Is it close to what you would expect?
+
+
+## Appendix
+
+```{r eval = TRUE}
+sessionInfo()
+```
