@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Hypothesis Testing</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Xiao Hui Tai" />
+    <meta name="date" content="2023-12-04" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.min.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Hypothesis Testing
+]
+.subtitle[
+## <br><br> STA35A: Statistical Data Science 1
+]
+.author[
+### Xiao Hui Tai
+]
+.date[
+### December 4, 2023
+]
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &lt;a href="https://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt;  --&gt;
+
+---
+
+
+&lt;style type="text/css"&gt;
+.tiny .remark-code { font-size: 70%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+&lt;/style&gt;
+
+
+
+
+## Reminders/announcements 
+
+- Course evals: https://eval.ucdavis.edu
+
+- Last homework (Homework 7) released today, due Sunday 12/10 at 9PM
+
+- Lab is a review, no lab assignment 
+
+
+---
+## Recap
+
+- More on confidence intervals: 
+
+  - Changing n and alpha
+  
+  - Simulation example 
+
+  - `\(\sigma^2\)` unknown:
+      - `\(n\)` large: `\(\left(\overline{x}-z_{\frac{\alpha}{2}}\frac{s}{\sqrt{n}}, \overline{x}+z_{\frac{\alpha}{2}}\frac{s}{\sqrt{n}} \right)\)`
+
+---
+## Today
+
+- Confidence interval for population proportion: `\(\left(\hat{p}-z_{\frac{\alpha}{2}}\frac{\sqrt{\hat{p}(1-\hat{p})}}{\sqrt{n}}, \hat{p}+z_{\frac{\alpha}{2}}\frac{\sqrt{\hat{p}(1-\hat{p})}}{\sqrt{n}} \right)\)`
+
+
+- Introduction to hypothesis testing 
+
+  - Framework 
+  
+  - Errors from hypothesis tests 
+
+- Hypothesis test for population mean 
+
+
+---
+## What happens if the population variance is unknown?
+
+- The confidence interval involves `\(\sigma^2\)`; most of the time, this is unknown 
+
+- Recall that we can **use the sample variance**, `\(s^2=\frac{1}{n-1}\sum_{i=1}^n(x_i-\bar{x})^2\)`, to estimate `\(\sigma^2\)`
+
+- Before collecting the data: `\(S^2=\frac{1}{n-1}\sum_{i=1}^n(X_i-\overline{X})^2\)`
+
+- If we estimate `\(\sigma^2\)` using `\(S^2\)`, then we can't use the Central Limit Theorem in the same way
+
+- Two ways we can make progress:
+  1. When `\(n\)` is large
+  2. When `\(n\)` is small (we're going to skip this)
+
+---
+## First case (n large)
+
+- If `\(n\)` is large, CLT still holds (for the `\(\sigma^2\)` version), and using another theorem (out of scope for this class), we can prove that 
+`\(\frac{\overline{X} - \mu}{S / \sqrt{n}} \approx N(0, 1)\)` 
+
+- Only difference: replaced `\(\sigma\)` by `\(S\)`
+
+- An `\(\alpha\)`-level confidence interval for `\(\mu\)` is `\(\left(\overline{x}-z_{\frac{\alpha}{2}}\frac{s}{\sqrt{n}}, \overline{x}+z_{\frac{\alpha}{2}}\frac{s}{\sqrt{n}} \right)\)`
+
+
+---
+## Previous example: `\(\sigma\)` known
+Let `\(X_1, X_2, ..., X_{200}\)` be independent `\(N(\mu, 4)\)` random variables. We collect the sample of size 200, and the resulting sample mean, `\(\overline{x}\)`, is `\(\overline{x} = 24\)`. What is a 95% confidence interval for `\(\mu\)`?
+
+--
+
+Since `\(n = 200\)` is large, by CLT, a 95% confidence interval for `\(\mu\)` is given by 
+`$$\left(\overline{x}-z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{x}+z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}} \right)$$`
+
+Substitute `\(\overline{x} = 24\)`, `\(z_{\frac{\alpha}{2}} = 1.96\)`, `\(\sigma = 2\)`, `\(n = 200\)`, giving `\(\left(24-1.96*2/ \sqrt{200}, 24 + 1.96*2/ \sqrt{200} \right)\)` or (23.72, 24.28)
+
+We are 95% confident that `\(\mu\)` falls within the interval (23.72, 24.28).
+
+---
+## Previous example: `\(\sigma\)` unknown
+Let `\(X_1, X_2, ..., X_{200}\)` be independent `\(N(\mu, \sigma^2)\)` random variables. We collect the sample of size 200, and the resulting sample mean, `\(\overline{x}\)`, is `\(\overline{x} = 24\)`. `\(\sigma^2\)` is unknown, but using our sample, we calculate the sample variance, `\(s^2\)` to be 4.1. 
+
+What is a 95% confidence interval for `\(\mu\)`?
+
+--
+
+Since `\(n = 200\)` is large, a 95% confidence interval for `\(\mu\)` is given by 
+`$$\left(\overline{x}-z_{\frac{\alpha}{2}}\frac{s}{\sqrt{n}}, \overline{x}+z_{\frac{\alpha}{2}}\frac{s}{\sqrt{n}} \right)$$`
+
+Substitute `\(\overline{x} = 24\)`, `\(z_{\frac{\alpha}{2}} = 1.96\)`, `\(s = \sqrt{4.1}\)`, `\(n = 200\)`, giving `\(\left(24-1.96*\sqrt{4.1}/ \sqrt{200}, 24 + 1.96*\sqrt{4.1}/ \sqrt{200} \right)\)` or (23.72, 24.28)
+
+We are 95% confident that `\(\mu\)` falls within the interval (23.72, 24.28).
+
+---
+
+
+## Example: Lead in Flint, MI
+
+From April 25, 2014 to October 15, 2015, the water supply source for Flint, MI was switched to the Flint River from the Detroit water system. Without corrosion inhibitors, the Flint River water, which is high in chloride, caused lead from aging pipes to leach into the water supply. We have data from Flint collected as part of a citizen-science project involving Virginia Tech researchers.
+
+&lt;img src="img/flintdetroit.jpg" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Example: Lead in Flint, MI
+
+.small[
+
+```r
+flint &lt;- readxl::read_excel("./data/Flint-Samples.xlsx", sheet = 1) %&gt;%
+  rename("Pb_initial"="Pb Bottle 1 (ppb) - First Draw")
+str(flint)
+```
+
+```
+## tibble [271 × 7] (S3: tbl_df/tbl/data.frame)
+##  $ SampleID                            : num [1:271] 1 2 4 5 6 7 8 9 12 13 ...
+##  $ Zip Code                            : num [1:271] 48504 48507 48504 48507 48505 ...
+##  $ Ward                                : num [1:271] 6 9 1 8 3 9 9 5 9 3 ...
+##  $ Pb_initial                          : num [1:271] 0.344 8.133 1.111 8.007 1.951 ...
+##  $ Pb Bottle 2 (ppb) - 45 secs flushing: num [1:271] 0.226 10.77 0.11 7.446 0.048 ...
+##  $ Pb Bottle 3 (ppb) - 2 mins flushing : num [1:271] 0.145 2.761 0.123 3.384 0.035 ...
+##  $ Notes                               : chr [1:271] NA NA NA NA ...
+```
+]
+
+- Each row is a water sample; lead level in `Pb_initial` column (units are parts per billion (ppb))
+
+- Want a confidence interval for the unknown population mean lead level in Flint water
+
+- What is the sample size `\(n\)`? What confidence interval should we use? 
+
+---
+
+## Calculating a Confidence Interval for Flint Lead
+
+- 271 water samples, so `\(n\)` qualifies as large 
+
+- For a 95% confidence interval: 
+`$$\left(\overline{x}-z_{\frac{\alpha}{2}}\frac{s}{\sqrt{n}}, \overline{x}+z_{\frac{\alpha}{2}}\frac{s}{\sqrt{n}} \right)$$`
+.small[
+
+```r
+xBar &lt;- mean(flint$Pb_initial)
+sigma2 &lt;- var(flint$Pb_initial)
+n &lt;- length(flint$Pb_initial)
+halfWidth &lt;- qnorm(.975)*sqrt(sigma2/n)
+(lower &lt;- xBar - halfWidth)
+```
+
+```
+## [1] 8.078981
+```
+
+```r
+(upper &lt;- xBar + halfWidth)
+```
+
+```
+## [1] 13.213
+```
+]
+Hence a 95% confidence interval for the mean lead level in water in Flint is (8.0789808, 13.2130044)
+
+---
+
+## Confidence interval for population proportion 
+
+- Recall: when `\(X \sim\)` Bernoulli, sample mean `\(\overline{X} = \frac{\sum_{i = 1}^n{X_i}}{n}\)` is the same as the sample proportion `\(\hat{P}\)`
+
+- We have `\(\overline{X} = \hat{P} \approx N(p, \frac{p(1-p)}{n})\)` by the Central Limit Theorem, when `\(n\)` is large
+
+- `\(p\)` is unknown, but we can replace it by `\(\hat{p}\)`, calculated from the sample, in the same way we replaced `\(\sigma\)` by `\(s\)` for the population mean (case 1, when `\(n\)` large), so an `\(\alpha\)`-level confidence interval for `\(p\)` is
+
+`$$\left(\hat{p}-z_{\frac{\alpha}{2}}\frac{\sqrt{\hat{p}(1-\hat{p})}}{\sqrt{n}}, \hat{p}+z_{\frac{\alpha}{2}}\frac{\sqrt{\hat{p}(1-\hat{p})}}{\sqrt{n}} \right)$$`
+
+
+---
+## Example: Approval ratings
+
+&lt;img src="img/approval.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+.tiny[
+Source: https://www.rasmussenreports.com/public_content/politics/biden_administration/prez_track_sep23
+]
+
+--
+
+- Margin of error = `\(z_{\frac{\alpha}{2}}\frac{\sqrt{\hat{p}(1-\hat{p})}}{\sqrt{n}}\)`
+
+
+```r
+qnorm(.975)*sqrt(.5^2/1500)
+```
+
+```
+## [1] 0.02530303
+```
+
+---
+
+## Example: Flint 
+
+- The EPA action level for lead in public water supplies is 15 ppb
+
+- What is the estimated proportion of water samples (homes) with lead levels over 15 ppb?
+
+
+```r
+flint &lt;- flint %&gt;%
+  mutate(Pbover15 = Pb_initial &gt; 15)
+
+pHat &lt;- mean(flint$Pbover15)
+var &lt;- pHat*(1 - pHat)/length(flint$Pbover15)
+halfWidth &lt;- qnorm(.975)*sqrt(var)
+(lower &lt;- pHat - halfWidth)
+```
+
+```
+## [1] 0.1217465
+```
+
+```r
+(upper &lt;- pHat + halfWidth)
+```
+
+```
+## [1] 0.2103569
+```
+
+A 95% confidence interval for the proportion of homes in Flint with lead level above 15 ppb is (0.1217465, 0.2103569).
+
+
+---
+
+## Hypothesis testing
+
+Example: Honor Court
+
+Suppose a case of suspected cheating is brought to a university Honor Court.  There are two opposing claims.
+- **Student:**  I did not cheat on the exam.
+- **Professor:**  The student did cheat on the exam.
+
+- Honor Court assumes students are innocent until proven guilty
+
+- The professor must provide evidence to support their claim
+
+- Evidence: there were two different versions of the exam; the student on three separate problems used numbers from the *other* version of the exam
+
+
+--
+
+The honor court members agree that this would be **extremely unlikely** if it were true that the student did not cheat. The professor's evidence is very strong; there is sufficient evidence to reject the student's claim that they did not cheat on the exam. 
+
+---
+
+## Hypothesis Testing Framework
+
+Steps in hypothesis testing:
+
+- Start with two opposing claims about the population (claim 1 and claim 2)
+
+- Choose a sampling strategy and collect data
+
+- Figure out how likely it is to see data like what we got, or more extreme results, if claim 1 is true
+
+- If our data would have been **unlikely** if claim 1 were true, then we reject claim 1. Otherwise, do not reject claim 1. 
+
+Note: we **never "accept"** claim 1. We can never "accept" claim 2 either. The test only tells us if we have sufficient evidence to reject claim 1. The outcomes are (1) reject claim 1, (2) fail to reject claim 1. 
+
+---
+
+## Hypothesis Testing Framework
+
+- Claim 1: **null hypothesis** `\(H_0\)`
+
+- Claim 2: **alternative hypothesis**, `\(H_1\)` or `\(H_A\)`
+
+- In this example:  
+    `\(H_0\)`: Student did not cheat  
+    `\(H_A\)`: Student cheated 
+
+- Gather data
+
+- Assess **how likely** we are to observe data, or more extreme results, **if `\(H_0\)` were true** (**p-value**)
+
+- In Honor Court example, if the student did not cheat, it is very unlikely that the student would have numbers from the other version of the exam in three separate problems
+
+---
+
+## Example: Ultra Low Dose Contraceptives
+
+- A certain ultra-low dose oral contraceptive pill is supposed to contain 0.02 mg of estrogen 
+
+- If the dose is higher, the user may risk side effects, and if the dose is lower, the user may get pregnant
+
+- Manufacturer wishes to check whether the mean concentration in a large shipment is the needed 0.02 mg or not
+
+- A random sample of `\(n=500\)` pills is tested, and the sample mean concentration is 0.017 mg with a sample standard deviation of 0.008 mg
+
+--
+
+- Is this sufficient evidence that the mean concentraion is not 0.02 mg? What about if our sample mean was 0.019 mg? 
+
+---
+## Example: Ultra Low Dose Contraceptives
+
+- State the claims
+  - **Claim 1**: Shipment is consistent with a population mean of 0.02 mg estrogen. `\(H_0: \mu=0.02\)`
+  - **Claim 2**: Shipment is not consistent with a population mean of 0.02 mg estrogen.  `\(H_A: \mu \neq 0.02\)`
+  
+- **Strategy**: Sample 500 pills at random and use a hypothesis test to evaluate whether they are consistent with a population with mean 0.02 mg estrogen
+  
+- **Data**: 500 pills have a sample mean `\(\bar{x}=0.017\)` and sample standard deviation `\(s=0.008\)`
+
+- Assess **how likely** we are to observe `\(\bar{x}=0.017\)`, or more extreme results, if `\(H_0\)` were true
+  - Say the probability of getting a result like ours (or more extreme) is 0.01 if Claim 1 is true.
+  
+---
+## Example: Ultra Low Dose Contraceptives
+
+- **Conclusion**: A probability of .01 is pretty unlikely. Reject claim 1. 
+
+- "There is sufficient evidence to reject the null hypothesis that `\(\mu = .02\)`, that the population mean amount of estrogen is 0.02mg." 
+
+  - i.e., the manufacturing procedure may not be consistent with one that produces pills at the required 0.02 mg dose
+
+- Suppose the probability of getting a result like ours, or more extreme, was relatively large, say 0.20 
+
+  - **Fail to reject** Claim 1 
+
+---
+## Two comments
+1. We would **not** say that evidence leads us to accept Claim 1.
+
+  - Same as in the US judicial system 
+
+    - Defendants are "innocent until proven guilty"
+    
+    - Find someone "guilty" or "not guilty" 
+    
+    - Do not say someone is "innocent"; we say there is insufficient evidence to say they are guilty
+  
+2. Hypothesis testing does not tell us the probability that Claim 1 is true. 
+
+  - Assumed claim 1 was true before we did our calculation
+  
+  - Calculated a probability about data like ours or more extreme than ours under that assumption 
+
+
+---
+
+## Step 1: State claim 1 and claim 2
+
+What are `\(H_0\)` and `\(H_A\)` in each case?
+
+1. Researchers would like to know whether a new intervention for informing children in developing countries of their HIV status is associated with different mental health quality of life. 
+
+2. Researchers would like to know if lead levels in the water from Flint exceed the EPA action level of 15 ppb.
+
+3. The World Health Organization would like to know if the prevalence of the omicron variant this month is the same as last month.
+
+---
+## Step 2
+
+Step 2 is to make a plan for data collection and analysis, get random sample, and summarize the data. 
+
+- Need to define a **test statistic** ( `\(T\)`), which is a **random variable** that is computed from the data, e.g., a sample mean ( `\(\overline{X}\)`)
+
+- Need to know the distribution of the test statistic ( `\(T\)`) under the null hypothesis 
+
+  - Type of test depends on this distribution, e.g., if our test statistic can be approximated by a normal distribution, we will use a **Z-test**
+
+---
+
+## Step 3: Assess results 
+
+- Calculate the probability of "getting data like ours, or more extreme than ours," if `\(H_0\)` is actually true
+
+- From Step 2, we have the distribution of `\(T\)`
+
+- Step 3: compute the value of the test statistic ( `\(t\)`) based on the data collected, and calculate the probability of getting a test statistic that is equally or more extreme than the one that we got, based on the distribution of the test statistic ( `\(T\)`)
+
+- This is a **conditional probability** (conditional on `\(H_0\)` being true), called a **p-value**.
+
+- **p-value**: probability of getting a specific test statistic ( `\(t\)`) based on the data, or one more extreme, if `\(H_0\)` were true
+
+---
+
+## Step 4: Draw conclusions
+
+- Recall that the two possible outcomes are (1) Reject claim 1, and (2) fail to reject claim 1
+
+- Reject Claim 1 when the probability of seeing our data (or more extreme data) when Claim 1 is true is small
+
+- What qualifies as "small" depends on the **significance level** of the test
+
+---
+## Significance level
+
+- We defined the significance level, `\(\alpha\)`, when discussing confidence intervals: 
+  - Confidence level = `\(100(1 - \alpha)\)`%, i.e., a 95% confidence interval will need `\(\alpha = .05\)`
+  - P(CI contains true parameter) = `\(1 - \alpha\)`.
+  
+- In a hypothesis test:
+  - Defines the tolerable **Type I error**: the probability of rejecting `\(H_0\)` **when `\(H_0\)` is actually true**
+  - Statistical property that we need: P(reject `\(H_0\)` | `\(H_0\)` true) `\(= \alpha\)`
+
+- When the null hypothesis is true, if we repeat the experiment a large number of times, we would expect to make the wrong decision only `\(\alpha\)` (e.g., 5%) of the time
+
+
+---
+## Decision rule
+
+- **Decision rule**: reject `\(H_0\)` if p-value `\(&lt; \alpha\)`
+  - We will demonstrate (in the next class) that this produces the required property that P(reject `\(H_0\)` | `\(H_0\)` true) `\(= \alpha\)`
+
+- p-value `\(&lt;\alpha\)` = "statistically significant"
+
+- p-value `\(\geq \alpha\)`: insufficient evidence to reject `\(H_0\)`
+
+---
+
+## Errors from hypothesis tests
+
+&lt;img src="img/murderkitty.jpeg" width="50%" style="display: block; margin: auto;" /&gt;
+
+A cat is on trial.  Did it commit the crime?  Evidence is presented as part of the trial by jury.
+
+|  | Truly Innocent   | Truly Guilty |
+|:------|:------:|:---------:|
+| Jury: Not Guilty | `\(\checkmark\)` | ☠️ |
+| Jury: Guilty | ☠️  | `\(\checkmark\)` | 
+
+---
+
+## Errors from hypothesis tests
+
+Cat is innocent unless proven guilty.  
+
+Right decisions? Mistakes? 
+
+|  | Truly Innocent   | Truly Guilty |
+|:------|:------:|:---------:|
+| Jury: Not Guilty | `\(\checkmark\)` | ☠️ |
+| Jury: Guilty | ☠️  | `\(\checkmark\)` | 
+
+In a hypothesis testing framework:
+`\(H_0:\)` Cat is innocent vs. `\(H_A\)`: Cat is guilty
+
+|  | `\(H_0\)` true   | `\(H_A\)` true |
+|:------|:------:|:---------:|
+| Decision: Do Not Reject `\(H_0\)` | `\(\checkmark\)` | ☠️ |
+| Decision: Reject `\(H_0\)` | ☠️  | `\(\checkmark\)` | 
+
+
+---
+
+## Errors from hypothesis tests
+Suppose we wish to test that the population mean equals some value, say `\(\mu_0\)`.
+
+Test of `\(H_0:  \mu=\mu_0\)`
+
+
+|  | Truly `\(\mu=\mu_0\)`   | Truly `\(\mu\neq\mu_0\)` |
+|:------|:------:|:---------:|
+| Decision: Do Not Reject `\(H_0\)` | `\(\checkmark\)` | ☠️ |
+| Decision: Reject `\(H_0\)` | ☠️  | `\(\checkmark\)` | 
+
+**Type I error**:  rejecting `\(H_0\)` when it is really true
+
+**Type II error**:  not rejecting `\(H_0\)` when it is false
+
+---
+## Errors from hypothesis tests
+
+- **Type I error**:  rejecting `\(H_0\)` when it is really true
+
+- **Type II error**:  not rejecting `\(H_0\)` when it is false
+
+- `\(\alpha\)` is the maximum allowable Type I error rate 
+
+- **Type I errors** involve incorrectly challenging the status quo, and are typically viewed as more severe than Type II errors. We specify `\(\alpha\)` at the design stage of the study and use it in making decisions with hypothesis tests.
+
+- **Type II error** is related to the **power** of the test, the probability of rejecting `\(H_0\)` when `\(H_0\)` is false (out of scope for this class)
+
+---
+
+
+## Recall: Hypothesis Testing Framework
+
+Steps in hypothesis testing:
+
+- Start with two claims about the population, `\(H_0\)` and `\(H_A\)`
+
+- Choose a sampling strategy, collect data, and summarize data, i.e., define test statistic and compute statistic from the data
+
+- Figure out how likely it is to see data like what we got, or more extreme results, if `\(H_0\)` is true, i.e., compute p-value 
+
+- Draw conclusions, i.e., if our data would have been unlikely if `\(H_0\)` were true, then reject `\(H_0\)`. Otherwise, do not reject `\(H_0\)`.
+
+---
+## Hypothesis Testing for the Population Mean
+
+Say `\(X_i\)` has mean `\(\mu\)` and variance 4. 
+
+- **Step 1**: Start with two claims about the population  
+
+`\(H_0\)`: `\(\mu = 20\)`  
+`\(H_A\)`: `\(\mu \neq 20\)`
+
+- **Step 2**: Choose a sampling strategy, collect data, and summarize data  
+
+Test statistic: By CLT, `\(Z = \frac{\overline{X} - \mu}{\sigma / \sqrt{n}} \approx N(0, 1)\)` when `\(n\)` large. Collect a sample with `\(n = 100\)`. Under `\(H_0\)`, `\(Z = \frac{\overline{X} - 20}{2 / \sqrt{100}} \approx N(0, 1)\)`. From the sample, we get `\(\bar{x} = 21\)`
+
+- **Step 3**: Figure out how likely it is to see data like what we got, or more extreme results, if `\(H_0\)` is true.
+
+To get the value of the test statistic based on our data ( `\(z\)`), simply substitute `\(\bar{x} = 21\)` to get `\(z = \frac{21 - 20}{2 / \sqrt{100}} = 5\)`
+
+---
+## Hypothesis Testing for the Population Mean
+
+- **Step 3** (continued): Figure out how likely it is to see data like what we got, or more extreme results, if claim 1 is true.
+
+Probability under `\(H_0\)` of getting data like what we got, or more extreme, is `\(P(|Z| \geq |z|) = P(Z \geq 5\)` or `\(Z \leq -5)\)`. 
+
+.small[
+
+```r
+2*pnorm(-5)
+```
+
+```
+## [1] 5.733031e-07
+```
+]
+
+`2*pnorm(-5)` is very small (on the order of `\(10^{-7}\)`).
+
+- **Step 4**: If our data would have been unlikely if `\(H_0\)` were true, then reject `\(H_0\)`. Otherwise, do not reject `\(H_0\)`
+
+Using a significance level of `\(\alpha = .05\)`, `\(P(|Z| \geq 5) &lt; \alpha\)`, so reject `\(H_0\)`. At a 5% level, there is sufficient evidence to reject the null hypothesis that `\(\mu = 20\)`.
+
+---
+## Hypothesis Testing for the Population Mean
+Say `\(X_i\)` has mean `\(\mu\)` and standard deviation `\(\sigma\)`. The test statistic we will use is `\(Z = \frac{\overline{X} - \mu}{\sigma / \sqrt{n}}\)`. By CLT, `\(Z \approx N(0, 1)\)` when `\(n\)` large.
+
+`\(H_0\)`: `\(\mu = \mu_0\)`  
+`\(H_A\)`: `\(\mu \neq \mu_0\)`
+
+Under `\(H_0\)`, `\(Z = \frac{\overline{X} - \mu_0}{\sigma / \sqrt{n}} \approx N(0, 1)\)`
+
+Value of test statistic: `\(z = \frac{\overline{x} - \mu_0}{\sigma / \sqrt{n}}\)`
+
+Decision rule: reject `\(H_0\)` if `\(P(|Z| \geq |z|) = P(Z \geq |z|\)` or `\(Z \leq -|z|) &lt; \alpha\)`
+
+
+---
+
+## Summary
+
+- Hypothesis testing framework
+
+  - Null and alternative hypotheses
+  
+  - Test statistics
+  
+  - p-values
+  
+  - Significance level
+
+- Errors from hypothesis tests
+
+  - Type I error
+  
+  - Type II error and power
+
+- Hypothesis test for population mean 
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

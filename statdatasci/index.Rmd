@@ -179,12 +179,12 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - Open Intro Statistics Chapter 7.1.1-7.1.4
 
-<!-- ### Week 11: Hypothesis testing  -->
-<!-- - Mon Dec 4: Hypothesis testing framework and errors  -->
-<!--   - Notes:  -->
-<!--   - Reading: -->
-<!--     - Open Intro Statistics Chapter 5.3 -->
-<!--   - Homework 7:  -->
+### Week 11: Hypothesis testing
+- Mon Dec 4: Hypothesis testing framework and errors
+  - Notes: [Lecture 23](https://xhtai.github.io/statdatasci/lectures/lecture23/lecture23.html)
+  - Reading:
+    - Open Intro Statistics Chapter 5.3
+  - Homework 7:
 <!-- - Wed Dec 6: Hypothesis testing for population mean and proportion  -->
 <!--   - Notes:  -->
 <!--   - Reading: -->
