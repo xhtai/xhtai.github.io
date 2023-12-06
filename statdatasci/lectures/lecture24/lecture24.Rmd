@@ -29,6 +29,20 @@ library(dplyr)
 library(ggplot2)
 ```
 
+## Reminders
+Formulas for final exam:
+
+**Bayes' theorem**: $P(A \mid B) =\frac{P(B \mid A)P(A)}{P(B)}$
+
+**Probability mass functions**:  
+
+- Binomial: $P(X=x)=\begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}$  
+- Poisson: $P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}$, $\lambda > 0$
+
+**Critical value**: $z_{.025} \approx 1.96$
+
+---
+
 ## Recap
 
 - Hypothesis testing framework
