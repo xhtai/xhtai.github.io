@@ -15,7 +15,7 @@ Lectures are Mondays, Wednesdays and Fridays, 11-11:50 AM at Wellman Hall 226.
 Discussions (labs) are run by Oscar Rivera on Thursdays 12:10-1 PM (Section A01), 1:10-2 PM (Section A02) at TLC 2212.
 
 **Office hours**:  
-Oscar Rivera: Tuesdays and Thursdays 10-11 AM at MSB 1117   
+Oscar Rivera: TBD  
 Xiao Hui Tai: Wednesdays 1-2 PM at MSB 4242
 
 **Syllabus**: [here](https://xhtai.github.io/statdatasci/syllabus_35A_F24.html).
