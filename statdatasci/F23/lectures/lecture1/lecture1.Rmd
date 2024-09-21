@@ -2,7 +2,7 @@
 title: "Introduction and R Basics"
 subtitle: "<br><br> STA35A: Statistical Data Science 1"
 author: "Xiao Hui Tai"
-date: September 25, 2024
+date: September 27, 2023
 output:
   xaringan::moon_reader:
     # css: [default, metropolis, metropolis-fonts]
@@ -109,11 +109,11 @@ knitr::include_graphics("img/data-science-cycle.006.png")
 ## Course logistics 
 - **Lectures** Monday, Wednesday and Friday 
 
-- Thursday **lab** (run by Oscar Rivera)
+- Thursday **lab** (run by Jedidiah Harwood)
 
 - **Office hours**
-  - Oscar Rivera: TBD  
-  - Xiao Hui Tai: Wednesdays 1-2 PM at MSB 4242
+  - Jedidiah Harwood: Tuesdays and Thursdays 10-11 AM at MSB 1117
+  - Xiao Hui Tai: Mondays 2:30-3:30 PM at MSB 4242
 
 - **Course website**: https://xhtai.github.io/statdatasci/
   - Lecture notes, homework, supplementary materials, etc.
@@ -137,19 +137,16 @@ knitr::include_graphics("img/data-science-cycle.006.png")
 
 ## Grading  
 
-- 10% labs
+- 15% labs
   - Due at 9pm, Monday after lab
   
-- 24% homework (roughly weekly; 6*4%)
+- 25% homework (roughly weekly)
   - Assigned on Friday afternoon, due Thursday 9pm
-  - Except last week  
-  - One homework can be dropped
-  
-- 1% participation 
+  - Except last two weeks 
   
 - 30% midterms (two midterms, one dropped)
 
-- 35% final
+- 30% final
 
 - See syllabus on course webpage for full details
 
@@ -253,7 +250,7 @@ knitr::include_graphics("img/rstudio.png")
 un_votes %>%
   filter(country %in% c("United States", "United Kingdom", "China", "Singapore")) %>%
   inner_join(un_roll_calls, by = "rcid") %>%
-  inner_join(un_roll_call_issues, by = "rcid", relationship = "many-to-many") %>%
+  inner_join(un_roll_call_issues, by = "rcid") %>%
   mutate(year = lubridate::year(date)) %>%
   group_by(country, year, issue) %>%
   summarize(votes = n(),
@@ -354,7 +351,7 @@ knitr::include_graphics("img/jupyter3.png")
 knitr::include_graphics("img/jupyter3annotated.png")
 ```
 
-To upload `qmd/Rmd` files or data files, download them to your computer (from the course webpage or from Canvas), and then upload them to the server using the Upload button in the Files pane. 
+To upload `Rmd` files or data files, download them to your computer (from the course webpage or from Canvas), and then upload them to the server using the Upload button in the Files pane. 
 
 ---
 
@@ -394,18 +391,18 @@ Alternatively, you can call a function from a package without loading it, using 
 
 ---
 
-## Quarto/R Markdown
-```{r echo=FALSE, out.width="30%"}
+## R Markdown
+```{r echo=FALSE, out.width="10%"}
 knitr::include_graphics("img/rmarkdown.png")
 ```
 
-- Quarto/R Markdown (old version) are tools to **integrate code and written prose** in reproducible computational documents
+- R Markdown is a tool to **integrate code and written prose** in reproducible computational documents
 
-- Quarto files have the `qmd` extension. R Markdown files have the `Rmd` extension. Each time you "knit," the analysis is run from the beginning.
+- R Markdown files have the `Rmd` extension. Each time you "knit," the analysis is run from the beginning.
 
-- To learn more, go to [quarto.org](https://quarto.org/) or [rmarkdown.rstudio.com](https://rmarkdown.rstudio.com/)
+- To learn more, go to [rmarkdown.rstudio.com](https://rmarkdown.rstudio.com/)
 
-- Labs will be completed in Quarto or R Markdown
+- Labs will be completed in R Markdown
 
 - Code goes in **chunks**, defined by three backticks, narrative goes outside of chunks
 

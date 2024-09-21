@@ -4,7 +4,7 @@
     <title>Introduction and R Basics</title>
     <meta charset="utf-8" />
     <meta name="author" content="Xiao Hui Tai" />
-    <meta name="date" content="2024-09-25" />
+    <meta name="date" content="2023-09-27" />
     <script src="lecture1_files/header-attrs/header-attrs.js"></script>
     <link href="lecture1_files/remark-css/default.css" rel="stylesheet" />
     <link href="lecture1_files/remark-css/default-fonts.css" rel="stylesheet" />
@@ -27,7 +27,7 @@ class: center, middle, inverse, title-slide
 ### Xiao Hui Tai
 ]
 .date[
-### September 25, 2024
+### September 27, 2023
 ]
 
 ---
@@ -122,11 +122,11 @@ layout: true
 ## Course logistics 
 - **Lectures** Monday, Wednesday and Friday 
 
-- Thursday **lab** (run by Oscar Rivera)
+- Thursday **lab** (run by Jedidiah Harwood)
 
 - **Office hours**
-  - Oscar Rivera: TBD  
-  - Xiao Hui Tai: Wednesdays 1-2 PM at MSB 4242
+  - Jedidiah Harwood: Tuesdays and Thursdays 10-11 AM at MSB 1117
+  - Xiao Hui Tai: Mondays 2:30-3:30 PM at MSB 4242
 
 - **Course website**: https://xhtai.github.io/statdatasci/
   - Lecture notes, homework, supplementary materials, etc.
@@ -150,19 +150,16 @@ layout: true
 
 ## Grading  
 
-- 10% labs
+- 15% labs
   - Due at 9pm, Monday after lab
   
-- 24% homework (roughly weekly; 6*4%)
+- 25% homework (roughly weekly)
   - Assigned on Friday afternoon, due Thursday 9pm
-  - Except last week  
-  - One homework can be dropped
-  
-- 1% participation 
+  - Except last two weeks 
   
 - 30% midterms (two midterms, one dropped)
 
-- 35% final
+- 30% final
 
 - See syllabus on course webpage for full details
 
@@ -215,7 +212,7 @@ layout: true
 ## Quick R demonstration
 - Arithmetic 
 
-``` r
+```r
 1 + 2
 ```
 
@@ -225,7 +222,7 @@ layout: true
 
 - Comparisons
 
-``` r
+```r
 1 == 2
 ```
 
@@ -264,7 +261,7 @@ layout: true
 &lt;br&gt;&lt;br&gt;
 .small[
 
-``` r
+```r
 un_votes %&gt;%
   filter(country %in% c("United States", "United Kingdom", "China", "Singapore")) %&gt;%
   inner_join(un_roll_calls, by = "rcid") %&gt;%
@@ -332,7 +329,7 @@ Clicking the "Sign in with Google" button will take you to a login page. Log in 
 
 &lt;img src="img/jupyter3annotated.png" width="80%" style="display: block; margin: auto;" /&gt;
 
-To upload `qmd/Rmd` files or data files, download them to your computer (from the course webpage or from Canvas), and then upload them to the server using the Upload button in the Files pane. 
+To upload `Rmd` files or data files, download them to your computer (from the course webpage or from Canvas), and then upload them to the server using the Upload button in the Files pane. 
 
 ---
 
@@ -341,7 +338,7 @@ To upload `qmd/Rmd` files or data files, download them to your computer (from th
 - **Functions** are (most often) verbs, followed by what they will be applied to in parentheses:
 
 
-``` r
+```r
 do_this(to_this)
 do_that(to_this, to_that, with_those)
 ```
@@ -352,7 +349,7 @@ do_that(to_this, to_that, with_those)
   - They are installed using `install.packages()` and loaded using `library()`, once per session:
 
 
-``` r
+```r
 install.packages("package_name")
 library(package_name)
 ```
@@ -364,7 +361,7 @@ Alternatively, you can call a function from a package without loading it, using 
 - Object **documentation** can be accessed with `?` or `help()`
 
 
-``` r
+```r
 ?mean
 ```
 
@@ -375,16 +372,16 @@ Alternatively, you can call a function from a package without loading it, using 
 
 ---
 
-## Quarto/R Markdown
-&lt;img src="img/rmarkdown.png" width="30%" style="display: block; margin: auto;" /&gt;
+## R Markdown
+&lt;img src="img/rmarkdown.png" width="10%" style="display: block; margin: auto;" /&gt;
 
-- Quarto/R Markdown (old version) are tools to **integrate code and written prose** in reproducible computational documents
+- R Markdown is a tool to **integrate code and written prose** in reproducible computational documents
 
-- Quarto files have the `qmd` extension. R Markdown files have the `Rmd` extension. Each time you "knit," the analysis is run from the beginning.
+- R Markdown files have the `Rmd` extension. Each time you "knit," the analysis is run from the beginning.
 
-- To learn more, go to [quarto.org](https://quarto.org/) or [rmarkdown.rstudio.com](https://rmarkdown.rstudio.com/)
+- To learn more, go to [rmarkdown.rstudio.com](https://rmarkdown.rstudio.com/)
 
-- Labs will be completed in Quarto or R Markdown
+- Labs will be completed in R Markdown
 
 - Code goes in **chunks**, defined by three backticks, narrative goes outside of chunks
 
