@@ -52,3 +52,9 @@ There will sometimes be additional (optional) reading from:
   - Notes: [Lecture 3](https://xhtai.github.io/statdatasci/lectures/lecture3/lecture3.html)
   - Reading:
     - Additional reading: Matloff Chapter 3
+
+- Wed Oct 2: Arrays, matrices, lists
+  - Notes: [Lecture 4](https://xhtai.github.io/statdatasci/lectures/lecture4/lecture4.html)
+  - Reading:
+    - Additional reading: Matloff Chapters 3, 4
+
