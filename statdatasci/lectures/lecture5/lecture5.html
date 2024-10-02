@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Fundamentals of R: More Data Structures</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Xiao Hui Tai" />
+    <meta name="date" content="2024-10-04" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.min.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Fundamentals of R: More Data Structures
+]
+.subtitle[
+## <br><br> STA35A: Statistical Data Science 1
+]
+.author[
+### Xiao Hui Tai
+]
+.date[
+### October 4, 2024
+]
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &lt;a href="https://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt;  --&gt;
+
+---
+
+&lt;style type="text/css"&gt;
+.small .remark-code { font-size: 80%; }
+.tiny .remark-code { font-size: 50%; }
+&lt;/style&gt;
+
+
+
+
+
+## Announcements
+
+- First homework will be posted this afternoon on course website
+
+- Due next Thursday at 9pm
+
+
+---
+## Today 
+
+- Lists 
+
+- Data frames, or more generally "data sets"
+
+---
+## Lists
+- Lists are a generic container
+- Sequence of values, _not_ necessarily all of the same type
+
+
+``` r
+my.distribution &lt;- list("exponential", 7, FALSE)
+my.distribution
+```
+
+```
+## [[1]]
+## [1] "exponential"
+## 
+## [[2]]
+## [1] 7
+## 
+## [[3]]
+## [1] FALSE
+```
+
+- Most of what you can do with vectors you can also do with lists
+- This is an unnamed list
+---
+## Lists
+- Elements can be vectors of any type, or other data structures like matrices
+- This is a named list
+
+
+``` r
+l &lt;- list(
+  x = 1:4,
+  y = c("hi", "hello", "jello"),
+  z = matrix(c(TRUE, FALSE, FALSE, FALSE), nrow = 2)
+)
+l
+```
+
+```
+## $x
+## [1] 1 2 3 4
+## 
+## $y
+## [1] "hi"    "hello" "jello"
+## 
+## $z
+##       [,1]  [,2]
+## [1,]  TRUE FALSE
+## [2,] FALSE FALSE
+```
+
+
+---
+## Lists
+Make an empty list to fill in later
+
+``` r
+myList &lt;- vector(mode = "list", length = 4)
+myList
+```
+
+```
+## [[1]]
+## NULL
+## 
+## [[2]]
+## NULL
+## 
+## [[3]]
+## NULL
+## 
+## [[4]]
+## NULL
+```
+---
+## Accessing pieces of lists
+Can use `[ ]` as with vectors  
+or use `[[ ]]`, but only with a single index  
+`[[ ]]` drops names and structures, `[ ]` does not
+
+
+``` r
+l[1]
+```
+
+```
+## $x
+## [1] 1 2 3 4
+```
+
+``` r
+l[[1]]
+```
+
+```
+## [1] 1 2 3 4
+```
+&lt;small&gt;Does `l[[1:2]]` work?&lt;/small&gt;
+
+
+---
+## Accessing pieces of lists
+Helpful illustration from R for Data Science (first edition, Chapter 20.5.3):
+
+.pull-left[
+&lt;img src="img/pepperShaker1.png" width="110%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="img/pepperShaker2.png" width="110%" style="display: block; margin: auto;" /&gt;
+]
+---
+## Working with lists 
+.pull-left[
+
+``` r
+my.distribution
+```
+
+```
+## [[1]]
+## [1] "exponential"
+## 
+## [[2]]
+## [1] 7
+## 
+## [[3]]
+## [1] FALSE
+```
+]
+
+.pull-right[
+
+``` r
+is.character(my.distribution)
+```
+
+```
+## [1] FALSE
+```
+
+``` r
+is.character(my.distribution[[1]])
+```
+
+```
+## [1] TRUE
+```
+
+``` r
+my.distribution[[2]]^2
+```
+
+```
+## [1] 49
+```
+]
+
+&lt;small&gt;What happens if you try `my.distribution[2]^2`?&lt;/small&gt;
+&lt;small&gt;What happens if you try `[[ ]]` on a vector?&lt;/small&gt;
+
+---
+## Filling in lists 
+
+``` r
+myList[[1]] &lt;- 1:10
+myList
+```
+
+```
+## [[1]]
+##  [1]  1  2  3  4  5  6  7  8  9 10
+## 
+## [[2]]
+## NULL
+## 
+## [[3]]
+## NULL
+## 
+## [[4]]
+## NULL
+```
+&lt;small&gt;What happens if you try `myList[1] &lt;- 1:10`?&lt;/small&gt;
+
+---
+## Expanding and contracting lists
+Add to lists with `c()` (also works with vectors):
+
+``` r
+my.distribution &lt;- c(my.distribution, 7)
+my.distribution
+```
+
+```
+## [[1]]
+## [1] "exponential"
+## 
+## [[2]]
+## [1] 7
+## 
+## [[3]]
+## [1] FALSE
+## 
+## [[4]]
+## [1] 7
+```
+
+---
+
+## Naming list elements
+- We saw how to name elements of a list while constructing them
+
+- We can also add names later on:
+
+
+``` r
+my.distribution &lt;- list("exponential", 7, FALSE)
+names(my.distribution) &lt;- c("family", "mean", "is.symmetric")
+my.distribution
+```
+
+```
+## $family
+## [1] "exponential"
+## 
+## $mean
+## [1] 7
+## 
+## $is.symmetric
+## [1] FALSE
+```
+---
+
+Lists have a special short-cut way of using names, `$` (which removes names and structures):
+
+``` r
+my.distribution[["family"]]
+```
+
+```
+## [1] "exponential"
+```
+
+``` r
+my.distribution$family
+```
+
+```
+## [1] "exponential"
+```
+
+``` r
+my.distribution[1]
+```
+
+```
+## $family
+## [1] "exponential"
+```
+
+---
+## Names in lists 
+
+Creating a list with names:
+
+``` r
+another.distribution &lt;- list(family="gaussian", mean = 7, 
+                             sd = 1, is.symmetric = TRUE)
+```
+
+Adding named elements:
+
+``` r
+my.distribution$was.estimated &lt;- FALSE
+my.distribution[["last.updated"]] &lt;- "2011-08-30"
+```
+
+Removing a named list element, by assigning it the value `NULL`:
+
+``` r
+my.distribution$was.estimated &lt;- NULL
+```
+---
+## Structure of lists
+- We saw the output of `str()` with arrays earlier on
+
+- `str()` is particularly useful for lists, since it allows us to easily get an idea of what is in the list. 
+
+``` r
+str(my.distribution)
+```
+
+```
+## List of 4
+##  $ family      : chr "exponential"
+##  $ mean        : num 7
+##  $ is.symmetric: logi FALSE
+##  $ last.updated: chr "2011-08-30"
+```
+
+---
+## `lapply()`
+When each list element has the same structure, a particularly useful function is `lapply()`
+
+``` r
+myList &lt;- replicate(8, rnorm(n = 10), simplify = FALSE)
+str(myList)
+```
+
+```
+## List of 8
+##  $ : num [1:10] -1.207 0.277 1.084 -2.346 0.429 ...
+##  $ : num [1:10] -0.4772 -0.9984 -0.7763 0.0645 0.9595 ...
+##  $ : num [1:10] 0.134 -0.491 -0.441 0.46 -0.694 ...
+##  $ : num [1:10] 1.102 -0.476 -0.709 -0.501 -1.629 ...
+##  $ : num [1:10] 1.449 -1.069 -0.855 -0.281 -0.994 ...
+##  $ : num [1:10] -1.806 -0.582 -1.109 -1.015 -0.162 ...
+##  $ : num [1:10] 0.6566 2.549 -0.0348 -0.6696 -0.0076 ...
+##  $ : num [1:10] 0.00689 -0.45547 -0.36652 0.64829 2.07027 ...
+```
+---
+
+``` r
+lapply(myList, mean)
+```
+
+```
+## [[1]]
+## [1] -0.3831574
+## 
+## [[2]]
+## [1] -0.1181707
+## 
+## [[3]]
+## [1] -0.3879468
+## 
+## [[4]]
+## [1] -0.7661931
+## 
+## [[5]]
+## [1] -0.6097971
+## 
+## [[6]]
+## [1] -0.2788647
+## 
+## [[7]]
+## [1] 0.6165922
+## 
+## [[8]]
+## [1] -0.04230209
+```
+---
+## `lapply()`
+Another useful function is `unlist()`, which removes the list structure
+
+
+``` r
+unlist(lapply(myList, mean), use.names = FALSE)
+```
+
+```
+## [1] -0.38315741 -0.11817071 -0.38794682 -0.76619306 -0.60979706
+## [6] -0.27886474  0.61659223 -0.04230209
+```
+---
+## Concept of key-value pairs
+
+- Lists give us a way to **store and look up data** by _name_, rather than by _position_
+
+- This is a **useful programming concept** with many names: 
+  - Key-value pairs
+  - Dictionaries
+  - Associative arrays
+  - Hashes
+
+- E.g., if all our distributions have components named `family`, we can look that up by name, without worrying about where it is in the list
+
+---
+## Data frames
+- A **data frame** is a special **list** containing vectors of equal length
+
+- Data frame = the classic data table, `\(n\)` rows for observations, `\(p\)` columns for variables
+
+- Lots of the statistical parts of R presume data frames
+
+- Not just a matrix because **columns can have different types**
+
+- Many **matrix functions** also work for data frames (`rowSums()`, `summary()`, `apply()`)
+
+&lt;small&gt;but no matrix multiplying data frames, even if all columns are numeric&lt;/small&gt;
+
+---
+## Creating data frames 
+
+Here we start with a matrix and turn it into a data frame:
+
+
+``` r
+a.matrix &lt;- matrix(c(35, 8, 10, 4), nrow = 2)
+colnames(a.matrix) &lt;- c("v1", "v2")
+a.matrix
+```
+
+```
+##      v1 v2
+## [1,] 35 10
+## [2,]  8  4
+```
+
+``` r
+a.matrix[, "v1"]  
+```
+
+```
+## [1] 35  8
+```
+&lt;small&gt;Does `a.matrix$v1` work?&lt;/small&gt;
+
+---
+
+
+``` r
+(a.data.frame &lt;- data.frame(a.matrix))
+```
+
+```
+##   v1 v2
+## 1 35 10
+## 2  8  4
+```
+
+``` r
+a.data.frame$v1 # now this works 
+```
+
+```
+## [1] 35  8
+```
+
+``` r
+a.data.frame[, "v1"]
+```
+
+```
+## [1] 35  8
+```
+
+``` r
+a.data.frame[1, ]
+```
+
+```
+##   v1 v2
+## 1 35 10
+```
+
+``` r
+colMeans(a.data.frame)
+```
+
+```
+##   v1   v2 
+## 21.5  7.0
+```
+
+---
+## Adding rows and columns
+We can add columns during construction of the data frame:
+
+``` r
+(a.data.frame &lt;- data.frame(a.matrix, logicals = c(TRUE, FALSE)))
+```
+
+```
+##   v1 v2 logicals
+## 1 35 10     TRUE
+## 2  8  4    FALSE
+```
+
+We can also add columns by name
+
+``` r
+a.data.frame$newCol &lt;- 1:2
+a.data.frame
+```
+
+```
+##   v1 v2 logicals newCol
+## 1 35 10     TRUE      1
+## 2  8  4    FALSE      2
+```
+
+Now remove `newCol`
+
+``` r
+a.data.frame &lt;- a.data.frame[, -4]
+```
+---
+## Adding rows and columns
+We can also add rows or columns to an array or data-frame with `rbind()` and `cbind()`, but be careful about forced type conversions
+
+``` r
+rbind(a.data.frame, list(v1 = -3, v2 = -5, logicals = TRUE))
+```
+
+```
+##   v1 v2 logicals
+## 1 35 10     TRUE
+## 2  8  4    FALSE
+## 3 -3 -5     TRUE
+```
+
+``` r
+rbind(a.data.frame, c(3, 4, 6))
+```
+
+```
+##   v1 v2 logicals
+## 1 35 10        1
+## 2  8  4        0
+## 3  3  4        6
+```
+&lt;small&gt;What happened here?&lt;/small&gt;
+
+---
+
+## Data frames, data sets  
+
+- We've seen data frames. This is a commonly used data structure that we get after reading in a data set into R. 
+
+- In a data set in general, 
+  - Each row is an **observation**, `\(n\)`
+  - Each column is a **variable**, `\(p\)`
+
+- Often, the **first things we want to do** when given a data set are to figure out
+  1. What is in it (what dimensions, what variables)
+  2. What the main characteristics of the variables are. 
+
+- We've seen a few tools and functions for working with data frames in "base R," next we will look at some tools from `dplyr`
+
+---
+&lt;img src="img/tidyverse.png" width="100%" style="display: block; margin: auto;" /&gt;
+https://www.tidyverse.org/
+- What we've seen so far: "base R"
+- `ggplot2` for plotting, `dplyr` for data manipulation
+
+
+
+---
+## Summary
+--
+
+- Lists (continued)
+  - Names in lists
+  - `lapply()`
+
+- Data frames, or more generally "data sets"
+  - Creating data frames
+  - `tidyverse` and `dplyr`
+  
+  
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

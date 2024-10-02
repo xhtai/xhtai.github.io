@@ -58,3 +58,8 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - Additional reading: Matloff Chapters 3, 4
 
+- Fri Oct 4: Lists, data frames
+  - Notes: [Lecture 5](https://xhtai.github.io/statdatasci/lectures/lecture5/lecture5.html)
+  - Reading:
+    - Additional reading: Matloff Chapter 4, 5
+
