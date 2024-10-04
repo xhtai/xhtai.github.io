@@ -62,4 +62,11 @@ There will sometimes be additional (optional) reading from:
   - Notes: [Lecture 5](https://xhtai.github.io/statdatasci/lectures/lecture5/lecture5.html)
   - Reading:
     - Additional reading: Matloff Chapter 4, 5
+  - Homework 1: [Html](https://xhtai.github.io/statdatasci/homework/homework1/HW1.html) [Rmd](https://xhtai.github.io/statdatasci/homework/homework1/HW1.qmd)
+
+### Week 3: Data frames, data manipulation and data visualization tools
+- Mon Oct 7: Data frames, exploratory data analysis, data manipulation tools
+  - Notes: [Lecture 6](https://xhtai.github.io/statdatasci/lectures/lecture6/lecture6.html)
+  - Reading:
+    - R for Data Science Chapter 3
 

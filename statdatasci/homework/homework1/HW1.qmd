@@ -1,0 +1,62 @@
+---
+title: "Homework 1"
+author: ""
+date: "DUE: October 10 2024, 9PM"
+output: 
+  html_document
+---
+
+## Instructions
+Upload a PDF file, named with your UC Davis email ID and homework number (e.g., `xtai_hw1.pdf`), to Gradescope (accessible through Canvas). You will give the commands to answer each question in its own code block, which will also produce output that will be automatically embedded in the output file. Each answer must be supported by written statements as well as any code used. 
+
+All code used to produce your results must be shown in your PDF file (e.g., do not use `echo = FALSE` or `include = FALSE` as options anywhere). `Rmd`/`qmd` files do not need to be submitted, but may be requested by the TA and must be available when the assignment is submitted. 
+
+Students may choose to collaborate with each other on the homework, but must clearly indicate with whom they collaborated. 
+
+## Problem 1: Working with functions and operators on different data types (70 points)
+Execute each of these instructions consecutively (e.g., if a vector was modified in a previous step, use the modified version in the next step).
+
+### Vectors 
+Use `sample()`, sampling *with* replacement, to create a vector of length 20. (Use the help command `?sample` to learn about the function. You can put anything you'd like in the vector, i.e., any suitable input to the first argument of `sample()`.) Print it and check if there are missing values. Find the sum and mean of the vector. Assign the 5th value of the vector the value 0. Create a new vector which only has elements of the first vector that are larger than 5.
+
+The colon operator will create a sequence of integers in order. It is a special case of the function `seq()`. Using the help command `?seq` to learn about the function, design an expression that will give you the sequence of numbers from 1 to 10000 in increments of 372. Design another that will give you a sequence between 1 and 10000 that is exactly 50 numbers in length. The function `rep()` repeats a vector some number of times. Explain the difference between `rep(1:3, times = 3)` and `rep(1:3, each = 3)`.
+
+### Matrices
+Create a $3 \times 3$ matrix containing the elements 1 to 9 (filled *row-wise*). Print the second row, first column of the matrix. Multiply the matrix by 3, element-wise. For each row, sum the columns of the matrix. Use `apply()` to do the same. Use two separate `apply()` operations, the sum and the number of elements, to find the column means of the matrix. 
+
+### Lists
+Create an empty list of length 2. Assign the vector `c(2, 4, 6, 1)` to the first element of the list. Assign the vector `c(1, 5, 3, 2)` to the second element of the list. Add a third element to the list, with the sequence 1:4. Check what is in the list. Name the list items a, b and c. Find the sum of each of the vectors in the list, using `lapply()`. Create a new vector of length 3 with this information using `unlist()`. 
+
+## Problem 2: Syntax and class-typing (30 points)
+For the following series of commands, either explain their results, or why they should produce errors.
+
+```{r eval = FALSE}
+letters[1] + 1
+letters[1] + letters[2]
+x <- "7"
+x + 2
+```
+How can we make the last command (`x + 2`) work? 
+
+```{r eval = FALSE}
+vector1 <- c("5", "12", "7", "32")
+max(vector1)
+sort(vector1)
+sum(vector1)
+vector2 <- c("5", 7, 12)
+vector2[2] + vector2[3]
+```
+
+
+```{r eval = FALSE}
+list4 <- list(z1 = "6", z2 = 42, z3 = "49", z4 = 126)
+list4[[2]] + list4[[4]]
+list4[2] + list4[4]
+```
+
+
+## Appendix
+
+```{r eval = TRUE}
+sessionInfo()
+```
