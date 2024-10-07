@@ -70,3 +70,8 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - R for Data Science Chapter 3
 
+- Wed Oct 9: Data manipulation tools
+  - Notes: [Lecture 7](https://xhtai.github.io/statdatasci/lectures/lecture7/lecture7.html)
+    - [Hotels data](https://github.com/xhtai/xhtai.github.io/blob/master/statdatasci/lectures/lecture6/data/hotels.csv)
+  - Reading:
+    - R for Data Science Chapter 3
