@@ -75,3 +75,8 @@ There will sometimes be additional (optional) reading from:
     - [Hotels data](https://github.com/xhtai/xhtai.github.io/blob/master/statdatasci/lectures/lecture6/data/hotels.csv)
   - Reading:
     - R for Data Science Chapter 3
+
+- Fri Oct 11: Data visualization tools
+  - Notes: [Lecture 8](https://xhtai.github.io/statdatasci/lectures/lecture8/lecture8.html)
+  - Reading:
+    - R for Data Science Chapter 1
