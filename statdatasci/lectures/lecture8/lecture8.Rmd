@@ -155,7 +155,7 @@ library(palmerpenguins)
 dplyr::glimpse(penguins)
 ```
 
-
+---
 .panelset[
 .panel[.panel-name[Plot]
 ```{r ref.label = "penguins", echo = FALSE, warning = FALSE, out.width = "70%", fig.width = 8}
@@ -181,7 +181,7 @@ ggplot(data = penguins,
 ]
 ]
 ]
----
+
 
 .midi[
 > **Start with the `penguins` data frame**
