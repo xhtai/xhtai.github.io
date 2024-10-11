@@ -182,7 +182,7 @@ ggplot(data = penguins,
 ]
 ]
 
-
+---
 .midi[
 > **Start with the `penguins` data frame**
 ]
