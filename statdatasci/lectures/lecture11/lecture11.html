@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Descriptive Statistics: Numerical Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Xiao Hui Tai" />
+    <meta name="date" content="2024-10-23" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.min.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Descriptive Statistics: Numerical Data
+]
+.subtitle[
+## <br><br> STA35A: Statistical Data Science 1
+]
+.author[
+### Xiao Hui Tai
+]
+.date[
+### October 23, 2024
+]
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &lt;a href="https://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt;  --&gt;
+
+---
+
+&lt;style type="text/css"&gt;
+.tiny .remark-code { font-size: 60%; }
+.small .remark-code { font-size: 80%; }
+&lt;/style&gt;
+
+
+
+
+
+
+
+## Today
+- Relationships between numerical variables 
+
+- Describing categorical distributions
+
+  - Bar plot
+
+- Relationships between categorical data
+
+  - Contingency tables
+
+
+---
+## Relationships between numerical variables
+
+- Paired or bivariate data
+
+  - Scatterplot 
+
+  - Hexplot
+
+  - Correlation
+  
+  - Line graph 
+
+---
+
+## Scatterplot
+We have seen many examples of scatterplots 
+
+--
+- UN Votes
+
+- Star Wars
+
+- Anscombe's quartet
+
+- Palmer Penguins
+
+---
+
+## Scatterplot
+Each point is a single observation with **two characteristics**, or variables, plotted on the x- and y-axis respectively 
+
+
+``` r
+ggplot(loans, aes(x = debt_to_income, y = interest_rate)) +
+  geom_point()
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Scatterplot in base R
+
+
+.tiny[
+.pull-left[
+
+``` r
+ggplot(loans, aes(x = debt_to_income, y = interest_rate)) +
+  geom_point()
+```
+
+```
+## Warning: Removed 24 rows containing missing values or values outside the
+## scale range (`geom_point()`).
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+``` r
+plot(loans$debt_to_income, loans$interest_rate)
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+]
+
+---
+
+## Overplotting and hex plots
+
+- **Overplotting** is when points are plotted on top of each other
+
+- Common in **large data sets** 
+
+- A few ways to deal with this include using `alpha`, or `jitter()`
+
+- Alternatively, **hex plots** or hexbin plots
+
+.tiny[
+.pull-left[
+
+``` r
+ggplot(loans, aes(x = debt_to_income, y = interest_rate)) +
+  geom_point()
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+``` r
+ggplot(loans, aes(x = debt_to_income, y = interest_rate)) +
+  geom_hex()
+```
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+]
+
+---
+
+## Hex plot
+
+- Hex plots **divide the graphing surface into hexagons** 
+
+  - All points are grouped into their respective hexagonal regions 
+  
+  - **Color gradient** indicates the number of observations (count) in each hexagonal area.
+
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-8-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Correlation
+
+- Correlation is the **association between two variables** 
+
+- **(Pearson) Correlation coefficient** is a measure of **linear** correlation between two sets of data
+
+- Ranges from -1 to 1
+
+&lt;img src="img/corr.svg" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Correlation
+
+Recall:
+- Sample mean: `\(\bar{x} = \frac{x_1 + x_2 + ... + x_n}{n} = \frac{\sum_{i = 1}^{n} x_i}{n}\)`
+- Sample variance: `\(s^2 = \frac{(x_1 - \bar{x})^2 + (x_2 - \bar{x})^2 + ... + (x_n - \bar{x})^2}{n - 1} = \frac{\sum_{i=1}^{n} (x_i-\bar{x})^2}{n-1}\)`
+
+- Population mean: `\(\mu\)`
+- Population variance: `\(\sigma^2\)`
+
+- When talking about a population parameter for a variable `\(x\)`, might use subscript `\(x\)`, e.g., `\(\mu_x\)`, `\(\sigma^2_x\)`; similarly for a sample statistic, e.g., `\(s_x^2\)`
+
+---
+## Correlation
+- Sample correlation: `\(r_{xy} = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2}}\)`
+
+- Population correlation: `\(\rho\)`
+
+- `cor()` in R
+
+---
+## Correlation
+- Sample correlation: `\(r_{xy} = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2}}\)`
+
+&lt;img src="img/corr1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## Correlation
+- Sample correlation: `\(r_{xy} = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2}}\)`
+
+&lt;img src="img/corr2.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Correlation
+- Sample correlation: `\(r_{xy} = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2}}\)`
+
+&lt;img src="img/corr3.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## Correlation
+- Sample correlation: `\(r_{xy} = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2}}\)`
+
+- What does the **denominator** look like? 
+
+--
+  - Recall: Sample variance `\(s^2 = \frac{(x_1 - \bar{x})^2 + (x_2 - \bar{x})^2 + ... + (x_n - \bar{x})^2}{n - 1} = \frac{\sum_{i=1}^{n} (x_i-\bar{x})^2}{n-1}\)`
+  
+  - Denominator: `\(\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2} = \sqrt{(n-1)s_x^2 (n - 1)s_y^2} = (n-1)s_xs_y\)`
+
+- Pearson correlation coefficient is **scale and location-invariant**
+  
+  - **Subtract sample means**, `\(\bar{x}\)` and `\(\bar{y}\)`
+
+  - You can think of the denominator as a **scaling factor** 
+  
+
+---
+## Guess the correlation
+http://guessthecorrelation.com/
+
+&lt;img src="img/corrGame.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## Line graphs
+
+Line graphs are most commonly used for data over time, **time series data**
+
+.tiny[
+.panelset[
+.panel[.panel-name[Plot]
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-14-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+.panel[.panel-name[Code]
+
+``` r
+loans %&gt;%
+  group_by(issue_month) %&gt;%
+  summarize(count = n()) %&gt;%
+  ggplot(aes(x = as.Date(paste0("01-", issue_month), format = "%d-%b-%Y"), y = count)) +
+  geom_point() + 
+  geom_line() +
+  scale_x_date(labels = scales::date_format(format = "%m/%Y"), 
+               breaks = scales::date_breaks(width = "1 month"), 
+               expand = c(.02, .02)) +
+  labs(title = "Number of monthly loans", 
+    y = "Number of loans",
+    x = "Month")
+```
+]
+]
+]
+
+---
+## Line graphs
+- Be careful of `geom_path()` vs. `geom_line()`: 
+
+  - `geom_path()` connects the observations in the order in which they appear in the data
+  
+  - `geom_line()` connects them in order of the variable on the x axis.
+
+- In base R: `plot(x, y, type = "l")`. Also see `lines()`
+
+---
+## Line graphs in base R
+.tiny[
+.panelset[
+.panel[.panel-name[Plot]
+&lt;img src="lecture11_files/figure-html/unnamed-chunk-15-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+.panel[.panel-name[Code]
+
+``` r
+tmpDF &lt;- loans %&gt;%
+  group_by(issue_month) %&gt;%
+  summarize(count = n()) %&gt;%
+  mutate(issue_month = as.Date(paste0("01-", issue_month), format = "%d-%b-%Y")) %&gt;%
+  arrange(issue_month)
+plot(tmpDF$issue_month, tmpDF$count, type = "l",
+     main = "Number of monthly loans",
+     xlab = "Month",
+     ylab = "Number of loans")
+```
+]
+]
+]
+
+---
+## Exercises
+
+- Two employees at a grocery store are weighing produce. One records weights in pounds (lb) and one in kilograms. What should we expect the correlation coefficient between their measurements to be?
+
+
+`\(r_{xy} = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2 \sum_{i=1}^n(y_i-\bar{y})^2}}\)`
+
+- Write R code to calculate the sample correlation coefficient using just basic arithmetic operations (+ or sum(), -, . . . ) and the length() function. (Do not use functions like cor(), mean() or sd().)
+
+---
+## Summary
+
+--
+- Relationships between numerical variables 
+
+  - Scatterplot
+  
+  - Hex plot
+
+  - Correlation coefficient
+  
+  - Line graph
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
