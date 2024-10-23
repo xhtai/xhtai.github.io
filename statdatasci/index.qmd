@@ -104,3 +104,8 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - R for Data Science Chapter 10
 
+- Wed Oct 25: Categorical data
+  - Notes: [Lecture 12](https://xhtai.github.io/statdatasci/lectures/lecture12/lecture12.html)
+  - Homework 3: 
+
+
