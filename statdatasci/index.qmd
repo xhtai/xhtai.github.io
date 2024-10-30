@@ -118,3 +118,10 @@ There will sometimes be additional (optional) reading from:
   - Notes: [Lecture 14](https://xhtai.github.io/statdatasci/lectures/lecture14/lecture14.html)
   - Reading:
     - Open Intro Statistics Chapter 3.2
+
+- Fri Nov 1: Bayes' Theorem; Random variables
+  - Notes: [Lecture 15](https://xhtai.github.io/statdatasci/lectures/lecture15/lecture15.html)
+  - Reading:
+    - Open Intro Statistics Chapter 3.4  
+  - Homework 4: 
+
