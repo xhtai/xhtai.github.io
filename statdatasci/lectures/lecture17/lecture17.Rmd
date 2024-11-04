@@ -1,0 +1,428 @@
+---
+title: "Binomial Distribution"
+subtitle: "<br><br> STA35A: Statistical Data Science 1"
+author: "Xiao Hui Tai"
+date: November 6, 2024
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      # ratio: "16:9"
+      # highlightLines: true
+      # highlightStyle: solarized-light
+      countIncrementalSlides: false
+---
+
+
+```{r child = "../setup.Rmd"}
+```
+
+```{css, echo = FALSE}
+.tiny .remark-code { font-size: 70%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+```
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr); library(ggplot2)
+```
+
+
+## Today
+- Common probability distributions
+
+  - Binomial 
+      - Theoretical properties: probability mass function, parameters, mean and variance 
+      - More on calculating binomial probabilities
+      - Sampling and law of large numbers; effect of changing parameters 
+  
+  
+---
+
+## Binomial random variable
+
+- **Binomial distribution**: $X$ "successes" from a sequence of $n$ independent Bernoulli trials (size $n$)
+
+  - Binomial(n, p)
+
+- E-cigarette example: each student would represent an independent Bernoulli trial 
+
+  - 1 draw from the binomial distribution is made of 3 independent draws from the Bernoulli distribution 
+
+- **Assumptions**:
+
+  - Fixed number $n$ of Bernoulli trials
+  
+  - Outcomes of the $n$ trials are **independent**
+  
+  - Probability of success $p$ is the same for each trial
+
+---
+
+## Binomial distribution
+
+- **Probability mass function**: $P(X=x)=\begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}$ 
+
+- Recall Bernoulli: $P(Y=y)=p^y(1-p)^{1-y}$
+
+- Second part: multiplying the right combination of $p$ and $1-p$ 
+
+  - Total of $n$ terms 
+
+  - For example, for 3 e-cig smokers, $x=3$, $p^x(1-p)^{n-x}=0.2^3(0.8)^0=0.008$
+
+- First part: $\begin{pmatrix}n \\x \end{pmatrix}$: all the possible ways to get the outcome $x$
+
+
+---
+
+## Combinations
+
+- $\begin{pmatrix} n \\ x \end{pmatrix}$, is said in words "n choose x" 
+
+- This is called a **combination**.
+
+- In this particular setting, it is also called the *binomial coefficient*. 
+
+- Represents the number of ways to pick $x$ subjects from a larger group of $n$ and is defined as $$\begin{pmatrix} n \\ x \end{pmatrix} = \frac{n!}{x!(n-x)!}.$$
+
+- n! ("n factorial"): $n!=n(n-1)(n-2)\cdots (1)$. 
+
+  - $3!=3(2)(1)=6$
+  - $4!=4(3)(2)(1)=24$, and so forth. 
+  - We define $0!=1$.
+
+---
+
+## Combinations
+- In R, `choose(n, k)`
+
+- Factorials are `factorial(x)`, e.g., 
+```{r}
+factorial(3)
+```
+
+- How many ways can we pick 3 subjects from a group of 3? Using the binomial coefficient, we see it is $\begin{pmatrix}3 \\ 3 \end{pmatrix}=\frac{3!}{3!0!}=\frac{3(2)(1)}{3(2)(1)1}=1$. In R,
+```{r}
+choose(3, 3)
+```
+
+---
+
+## Combinations
+
+Going back to the table: 3 ways to pick 2 from a group of 3 students.  
+
+.small[
+
+| $Y_1$ | $Y_2$ | $Y_3$ | $X$ | $P(X)$ |
+|:----:|:----:|:----:|:----:|:----:|
+| 0 | 0 | 0 | 0 | 0.8(0.8)(0.8)=0.512 |
+| 1 | 0 | 0 | 1 | 0.2(0.8)(0.8)=0.128 |
+| 0 | 1 | 0 | 1 | 0.8(0.2)(0.8)=0.128 |
+| 0 | 0 | 1 | 1 | 0.8(0.8)(0.2)=0.128 |
+| 1 | 1 | 0 | 2 | 0.2(0.2)(0.8)=0.032 |
+| 1 | 0 | 1 | 2 | 0.2(0.8)(0.2)=0.032 |
+| 0 | 1 | 1 | 2 | 0.8(0.2)(0.2)=0.032 |
+| 1 | 1 | 1 | 3 | 0.2(0.2)(0.2)=0.008 |
+
+]
+
+We can also calculate $\begin{pmatrix}3 \\ 2 \end{pmatrix}=\frac{3!}{2!1!}=\frac{3(2)(1)}{(2)(1)(1)}=3$.
+
+---
+
+## Binomial probabilities
+
+Putting the ingredients together, we have 
+
+$$
+\begin{aligned}
+P(X = 2) &=  \begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}\\
+&= \begin{pmatrix} 3 \\ 2 \end{pmatrix}p^2(1-p)^{3-2}\\
+&=3(0.2)^2(0.8)^{3-2}\\
+&=3(.032) \\
+&=.096
+\end{aligned}
+$$
+This is the same as we saw in the table. 
+
+---
+
+## Binomial probabilities 
+
+- We saw how to calculate $P(X = 2)$. How about $P(X = 3)$?
+
+$$
+\begin{aligned}
+P(X = x) &=\begin{pmatrix} n \\ x \end{pmatrix} p^x(1-p)^{n-x} \\
+&= \frac{n!}{x!(n-x)!}p^x(1-p)^{n-x} 
+\end{aligned}
+$$
+
+--
+
+- Probability of getting 3 recent e-cig smokers in our sample of 3 students,
+
+$$\begin{aligned}
+P(X = 3)& = \begin{pmatrix} 3 \\ 3 \end{pmatrix}0.2^3(1-0.2)^{3-3}  \\
+& = \frac{3!}{3!(3-3)!}0.2^3(1-0.2)^{3-3} \\
+ & = \frac{3(2)(1)}{3(2)(1)1}0.2^3(0.8)^{0}=0.2^3 \\
+ & = 0.008.
+ \end{aligned}$$
+
+- Derive the probability distribution
+
+---
+## Binomial probabilites in R
+
+- In R, we can use `dbinom()`
+
+- From the help page: `dbinom()` has the arguments `x, size, prob, log = FALSE`
+  - `x` are the values of $x$ that we want probabilities for; here it is 0, 1, 2 and 3
+  - `size` is the number of Bernoulli trials; here it is 3
+  - `prob` is the probability of success; here it is .2
+
+.pull-left[
+```{r}
+dbinom(x = 0:3, size = 3, 
+       prob = .2)
+```
+]
+
+.pull-right[
+
+| | | | | |
+|:--:|:--:|:--:|:--:|:---:|
+| $X$ | 0 | 1 | 2 | 3|
+| $P(X=x)$ | 0.512 | 0.384 | 0.096 | 0.008 |
+ 
+ ]
+
+
+---
+## Bernoulli vs. binomial random variable
+
+- Recall: The **binomial distribution** gives us the probability of $X$ "successes" from a sequence of $n$ independent Bernoulli trials. 
+
+- In our example, each student would be an independent Bernoulli trial (either an e-cig smoker, or not).
+
+  - **Bernoulli**: whether or not a student is a recent e-cigarette smoker 
+
+  - **Binomial**: number of students, out of 3, who are recent e-cigarette smokers
+
+  - One observation of this binomial random variable is composed of 3 Bernoulli trials ("size 3")
+
+- Bernoulli distribution = special case of the binomial distribution, with 1 "trial"
+
+---
+## Mean and variance of binomial random variable
+
+For a binomial random variable with number of trials $n$ and probability of success $p$, $E(X) = np$ and $Var(X) = n(p)(1-p)$
+
+- How to get this? 
+
+--
+
+- From Bernoulli!
+
+- In our example, $p = .2$, $n = 3$, so $E(X) = .6$ and $Var(X) = 3*.2*.8 = .48$
+
+--
+
+- The Bernoulli distribution is a special case of the binomial distribution, with $n = 1$. Recall: $E(X) = p$ and $Var(X) = p(1-p)$.
+
+---
+
+## Case Study: E-Cigarettes
+
+- The [CDC reports](https://www.cdc.gov/tobacco/data_statistics/fact_sheets/youth_data/tobacco_use/index.htm) that about 20% of high school students have smoked e-cigarettes in the past 30 days
+
+- $P(Y=1)=P(Smoker)=p=0.2$ and $P(Y=0)=0.8$
+
+- Previously: 3 Bernoulli trials
+  
+
+---
+## More examples of calculating binomial probabilities 
+- What if we are interested in the probability that there is at least 1 student, out of 500, that has recent e-cigarette use? 
+
+- $X =$? 
+
+- What is the probability of interest? 
+
+- $n =$? $p =$?
+
+---
+## More examples of calculating binomial probabilities 
+- What if we are interested in the probability that there are more than 2 students, out of 500, who have recent e-cigarette use? 
+
+--
+
+Binomial distribution: $P(X = x)=\begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}$
+
+- Quick trick: $P(X \geq 1) = 1 - P(X=0)$ (either no students with recent e-cigarette use, or one or more students with recent e-cigarette use)
+
+- Similarly, $P(X > 2)=1-P(X=0)-P(X=1)-P(X=2)$ 
+
+
+---
+## More examples of calculating binomial probabilities 
+
+Binomial distribution: $P(X = x)=\begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}$
+
+So we have
+
+.small[
+$$
+\begin{aligned}
+P(X \geq 1) & =1-P(X = 0) \\
+&=1-\begin{pmatrix}500 \\ 0 \end{pmatrix} 0.2^0 (0.8)^{500-0} \\
+&=1-0.8^{500} \\
+&= 1\\
+ P(X>2) & = 1-P(X=0)-P(X=1)-P(X=2) \\ 
+ & = 1 - 0.8^{500} - \begin{pmatrix} 500 \\ 1 \end{pmatrix}0.2^1(0.8)^{500-1} - \begin{pmatrix} 500 \\ 2 \end{pmatrix}0.2^2(0.8)^{500-2} \\
+ & = 1 - 0.8^{500} - 500(0.2)(0.8)^{500-1} - \frac{500!}{2!(500-2)!}0.2^2(0.8)^{500-2} \\
+ & = 1 - 0.8^{500} - 500(0.2)(0.8)^{500-1} - \frac{500(500-1)}{2}0.2^2(0.8)^{500-2} \\
+ & = 1
+\end{aligned}
+$$
+]
+
+---
+## In R
+
+- Given the large number of students (500), it is almost certain that at least 1 or 2 would have recent e-cigarette use. 
+
+- We might be interested instead in $P(X \geq 100)$, the probability that at least one-fifth of the students have recent e-cigarette use
+
+- Luckily, we can do this in R
+
+```{r}
+sum(dbinom(x = 100:500, size = 500, prob = .2))
+```
+
+- Also, `pbinom()`: gives us $P(X \leq x)$ directly
+```{r}
+1 - pbinom(q = 99, size = 500, prob = .2)
+```
+
+---
+## Sampling from a binomial distribution in R
+
+- Recall draws from the Bernoulli distribution:
+  
+  - For any value of $0 \leq p \leq 1$ (including .5), we can use the `rbinom()` function
+
+  - `rbinom()` has the arguments `n, size, prob`, where `n` is the number of draws, and `prob` is the probability of success.
+  
+  - `size` is the "number of trials (zero or more)" -- for the Bernoulli distribution, we use `size = 1`. 
+  
+---
+## Sampling from a binomial distribution in R
+
+- `size` = number of Bernoulli trials; in the 3-student e-cigarette example, `size = 3`
+
+- **NOTE**: we use $n$ to denote the number of Bernoulli trials; in R this is the `size` argument
+
+Description | R
+----|--
+Number of draws/samples from Binomial | `n`
+Number of Bernoulli trials, size $n$ | `size`
+Probability of success, $p$ | `prob`
+
+- Bernoulli distribution: `size = 1`
+
+---
+## Sampling from a binomial distribution in R
+
+Example: 100 draws from the binomial distribution; each draw is made of 3 Bernoulli trials (size 3); probability of success = .2
+
+```{r}
+set.seed(0) # so results are reproducible 
+inputP <- .2
+binomDraws <- rbinom(n = 100, size = 3, prob = inputP)
+binomDraws
+```
+
+
+---
+## Sample mean  
+
+- Recall: for a binomial random variable with number of trials $n$ and probability of success $p$, $E(X) = np$ and $Var(X) = n(p)(1-p)$
+
+- In our example, $p = .2$, $n = 3$, so $E(X) = .6$ and $Var(X) = 3*.2*.8 = .48$
+
+- We can calculate the sample mean from our sample of 100:
+```{r}
+mean(binomDraws)
+```
+
+- What should this converge to? 
+
+---
+## Law of Large Numbers again
+As the sample size grows, the sample mean gets closer to the expected value, or population mean
+
+.small[
+```{r}
+set.seed(0) # so results are reproducible 
+binomDraws <- rbinom(n = 5000, size = 3, prob = .2)
+myMeans <- data.frame(sampleSize = 1:5000, myMean = NA)
+meanFun <- function(inputSampSize, outcomes) {
+  return(mean(outcomes[1:inputSampSize]))
+}
+myMeans$myMean <- sapply(myMeans$sampleSize, meanFun, binomDraws)
+head(myMeans)
+tail(myMeans)
+```
+]
+---
+## Law of Large Numbers again 
+.small[
+```{r}
+myMeans %>%
+  ggplot(aes(x = sampleSize, y = myMean)) +
+  geom_line() +
+  labs(x = "Sample size",
+       y = "Sample mean",
+       title = "Illustration of law of large numbers for Binomial distribution\nn = 3, p = .2")
+```
+]
+
+
+
+---
+## Exercise
+Boston Children's Hospital estimates that 90% of Americans have had chickenpox by the time they reach adulthood.
+
+(a) Suppose we take a random sample of 100 American adults. Is the use of the binomial distribution appropriate for calculating the probability that exactly 97 out of 100 randomly sampled American adults had chickenpox during childhood? Explain.
+
+(b) Calculate the probability that exactly 97 out of 100 randomly sampled American adults had chickenpox during childhood.
+
+(c) What is the probability that exactly 3 out of a new sample of 100 American adults have not had chickenpox in their childhood?
+
+(d) What is the probability that at least 1 out of 10 randomly sampled American adults have had chickenpox?
+
+(e) What is the probability that at most 3 out of 10 randomly sampled American adults have not had
+chickenpox?
+
+---
+## Summary
+
+
+
+- Common probability distributions: Binomial  
+
+  - Theoretical properties: probability mass function, parameters, mean and variance, effect of varying parameters
+  
+  - Sampling and law of large numbers; effect of changing parameters 
+
+  - R functions:
+  
+      - `d____()`, e.g., `dbinom()`: for densities (more accurately, for discrete random variables these are probability mass functions, $P(X = x)$)
+      - `p____()`, e.g., `pbinom()`: for $P(X\leq x)$
+      - `r____()`, e.g., `rbinom()`: for random sample
+    

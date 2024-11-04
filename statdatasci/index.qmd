@@ -130,3 +130,9 @@ There will sometimes be additional (optional) reading from:
   - Notes: [Lecture 16](https://xhtai.github.io/statdatasci/lectures/lecture16/lecture16.html)
   - Reading:
     - Open Intro Statistics Chapter 3.5, 4.3
+
+- Wed Nov 6: Binomial distribution
+  - Notes: [Lecture 17](https://xhtai.github.io/statdatasci/lectures/lecture17/lecture17.html)
+  - Reading:
+    - Open Intro Statistics Chapter 4.5
+
