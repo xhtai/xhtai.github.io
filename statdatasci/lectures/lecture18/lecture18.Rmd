@@ -1,0 +1,435 @@
+---
+title: "Poisson Distribution"
+subtitle: "<br><br> STA35A: Statistical Data Science 1"
+author: "Xiao Hui Tai"
+date: November 8, 2024
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      # ratio: "16:9"
+      # highlightLines: true
+      # highlightStyle: solarized-light
+      countIncrementalSlides: false
+---
+
+```{r child = "../setup.Rmd"}
+```
+
+```{css, echo = FALSE}
+.tiny .remark-code { font-size: 70%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+```
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr); library(ggplot2)
+# library(knitr)
+```
+
+## Announcements : Midterm 2
+
+- Midterm next Friday 11/15
+  - Will cover material from after Midterm 1 until today's lecture
+  - Monday: holiday
+  - Wednesday: review (OR)
+  - Thursday: no lab, XHT OH 12-1pm on Zoom
+  - Same rules apply: closed-book, no computers or calculators, no make-up exams
+
+- These formulas will be provided: 
+  - **Bayes' theorem**: $P(A \mid B) =\frac{P(B \mid A)P(A)}{P(B)}$.
+  - **Probability mass functions**:  
+      - Binomial: $P(X=x)=\begin{pmatrix} n \\ x \end{pmatrix}p^x(1-p)^{n-x}$  
+      - Poisson: $P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}$, $\lambda > 0$
+
+
+---
+## Today
+- Common probability distributions
+
+  - Poisson distribution 
+
+
+---
+
+## Random samples from binomial distribution
+
+- Use `rbinom()` to get 5000 draws from the population 
+
+- In R:
+.small[
+```{r}
+set.seed(0) # so results are reproducible 
+binomDraws <- rbinom(n = 5000, size = 3, prob = .2)
+table(binomDraws)/5000
+```
+]
+
+---
+
+## Frequency distribution for Binomial(3, .2)
+
+```{r}
+data.frame(binomDraws) %>%
+  ggplot(aes(x = binomDraws)) + 
+    geom_bar() +
+    labs(x = "Number of Smokers",
+         title = "5000 samples from Binomial(3, .2)")
+```
+
+---
+## Varying the number of Bernoulli trials: 100 trials
+
+.small[
+```{r}
+set.seed(0) # so results are reproducible 
+binomDraws100 <- rbinom(n = 5000, size = 100, prob = .2)
+data.frame(binomDraws100) %>%
+  ggplot(aes(x = binomDraws100)) + 
+    geom_bar() +
+    labs(x = "Number of Smokers",
+         title = "5000 samples from Binomial(100, .2)")
+```
+]
+---
+## Varying the number of Bernoulli trials: 500 trials
+
+.small[
+```{r}
+set.seed(0) # so results are reproducible 
+binomDraws500 <- rbinom(n = 5000, size = 500, prob = .2)
+data.frame(binomDraws500) %>%
+  ggplot(aes(x = binomDraws500)) + 
+    geom_bar() +
+    labs(x = "Number of Smokers",
+         title = "5000 samples from Binomial(500, .2)")
+```
+]
+---
+## Frequency distribution varying number of Bernoulli trials
+
+.small[
+.pull-left[
+```{r eval = FALSE}
+data.frame(binomDraws) %>%
+  bind_cols(size = 3) %>%
+  bind_rows(
+    data.frame(binomDraws100) %>%
+      rename(binomDraws = binomDraws100) %>%
+      bind_cols(size = 100)
+  ) %>%
+  bind_rows(
+    data.frame(binomDraws500) %>%
+      rename(binomDraws = binomDraws500) %>%
+      bind_cols(size = 500)
+  ) %>%
+  ggplot(aes(x = binomDraws, 
+             fill = as.factor(size))) +
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of smokers",
+      y = "Frequency",
+      title = "5000 samples each from Binomial(3, .2), Binomial(100, .2), Binomial(500, .2)",
+      fill = "Size"
+    )
+```
+]
+]
+.pull-right[
+```{r echo = FALSE, out.width = "100%"}
+data.frame(binomDraws) %>%
+  bind_cols(size = 3) %>%
+  bind_rows(
+    data.frame(binomDraws100) %>%
+      rename(binomDraws = binomDraws100) %>%
+      bind_cols(size = 100)
+  ) %>%
+  bind_rows(
+    data.frame(binomDraws500) %>%
+      rename(binomDraws = binomDraws500) %>%
+      bind_cols(size = 500)
+  ) %>%
+  ggplot(aes(x = binomDraws, 
+                    fill = as.factor(size))) + 
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of smokers",
+      y = "Frequency",
+      title = "5000 samples each from \n Binomial(3, .2), Binomial(100, .2), Binomial(500, .2)",
+      fill = "Size"
+    )
+```
+]
+
+---
+## Frequency distribution varying probability of success
+
+.small[
+```{r }
+set.seed(0) # so results are reproducible 
+binomP.2 <- rbinom(n = 5000, size = 100, prob = .2)
+binomP.5 <- rbinom(n = 5000, size = 100, prob = .5)
+binomP.7 <- rbinom(n = 5000, size = 100, prob = .7)
+```
+]
+```{r echo = FALSE, out.width = "60%"}
+data.frame(binomP.2) %>%
+  rename(outcome = binomP.2) %>%
+  bind_cols(prob = .2) %>%
+  bind_rows(
+    data.frame(binomP.5) %>%
+      rename(outcome = binomP.5) %>%
+      bind_cols(prob = .5)
+  ) %>%
+  bind_rows(
+    data.frame(binomP.7) %>%
+      rename(outcome = binomP.7) %>%
+      bind_cols(prob = .7)
+  ) %>%
+  ggplot(aes(x = outcome, 
+                    fill = as.factor(prob))) +
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of smokers",
+      y = "Frequency",
+      title = "5000 samples each from \nBinomial(100, .2), Binomial(100, .5), Binomial(100, .7)",
+      fill = "Prob"
+    )
+```
+
+
+
+---
+## Poisson distribution
+
+- Useful for estimating the **number of events in a large population over a unit of time**. 
+
+- For example:
+  - The number of people having heart attacks in New York City every year
+  - The number of accidents occurring at an intersection per hour
+  - The number of typos in every 100 pages of a book 
+  
+- It is named after French mathematician Siméon Denis Poisson
+
+---
+## Poisson distribution
+- E.g.: Number of people having heart attacks in New York City every year
+
+- **Key ingredients**
+  - **Fixed interval** of time or space
+  
+  - Events happen with a **known average rate**, independently of time since the last event ("memoryless" property)
+      - One person having a heart attack does not change the probability of another person having a heart attack, hence the timing of the next heart attack 
+
+- The parameter that defines a Poisson distributed random variable is the **rate** $\lambda$, where $\lambda > 0$
+
+  - Rate = **average number of occurrences per unit of time**
+
+- Often used to model rare events
+
+---
+## Probability mass function, mean and variance
+
+- $P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}$, defined over non-negative integer values of $x$
+
+  - Recall: $n! = n(n - 1)(n - 2)\cdots (1)$. 
+
+- No upper limit, i.e., $x$ can take very large non-negative integer values 
+
+- $E(X) = \lambda$
+
+- $Var(X) = \lambda$
+
+---
+## Poisson probabilities  
+- $P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}$ lets us calculate probabilities of taking a certain value
+
+- For $x = 2$ and $\lambda = 3$, we have 
+
+$$
+\begin{aligned}
+P(X = 2) &= \frac{3^2 e^{-3}}{2!}  = \frac{9(e^{-3})}{2(1)}  = 0.2240418
+\end{aligned}
+$$
+- In R:
+
+```{r}
+dpois(x = 2, lambda = 3)
+```
+
+- For large values of $x$, the probability is very small because of the large denominator
+
+```{r}
+dpois(x = 10, lambda = 3)
+```
+
+---
+## Probability distribution
+- In the same manner, we can derive the entire probability distribution
+
+.tiny[
+.pull-left[
+```{r}
+dpois(x = 0:10, lambda = 3)
+```
+
+```{r eval = FALSE}
+data.frame(x = 0:10, y = dpois(0:10, lambda = 3)) %>%
+  ggplot(aes(x = x, y = y)) + 
+    geom_bar(stat = "identity") +
+  labs(title = "Probability distribution of Poisson(3)",
+       y = "P(X = x)")
+```
+]
+]
+.pull-right[
+```{r echo = FALSE, out.width = "100%"}
+data.frame(x = 0:10, y = dpois(0:10, lambda = 3)) %>%
+  ggplot(aes(x = x, y = y)) + 
+    geom_bar(stat = "identity") +
+  labs(title = "Probability distribution of Poisson(3)",
+       y = "P(X = x)")
+```
+]
+
+---
+## Probability distribution varying lambda
+
+.small[
+```{r}
+data.frame(x = 0:30, y = dpois(0:30, lambda = 3), lambda = 3) %>%
+  bind_rows(data.frame(x = 0:30, y = dpois(0:30, lambda = 10), lambda = 10)) %>%
+  bind_rows(data.frame(x = 0:30, y = dpois(0:30, lambda = 20), lambda = 20)) %>%
+    ggplot(aes(x = x, y = y, fill = as.factor(lambda))) + 
+      geom_bar(stat = "identity", 
+               position = "identity", 
+               alpha = .5) +
+    labs(title = "Probability distribution of \nPoisson(3), Poisson(10), Poisson(20)",
+         y = "P(X = x)",
+         fill = "Lambda")
+```
+]
+
+---
+## Sampling from Poisson distribution in R
+- Simulate random draws using the `rpois()` function
+
+- `rpois()` has the arguments 
+  - `n`, the number of draws from the distribution 
+  - `lambda`, the mean
+
+```{r}
+set.seed(0) # so results are reproducible 
+inputLambda <- 3
+poissonDraws <- rpois(n = 100, lambda = inputLambda)
+poissonDraws
+```
+
+---
+## Frequency distribution varying lambda
+
+.small[
+```{r }
+set.seed(0) # so results are reproducible 
+poissonL3 <- rpois(n = 5000, lambda = 3)
+poissonL10 <- rpois(n = 5000, lambda = 10)
+poissonL20 <- rpois(n = 5000, lambda = 20)
+```
+]
+
+.tiny[
+.pull-left[
+```{r eval = FALSE}
+data.frame(poissonL3) %>%
+  rename(outcome = poissonL3) %>%
+  bind_cols(lambda = 3) %>%
+  bind_rows(
+    data.frame(poissonL10) %>%
+      rename(outcome = poissonL10) %>%
+      bind_cols(lambda = 10)
+  ) %>%
+  bind_rows(
+    data.frame(poissonL20) %>%
+      rename(outcome = poissonL20) %>%
+      bind_cols(lambda = 20)
+  ) %>%
+  ggplot(aes(x = outcome, 
+                    fill = as.factor(lambda))) +
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of occurrences",
+      y = "Frequency",
+      title = "5000 samples each from \nPoisson(3), Poisson(10), Poisson(20)",
+      fill = "Lambda"
+    )
+```
+]
+]
+.pull-right[
+```{r echo = FALSE, out.width = "100%"}
+data.frame(poissonL3) %>%
+  rename(outcome = poissonL3) %>%
+  bind_cols(lambda = 3) %>%
+  bind_rows(
+    data.frame(poissonL10) %>%
+      rename(outcome = poissonL10) %>%
+      bind_cols(lambda = 10)
+  ) %>%
+  bind_rows(
+    data.frame(poissonL20) %>%
+      rename(outcome = poissonL20) %>%
+      bind_cols(lambda = 20)
+  ) %>%
+  ggplot(aes(x = outcome, 
+                    fill = as.factor(lambda))) +
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of occurrences",
+      y = "Frequency",
+      title = "5000 samples each from \nPoisson(3), Poisson(10), Poisson(20)",
+      fill = "Lambda"
+    )
+```
+]
+
+
+
+---
+## Exercises
+An insurance agency determines that 70% of individuals do not exceed their deductible. 
+
+- Suppose the insurance agency is considering a random sample of four individuals they insure. What is the probability that exactly one of them will exceed the deductible?
+
+--
+
+- What is the probability that 3 of 8 randomly selected individuals will have exceeded the insurance deductible, i.e., that 5 of 8 will not exceed the deductible?
+
+---
+## Exercises
+A very skilled court stenographer makes one typographical error (typo) per hour on average.
+
+- What probability distribution is most appropriate for calculating the probability of a given number of typos this stenographer makes in an hour?
+
+- What are the mean and the standard deviation of the number of typos this stenographer makes?
+
+- Would it be considered unusual if this stenographer made 4 or more typos in a given hour?
+
+- Calculate the probability that this stenographer makes at most 2 typos in a given hour.
+
+
+---
+## Summary
+
+- Common probability distributions: Poisson 
+
+  - Theoretical properties: probability density function, parameters, mean and variance, effect of varying parameters
+  
+  - R functions, e.g.:
+  
+      - `dpois()` for densities 
+      - `ppois()` for $P(X\leq x)$
+      - `rpois()` for random sample
+    
+
