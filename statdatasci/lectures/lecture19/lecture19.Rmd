@@ -1,0 +1,812 @@
+---
+title: "Normal Distribution"
+subtitle: "<br><br> STA35A: Statistical Data Science 1"
+author: "Xiao Hui Tai"
+date: November 18, 2024
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      # ratio: "16:9"
+      # highlightLines: true
+      # highlightStyle: solarized-light
+      countIncrementalSlides: false
+---
+
+```{r child = "../setup.Rmd"}
+```
+
+```{css, echo = FALSE}
+.tiny .remark-code { font-size: 70%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+```
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr); library(ggplot2)
+```
+
+
+
+## Today
+
+- Common probability distributions: Normal
+
+  - Standard normal distribution
+
+  - R functions:
+      - `dnorm()` for densities 
+      - `pnorm()` for $P(X\leq x)$
+      - `rnorm()` for random sample
+      - `qnorm()` for quantiles (the value corresponding to an input probability, e.g., $P(X \leq \ ?) = p$)
+
+
+---
+
+## Recall: Continuous random variables
+
+```{r echo = FALSE, out.width = "40%"}
+knitr::include_graphics("img/density.png")
+```
+
+- Probability distribution for a discrete random variable: **probability mass function**
+
+- Continuous random variable: **probability density functions**
+
+- For a continuous random variable, probability for any exact value is zero
+
+- Instead, we think about probabilities in ranges. 
+
+- $P(a \leq X \leq b)$ is the area under the density function between $a$ and $b$.
+
+---
+## Normal Distribution
+
+- The **normal distribution** is an example of a continuous distribution
+
+- It is a very important distribution and one of the primary inferential tools in statistics 
+
+- Many **natural phenomenon** approximate the normal distribution, such as weight, height, blood pressure, annual rainfall
+
+- Commonly called the *Gaussian distribution* after [Carl Friedrich Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss)
+
+- Also sometimes called a *bell curve*
+
+---
+
+## Illustration: Shoe sizes 
+
+- Mickle et al (2010 *Footwear Science*) showed the following bimodal distribution of shoe sizes in the US. 
+
+```{r echo=FALSE, out.width="80%"}
+knitr::include_graphics("img/bimodalshoes.png")
+```
+
+Note that standard shoe sizes are discrete.
+
+---
+
+## Illustration: Shoe sizes 
+
+- Let $X$ represent the shoe size for wearers of men's shoes
+
+- (Hypothetical) probability distribution of shoe sizes of wearers of men's shoes.
+
+```{r echo=FALSE}
+set.seed(0)
+x <- rnorm(10000, mean = 11, sd = 1.5)
+x2 <- 2*x
+xcat <- round(x2, digits = 0)
+xdf <- data.frame(cbind(xcat = xcat / 2, x))
+ggplot(data = xdf, aes(x = xcat)) + 
+  geom_bar(aes(y = after_stat(count)/sum( after_stat(count) ) ) ) + 
+  scale_x_continuous(n.breaks = 10) +
+  labs(x = "Shoe Size",
+       y = "Probability",
+       title = "US Men's Shoe Sizes")
+```
+
+---
+
+## Illustration: Shoe sizes 
+
+What is the probability of a customer wanting  a men's shoe size smaller than 9?
+
+
+```{r echo=FALSE}
+ggplot(data = xdf, aes(x = xcat)) + 
+  geom_bar(aes(y = (after_stat(count))/sum(after_stat(count)))) + 
+  scale_x_continuous(n.breaks = 10) +
+  labs(x = "Shoe Size",
+       y = "Percent",
+       title = "US Men's Shoe Sizes")
+```
+
+
+---
+
+## Smaller Shoes
+
+.pull-left[
+```{r janitor,warning=FALSE,message=FALSE,echo=FALSE}
+library(janitor)
+distx <- xdf %>%
+  tabyl(xcat) %>%
+  select(-n) %>%
+  rename(size = xcat,
+         probability = percent)
+distx[1:11, ]
+```
+]
+.pull-right[
+```{r janitor2,warning=FALSE,message=FALSE,echo=FALSE}
+distx[12:22, ]
+```
+]
+
+The probability of a random men's shoe wearer having a shoe size less than 9 in this population is `r sum(distx$probability[distx$size < 9])`.
+
+What is the probability of shoe size 10-11.5?
+---
+
+## Moving to Continuous Distributions
+
+- Now suppose we could get *really* well-fitting shoes, using quarter sizes (9, 9.25, 9.5, 9.75, ...) or even tenth sizes (9, 9.1, 9.2, ...), or shoes specifically made to fit your feet perfectly.
+
+- As the number of sizes increases, the bar widths become narrower -> probability distribution of continuous random variable
+
+.pull-left[
+```{r normal, echo=FALSE, message=FALSE, warning=FALSE, out.width="90%"}
+ggplot(data = data.frame(x = c(4, 18)), aes(x)) +
+  stat_function(fun = dnorm, n = 10000, args = list(mean = 11, sd = 1.5)) + ylab("") +
+  scale_y_continuous() +
+  labs (x = "Continuous Shoe Size",
+        y = "Density")
+
+```
+]
+.pull-right[
+This is a **probability density function**.
+]
+---
+## Moving to Continuous Distributions
+
+- Probability density function can be used to get the probability of any range of continuous shoe sizes 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+ggplot(data.frame(x = c(4, 18)), aes(x = x)) +
+  stat_function(fun = dnorm,
+                n = 10000,
+                args = list(mean = 11, sd = 1.5)) +
+  stat_function(
+    fun = dnorm,
+    args = list(mean = 11, sd = 1.5),
+    xlim = c(4, 9),
+    geom = "area",
+    fill = "#003087",
+    alpha = .3
+  ) + labs(x = "Continuous Shoe Size")
+
+```
+
+E.g., probability of shoe size being less than 9 (shaded area)
+
+---
+## Moving to Continuous Distributions
+```{r echo=FALSE, warning=FALSE, message=FALSE, out.width = "40%"}
+ggplot(data.frame(x = c(4, 18)), aes(x = x)) +
+  stat_function(fun = dnorm,
+                n = 10000,
+                args = list(mean = 11, sd = 1.5)) +
+  stat_function(
+    fun = dnorm,
+    args = list(mean = 11, sd = 1.5),
+    xlim = c(4, 9),
+    geom = "area",
+    fill = "#003087",
+    alpha = .3
+  ) + labs(x = "Continuous Shoe Size")
+
+```
+
+- How do we find this area of interest?
+
+- Calculus! $$P(a \leq X \leq b)=\text{area between a and b below the curve}=\int_a^b f(x)dx$$ where $f(x)$ represents the density curve
+  - In this course, we will use R
+
+---
+## Normal Distribution
+
+- **Symmetric, bell-shaped**
+
+- Characterized by the mean, $\mu$, and the standard deviation, $\sigma$ (or variance, $\sigma^2$)
+
+- For the normal distribution, the **density function** is given by  $$f(x)=\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{1}{2}\frac{(x-\mu)^2}{\sigma^2}}$$
+
+- Notation: $N(\mu,\sigma^2)$
+
+- The normal distribution with mean 0 and standard deviation 1 is called the **standard normal distribution**. It is commonly denoted $Z \sim N(0, 1)$. 
+
+---
+## Probability density function for Normal Distribution
+- Like `dbinom()` and `dpois()`, `dnorm()` in R gives us the probability density function 
+
+- Here instead of $P(X = x)$, it is the **value of the probability density function**, $f(x)$ on the previous slide, at values that we input
+
+- `dnorm()` has arguments `x`, `mean` and `sd`, where `mean` and `sd` are the mean and standard deviation of the normal distribution that we want
+
+- **Remember that $P(X = x) = 0$ for a continuous random variable**; the value that `dnorm()` gives us is not a probability but the height of the density function
+
+---
+## Probability density function for Normal Distribution
+```{r}
+dnorm(x = -3:3, mean = 0, sd = 1)
+```
+
+.small[
+```{r}
+data.frame(x = c(-3, 3)) %>%
+  ggplot(aes(x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1)) +
+  labs(title = "Probability distribution of N(0, 1)",
+       y = "f(x)")
+```
+]
+
+---
+## Normal Distribution varying mean 
+- Which of the three distributions have means 0, 1, and 4?
+
+```{r echo = FALSE}
+myCols <- c("#420A68FF", "#DD513AFF", "#FCA50AFF")
+data.frame(x = c(-3, 7)) %>%
+  ggplot(aes(x)) +
+  stat_function(fun = dnorm, 
+                args = list(mean = 0, sd = 1),
+                geom = "area", 
+                fill = myCols[1],
+                alpha = .5) +
+  stat_function(fun = dnorm, 
+                args = list(mean = 1, sd = 1), 
+                geom = "area", 
+                fill = myCols[2],
+                alpha = .5) +
+  stat_function(fun = dnorm, 
+                args = list(mean = 4, sd = 1), 
+                geom = "area", 
+                fill = myCols[3],
+                alpha = .5) +
+  labs(title = "Probability distribution of N(0, 1), N(1, 1), N(4, 1)",
+       y = "f(x)")
+```
+
+---
+## Normal Distribution varying standard deviation 
+- Which has standard deviation 1, 2, and 4? 
+
+```{r echo = FALSE}
+data.frame(x = c(-15, 15)) %>%
+  ggplot(aes(x)) +
+  stat_function(fun = dnorm, 
+                n = 10000,
+                args = list(mean = 0, sd = 1),
+                geom = "area", 
+                fill = myCols[1],
+                alpha = .5) +
+  stat_function(fun = dnorm, 
+                args = list(mean = 0, sd = 2), 
+                geom = "area", 
+                fill = myCols[2],
+                alpha = .5) +
+  stat_function(fun = dnorm, 
+                args = list(mean = 0, sd = 4), 
+                geom = "area", 
+                fill = myCols[3],
+                alpha = .5) +
+  labs(title = "Probability distribution of N(0, 1), N(0, 4), N(0, 16)",
+       y = "f(x)")
+```
+
+
+---
+## Calculating probabilities for the normal distribution
+
+- Recall `pbinom()`: $P(X \leq x)$ for  binomial 
+
+- `pnorm()` for $P(X \leq x)$ for the normal distribution
+
+- Arguments: 
+  - `q`, "vector of quantiles" ( $x$ in $P(X \leq x)$ )
+  - `mean`, $\mu$ (default value 0)
+  - `sd`, standard deviation $\sigma$ (default value 1)
+
+```{r}
+pnorm(0)
+```
+---
+## Back to shoes example
+
+Men's shoe sizes follow a normal distribution with mean 11 and standard deviation 1.5, i.e., $N(\mu = 11,\sigma^2 = 1.5^2)$
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+ggplot(data.frame(x = c(4, 18)), aes(x = x)) +
+  stat_function(fun = dnorm,
+                n = 10000,
+                args = list(mean = 11, sd = 1.5)) +
+  stat_function(
+    fun = dnorm,
+    args = list(mean = 11, sd = 1.5),
+    xlim = c(4, 9),
+    geom = "area",
+    fill = "#003087",
+    alpha = .3
+  ) + labs(x = "Continuous Shoe Size")
+
+```
+
+E.g., probability of shoe size being less than 9 (shaded area)
+
+---
+## Calculating probabilities for our shoes example
+
+Given $N(\mu = 11,\sigma^2 = 1.5^2)$, what is the probability of shoe sizes less than 9? 
+
+--
+
+```{r}
+pnorm(9, mean = 11, sd = 1.5)
+```
+
+What is the probability of shoe sizes greater than 9? 
+
+--
+
+```{r}
+1 - pnorm(9, mean = 11, sd = 1.5)
+```
+
+
+
+---
+## Calculating probabilities for our shoes example
+What is the probability of shoe sizes less than 13? 
+--
+
+```{r}
+pnorm(13, mean = 11, sd = 1.5)
+```
+
+--
+What is the probability of shoe size 10-11.5?
+--
+
+```{r}
+pnorm(11.5, mean = 11, sd = 1.5) - pnorm(10, mean = 11, sd = 1.5)
+```
+
+---
+## Probabilities between two values
+
+```{r echo=FALSE}
+knitr::include_graphics("img/stdnorm6.png")
+```
+
+What is the probability of shoe size 10-11.5?
+
+```{r}
+pnorm(11.5, mean = 11, sd = 1.5) - pnorm(10, mean = 11, sd = 1.5)
+```
+
+---
+## Sampling from Normal distribution in R
+- `rnorm()` 
+
+- Arguments `n, mean, sd` 
+
+```{r}
+set.seed(0) # so results are reproducible 
+normalDraws <- rnorm(n = 100, mean = 0, sd = 1)
+head(normalDraws, 20)
+```
+
+---
+## Frequency distribution varying mean and sd
+
+.small[
+```{r }
+set.seed(0) # so results are reproducible 
+normal1 <- rnorm(n = 5000, mean = 3, sd = 2)
+normal2 <- rnorm(n = 5000, mean = 3, sd = 10)
+normal3 <- rnorm(n = 5000, mean = 11, sd = 1.5) # shoe size distribution 
+```
+]
+
+```{r echo = FALSE, out.width = "60%"}
+data.frame(normal1) %>%
+  rename(outcome = normal1) %>%
+  bind_cols(mean = 3, sd = 2) %>%
+  bind_rows(
+    data.frame(normal2) %>%
+      rename(outcome = normal2) %>%
+      bind_cols(mean = 3, sd = 10)
+  ) %>%
+  bind_rows(
+    data.frame(normal3) %>%
+      rename(outcome = normal3) %>%
+      bind_cols(mean = 11, sd = 1.5)
+  ) %>%
+  ggplot(aes(x = outcome, 
+                    fill = as.factor(paste0(mean, ", ", sd)))) +
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "x",
+      y = "Frequency",
+      title = "5000 samples each from N(3, 2^2), N(3, 10^2), N(11, 1.5^2)",
+      fill = "Mean, sd"
+    ) +
+  scale_fill_viridis_d() +
+  guides(fill = "none")
+```
+
+---
+## Frequency distribution varying mean and sd
+
+.small[
+```{r }
+set.seed(0) # so results are reproducible 
+normal1 <- rnorm(n = 5000, mean = 3, sd = 2)
+normal2 <- rnorm(n = 5000, mean = 3, sd = 10)
+normal3 <- rnorm(n = 5000, mean = 11, sd = 1.5)
+```
+]
+
+```{r echo = FALSE, out.width = "60%"}
+data.frame(normal1) %>%
+  rename(outcome = normal1) %>%
+  bind_cols(mean = 3, sd = 2) %>%
+  bind_rows(
+    data.frame(normal2) %>%
+      rename(outcome = normal2) %>%
+      bind_cols(mean = 3, sd = 10)
+  ) %>%
+  bind_rows(
+    data.frame(normal3) %>%
+      rename(outcome = normal3) %>%
+      bind_cols(mean = 11, sd = 1.5)
+  ) %>%
+  ggplot(aes(x = outcome, 
+                    fill = as.factor(paste0(mean, ", ", sd)))) +
+    geom_histogram(binwidth = 1, position = "identity", alpha = .7) + 
+    labs(
+      x = "Number of occurrences",
+      y = "Frequency",
+      title = "5000 samples each from N(3, 2^2), N(3, 10^2), N(11, 1.5^2)",
+      fill = "Mean, sd"
+    ) +
+  scale_fill_viridis_d() 
+```
+
+---
+## Standard normal distribution
+
+- Recall: $Z \sim N(0, 1)$
+
+- Any normally distributed random variable can be expressed as a standard normal by **subtracting the mean and dividing by the standard deviation**
+
+- This process is called **standardization**
+
+- $Y \sim N(\mu, \sigma^2)$
+
+- $Z = \frac{Y - \mu}{\sigma}$
+
+- $E\left(\frac{Y - \mu}{\sigma}\right) = \frac{1}{\sigma}[E(Y) - \mu] = 0$
+
+- $Var\left(\frac{Y - \mu}{\sigma}\right) = \frac{1}{\sigma^2}[Var(Y)] = \frac{1}{\sigma^2}[\sigma^2] = 1$
+
+- **Moving the location** (mean moves to 0) and **changing the scale** (standard deviation becomes 1)
+
+---
+## More about the standard normal distribution
+
+- Probability of shoe sizes smaller than 13:
+
+.small[
+```{r}
+pnorm(13, mean = 11, sd = 1.5)
+```
+]
+
+- Let $Y$ be the random variable denoting men's shoe sizes. Then $Y \sim N(11, 1.5^2)$.
+
+.tiny[
+$$
+\begin{aligned}
+P(Y \leq 13) &= P\left(\frac{Y - \mu_y}{\sigma_y} \leq \frac{13 - \mu_y}{\sigma_y} \right) \\
+&=P\left( Z \leq \frac{13-11}{1.5} \right) \\
+&=P(Z \leq \frac{2}{1.5})
+\end{aligned}
+$$
+]
+.small[
+```{r}
+pnorm(2/1.5, mean = 0, sd = 1)
+```
+]
+
+---
+## z-score
+.tiny[
+$$
+\begin{aligned}
+P(Y \leq 13) &= P\left(\frac{Y - \mu_y}{\sigma_y} \leq \frac{13 - \mu_y}{\sigma_y} \right) \\
+&=P\left( Z \leq \frac{13-11}{1.5} \right) \\
+&=P(Z \leq \frac{2}{1.5})
+\end{aligned}
+$$
+]
+
+- Standardized value $\frac{13-11}{1.5}$ is a z-score
+
+- $z = \frac{x - \mu}{\sigma} = \frac{\text{value - mean}}{\text{standard deviation}}$
+
+- **Number of standard deviations above (positive z-scores) or below the mean (negative z-scores)**
+
+
+---
+## z-score
+
+.tiny[
+$$
+\begin{aligned}
+P(Y \leq 13) &= P\left(\frac{Y - \mu_y}{\sigma_y} \leq \frac{13 - \mu_y}{\sigma_y} \right) \\
+&=P\left( Z \leq \frac{13-11}{1.5} \right) \\
+&=P(Z \leq \frac{2}{1.5})
+\end{aligned}
+$$
+]
+
+- $x - \mu$ is the number relative to the mean, e.g., shoe size 13 is 2 above the mean
+
+- Dividing by $\sigma$: gives number of standard deviations above the mean
+
+- e.g., shoe size distribution has sd = 1.5, so shoe size 13 is $\frac{2}{1.5} = 1.33$ standard deviations above the mean
+
+- **Relative** positions stay the same, i.e., $P(Y \leq 13) = P(Z \leq \frac{2}{1.5})$ 
+
+---
+## Recall: Variance and standard deviation
+
+- **Rules of thumb** for symmetric, bell-shaped distributions: 68%, 95%, and 99.7% of the values lie within one, two, and three standard deviations of the mean, respectively
+
+```{r echo=FALSE, out.width="60%"}
+knitr::include_graphics("img/sdRules.png")
+```
+
+```{r}
+pnorm(2)
+```
+
+---
+## Standardizing in R
+
+Consider the samples we drew earlier from $N \sim (11, 1.5^2)$
+
+.small[
+```{r }
+set.seed(0) # so results are reproducible 
+normal3 <- rnorm(n = 5000, mean = 11, sd = 1.5) # shoe size distribution 
+standardizedNormal3 <- (normal3 - 11)/1.5
+```
+]
+
+```{r echo = FALSE, out.width = "60%"}
+data.frame(normal3) %>%
+  rename(outcome = normal3) %>%
+  bind_cols(dist = "original") %>%
+  bind_rows(
+    data.frame(standardizedNormal3) %>%
+      rename(outcome = standardizedNormal3) %>%
+      bind_cols(dist = "standardized")
+  ) %>%
+  ggplot(aes(x = outcome, 
+                    fill = as.factor(dist))) +
+    geom_histogram(binwidth = .1, position = "identity", alpha = .7) + 
+    labs(
+      x = "x",
+      y = "Frequency",
+      title = "Original N(11, 1.5^2) and standardized",
+      fill = "Distribution"
+    ) +
+  scale_fill_viridis_d() 
+```
+
+---
+## Standardizing in R
+```{r echo = FALSE, out.width = "60%"}
+data.frame(normal3) %>%
+  rename(outcome = normal3) %>%
+  bind_cols(dist = "original") %>%
+  bind_rows(
+    data.frame(standardizedNormal3) %>%
+      rename(outcome = standardizedNormal3) %>%
+      bind_cols(dist = "standardized")
+  ) %>%
+  ggplot(aes(x = outcome, 
+                    fill = as.factor(dist))) +
+    geom_histogram(binwidth = .1, position = "identity", alpha = .7) + 
+    labs(
+      x = "x",
+      y = "Frequency",
+      title = "Original N(11, 1.5^2) and standardized",
+      fill = "Distribution"
+    ) +
+  scale_fill_viridis_d() +
+  geom_vline(xintercept = 13, linetype = "dashed") +
+  geom_vline(xintercept = 2/1.5, linetype = "dashed")
+```
+
+.small[
+```{r }
+sum(normal3 <= 13)/length(normal3)
+sum(standardizedNormal3 <= 2/1.5)/length(standardizedNormal3)
+```
+]
+
+---
+## Exercise
+
+Assume that player ratings in chess tournaments follow a symmetric, bell-shaped distribution with mean 1600 and standard deviation 350. 
+
+What common probability distribution do player ratings follow, and what are the parameters? 
+
+--
+
+A player with a rating of 2650 enters the tournament. What is the probability of a rating higher than this player? 
+
+--
+
+What is the probability of ratings between 1200 and 1800? 
+
+
+---
+## More about the standard normal distribution 
+
+- We saw earlier that $P(Z \leq 0) = .5$. This is because the standard normal distribution is symmetric with mean 0.
+
+```{r}
+pnorm(0) # default value of mean = 0 and sd = 1
+```
+
+- Tail probabilities of the standard normal distribution 
+
+  - The symmetry of the normal distribution allows us to calculate the probability of values falling in the tails
+  
+  - For any $z$-score, $P(Z \leq -z) = P(Z \geq z)$
+
+```{r echo=FALSE, out.width = "20%"}
+knitr::include_graphics("img/stdnorm5.png")
+```
+
+---
+## Quantiles for the normal distribution 
+
+- Quantiles are cut points dividing the range of a probability distribution into continuous intervals
+
+- Recall: quartiles (four groups) and percentiles (100 groups)
+
+- $P(X \leq q) = p$, where $q$ is the quantile (think of value on the horizontal axis), e.g., $P(Z \leq 0) = .5$
+
+- Recall: `pnorm(q, mean, sd)` for $P(X\leq x)$, or $P(Z \leq z)$ for standard normal. `pnorm()` returns the probability, `p`
+
+```{r}
+pnorm(q = 0, mean = 0, sd = 1)
+```
+
+- `qnorm(p, mean, sd)` for the quantile, e.g., $P(X \leq \ ?) = p$. `qnorm()` returns the quantile, `q`
+  
+```{r}
+qnorm(p = .5, mean = 0, sd = 1)
+```
+
+---
+## Important reference points for the normal distribution 
+
+- z-scores (quantiles) corresponding to particular probabilities are often written as $z_p$
+  - $p$ denotes the probability in the **right tail**, e.g., $z_{.025} \approx 1.96$
+
+- Important reference points: 2.5% in the left and right tails 
+
+- In R:
+
+.pull-left[
+```{r}
+qnorm(.025, lower.tail = FALSE)
+qnorm(.975)
+```
+]
+
+.pull-right[
+```{r echo=FALSE, out.width = "70%"}
+knitr::include_graphics("img/stdnorm5.png")
+```
+]
+---
+## Important reference points for the normal distribution 
+
+
+.pull-left[
+```{r}
+pnorm(1.96)
+pnorm(1.96, lower.tail = FALSE)
+```
+
+```{r echo=FALSE, out.width = "78%"}
+knitr::include_graphics("img/stdnorm1.png")
+```
+]
+.pull-right[
+```{r}
+pnorm(-1.96)
+pnorm(-1.96, lower.tail = FALSE)
+```
+
+```{r echo=FALSE, out.width = "70%"}
+knitr::include_graphics("img/stdnorm2.png")
+```
+]
+
+---
+## Standard normal table
+
+```{r echo=FALSE}
+knitr::include_graphics("img/normaltable.png")
+```
+
+---
+## Standard normal table
+
+.pull-left[
+What is the probability of a shoe size bigger than 13 (z-score 1.33)?
+
+```{r echo=FALSE, out.width="100%"}
+knitr::include_graphics("img/normalcurveupper.png")
+```
+]
+--
+.pull-right[
+.small[
+```{r}
+pnorm(13, mean = 11, sd = 1.5, lower.tail = FALSE)
+pnorm(2/1.5, lower.tail = FALSE)
+1 - pnorm(2/1.5)
+```
+]
+]
+
+
+---
+## Summary: Distributions in R
+
+- For each distribution, R has a family of commands, starting with the letters `d`, `p`, `q` and `r`
+  - `d` for density
+  - `p` for cumulative density up to input value $P(X \leq x)$. Think of $P(X \leq q) = p$
+  - `q` for the quantile, e.g., $P(X \leq \ ?) = p$
+  - `r` for a random sample from the distribution
+
+---
+## Summary
+
+- Common probability distributions: Normal
+
+  - Standard normal distribution
+
+  - R functions:
+      - `dnorm()` for densities 
+      - `pnorm()` for $P(X\leq x)$
+      - `rnorm()` for random sample
+      - `qnorm()` for quantiles (the value corresponding to an input probability, e.g., $P(X \leq \ ?) = p$)
+
+
+

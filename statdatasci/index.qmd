@@ -149,3 +149,8 @@ There will sometimes be additional (optional) reading from:
 
 - Fri Nov 15: Midterm 2
 
+### Week 9: Normal distribution, sampling distributions
+- Mon Nov 20: Normal distribution
+  - Notes: [Lecture 19](https://xhtai.github.io/statdatasci/lectures/lecture19/lecture19.html)
+  - Reading:
+    - Open Intro Statistics Chapter 5.1

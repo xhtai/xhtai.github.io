@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Normal Distribution</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Xiao Hui Tai" />
+    <meta name="date" content="2024-11-18" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.min.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Normal Distribution
+]
+.subtitle[
+## <br><br> STA35A: Statistical Data Science 1
+]
+.author[
+### Xiao Hui Tai
+]
+.date[
+### November 18, 2024
+]
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &lt;a href="https://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt;  --&gt;
+
+---
+
+&lt;style type="text/css"&gt;
+.tiny .remark-code { font-size: 70%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+&lt;/style&gt;
+
+
+
+
+
+
+## Today
+
+- Common probability distributions: Normal
+
+  - Standard normal distribution
+
+  - R functions:
+      - `dnorm()` for densities 
+      - `pnorm()` for `\(P(X\leq x)\)`
+      - `rnorm()` for random sample
+      - `qnorm()` for quantiles (the value corresponding to an input probability, e.g., `\(P(X \leq \ ?) = p\)`)
+
+
+---
+
+## Recall: Continuous random variables
+
+&lt;img src="img/density.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+- Probability distribution for a discrete random variable: **probability mass function**
+
+- Continuous random variable: **probability density functions**
+
+- For a continuous random variable, probability for any exact value is zero
+
+- Instead, we think about probabilities in ranges. 
+
+- `\(P(a \leq X \leq b)\)` is the area under the density function between `\(a\)` and `\(b\)`.
+
+---
+## Normal Distribution
+
+- The **normal distribution** is an example of a continuous distribution
+
+- It is a very important distribution and one of the primary inferential tools in statistics 
+
+- Many **natural phenomenon** approximate the normal distribution, such as weight, height, blood pressure, annual rainfall
+
+- Commonly called the *Gaussian distribution* after [Carl Friedrich Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss)
+
+- Also sometimes called a *bell curve*
+
+---
+
+## Illustration: Shoe sizes 
+
+- Mickle et al (2010 *Footwear Science*) showed the following bimodal distribution of shoe sizes in the US. 
+
+&lt;img src="img/bimodalshoes.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+Note that standard shoe sizes are discrete.
+
+---
+
+## Illustration: Shoe sizes 
+
+- Let `\(X\)` represent the shoe size for wearers of men's shoes
+
+- (Hypothetical) probability distribution of shoe sizes of wearers of men's shoes.
+
+&lt;img src="lecture19_files/figure-html/unnamed-chunk-5-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Illustration: Shoe sizes 
+
+What is the probability of a customer wanting  a men's shoe size smaller than 9?
+
+
+&lt;img src="lecture19_files/figure-html/unnamed-chunk-6-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Smaller Shoes
+
+.pull-left[
+
+```
+##  size probability
+##   5.5      0.0001
+##   6.0      0.0006
+##   6.5      0.0012
+##   7.0      0.0032
+##   7.5      0.0081
+##   8.0      0.0180
+##   8.5      0.0334
+##   9.0      0.0556
+##   9.5      0.0805
+##  10.0      0.1072
+##  10.5      0.1202
+```
+]
+.pull-right[
+
+```
+##  size probability
+##  11.0      0.1326
+##  11.5      0.1247
+##  12.0      0.1109
+##  12.5      0.0807
+##  13.0      0.0550
+##  13.5      0.0345
+##  14.0      0.0182
+##  14.5      0.0086
+##  15.0      0.0050
+##  15.5      0.0012
+##  16.0      0.0004
+```
+]
+
+The probability of a random men's shoe wearer having a shoe size less than 9 in this population is 0.0646.
+
+What is the probability of shoe size 10-11.5?
+---
+
+## Moving to Continuous Distributions
+
+- Now suppose we could get *really* well-fitting shoes, using quarter sizes (9, 9.25, 9.5, 9.75, ...) or even tenth sizes (9, 9.1, 9.2, ...), or shoes specifically made to fit your feet perfectly.
+
+- As the number of sizes increases, the bar widths become narrower -&gt; probability distribution of continuous random variable
+
+.pull-left[
+&lt;img src="lecture19_files/figure-html/normal-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+This is a **probability density function**.
+]
+---
+## Moving to Continuous Distributions
+
+- Probability density function can be used to get the probability of any range of continuous shoe sizes 
+
+&lt;img src="lecture19_files/figure-html/unnamed-chunk-7-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+E.g., probability of shoe size being less than 9 (shaded area)
+
+---
+## Moving to Continuous Distributions
+&lt;img src="lecture19_files/figure-html/unnamed-chunk-8-1.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+- How do we find this area of interest?
+
+- Calculus! `$$P(a \leq X \leq b)=\text{area between a and b below the curve}=\int_a^b f(x)dx$$` where `\(f(x)\)` represents the density curve
+  - In this course, we will use R
+
+---
+## Normal Distribution
+
+- **Symmetric, bell-shaped**
+
+- Characterized by the mean, `\(\mu\)`, and the standard deviation, `\(\sigma\)` (or variance, `\(\sigma^2\)`)
+
+- For the normal distribution, the **density function** is given by  `$$f(x)=\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{1}{2}\frac{(x-\mu)^2}{\sigma^2}}$$`
+
+- Notation: `\(N(\mu,\sigma^2)\)`
+
+- The normal distribution with mean 0 and standard deviation 1 is called the **standard normal distribution**. It is commonly denoted `\(Z \sim N(0, 1)\)`. 
+
+---
+## Probability density function for Normal Distribution
+- Like `dbinom()` and `dpois()`, `dnorm()` in R gives us the probability density function 
+
+- Here instead of `\(P(X = x)\)`, it is the **value of the probability density function**, `\(f(x)\)` on the previous slide, at values that we input
+
+- `dnorm()` has arguments `x`, `mean` and `sd`, where `mean` and `sd` are the mean and standard deviation of the normal distribution that we want
+
+- **Remember that `\(P(X = x) = 0\)` for a continuous random variable**; the value that `dnorm()` gives us is not a probability but the height of the density function
+
+---
+## Probability density function for Normal Distribution
+
+``` r
+dnorm(x = -3:3, mean = 0, sd = 1)
+```
+
+```
+## [1] 0.004431848 0.053990967 0.241970725 0.398942280 0.241970725
+## [6] 0.053990967 0.004431848
+```
+
+.small[
+
+``` r
+data.frame(x = c(-3, 3)) %&gt;%
+  ggplot(aes(x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1)) +
+  labs(title = "Probability distribution of N(0, 1)",
+       y = "f(x)")
+```
+
+&lt;img src="lecture19_files/figure-html/unnamed-chunk-10-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## Normal Distribution varying mean 
+- Which of the three distributions have means 0, 1, and 4?
+
+&lt;img src="lecture19_files/figure-html/unnamed-chunk-11-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Normal Distribution varying standard deviation 
+- Which has standard deviation 1, 2, and 4? 
+
+&lt;img src="lecture19_files/figure-html/unnamed-chunk-12-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Calculating probabilities for the normal distribution
+
+- Recall `pbinom()`: `\(P(X \leq x)\)` for  binomial 
+
+- `pnorm()` for `\(P(X \leq x)\)` for the normal distribution
+
+- Arguments: 
+  - `q`, "vector of quantiles" ( `\(x\)` in `\(P(X \leq x)\)` )
+  - `mean`, `\(\mu\)` (default value 0)
+  - `sd`, standard deviation `\(\sigma\)` (default value 1)
+
+
+``` r
+pnorm(0)
+```
+
+```
+## [1] 0.5
+```
+---
+## Back to shoes example
+
+Men's shoe sizes follow a normal distribution with mean 11 and standard deviation 1.5, i.e., `\(N(\mu = 11,\sigma^2 = 1.5^2)\)`
+
+&lt;img src="lecture19_files/figure-html/unnamed-chunk-14-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+E.g., probability of shoe size being less than 9 (shaded area)
+
+---
+## Calculating probabilities for our shoes example
+
+Given `\(N(\mu = 11,\sigma^2 = 1.5^2)\)`, what is the probability of shoe sizes less than 9? 
+
+--
+
+
+``` r
+pnorm(9, mean = 11, sd = 1.5)
+```
+
+```
+## [1] 0.09121122
+```
+
+What is the probability of shoe sizes greater than 9? 
+
+--
+
+
+``` r
+1 - pnorm(9, mean = 11, sd = 1.5)
+```
+
+```
+## [1] 0.9087888
+```
+
+
+
+---
+## Calculating probabilities for our shoes example
+What is the probability of shoe sizes less than 13? 
+--
+
+
+``` r
+pnorm(13, mean = 11, sd = 1.5)
+```
+
+```
+## [1] 0.9087888
+```
+
+--
+What is the probability of shoe size 10-11.5?
+--
+
+
+``` r
+pnorm(11.5, mean = 11, sd = 1.5) - pnorm(10, mean = 11, sd = 1.5)
+```
+
+```
+## [1] 0.3780661
+```
+
+---
+## Probabilities between two values
+
+&lt;img src="img/stdnorm6.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+What is the probability of shoe size 10-11.5?
+
+
+``` r
+pnorm(11.5, mean = 11, sd = 1.5) - pnorm(10, mean = 11, sd = 1.5)
+```
+
+```
+## [1] 0.3780661
+```
+
+---
+## Sampling from Normal distribution in R
+- `rnorm()` 
+
+- Arguments `n, mean, sd` 
+
+
+``` r
+set.seed(0) # so results are reproducible 
+normalDraws &lt;- rnorm(n = 100, mean = 0, sd = 1)
+head(normalDraws, 20)
+```
+
+```
+##  [1]  1.262954285 -0.326233361  1.329799263  1.272429321
+##  [5]  0.414641434 -1.539950042 -0.928567035 -0.294720447
+##  [9] -0.005767173  2.404653389  0.763593461 -0.799009249
+## [13] -1.147657009 -0.289461574 -0.299215118 -0.411510833
+## [17]  0.252223448 -0.891921127  0.435683299 -1.237538422
+```
+
+---
+## Frequency distribution varying mean and sd
+
+.small[
+
+``` r
+set.seed(0) # so results are reproducible 
+normal1 &lt;- rnorm(n = 5000, mean = 3, sd = 2)
+normal2 &lt;- rnorm(n = 5000, mean = 3, sd = 10)
+normal3 &lt;- rnorm(n = 5000, mean = 11, sd = 1.5) # shoe size distribution 
+```
+]
+
+&lt;img src="lecture19_files/figure-html/unnamed-chunk-23-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Frequency distribution varying mean and sd
+
+.small[
+
+``` r
+set.seed(0) # so results are reproducible 
+normal1 &lt;- rnorm(n = 5000, mean = 3, sd = 2)
+normal2 &lt;- rnorm(n = 5000, mean = 3, sd = 10)
+normal3 &lt;- rnorm(n = 5000, mean = 11, sd = 1.5)
+```
+]
+
+&lt;img src="lecture19_files/figure-html/unnamed-chunk-25-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Standard normal distribution
+
+- Recall: `\(Z \sim N(0, 1)\)`
+
+- Any normally distributed random variable can be expressed as a standard normal by **subtracting the mean and dividing by the standard deviation**
+
+- This process is called **standardization**
+
+- `\(Y \sim N(\mu, \sigma^2)\)`
+
+- `\(Z = \frac{Y - \mu}{\sigma}\)`
+
+- `\(E\left(\frac{Y - \mu}{\sigma}\right) = \frac{1}{\sigma}[E(Y) - \mu] = 0\)`
+
+- `\(Var\left(\frac{Y - \mu}{\sigma}\right) = \frac{1}{\sigma^2}[Var(Y)] = \frac{1}{\sigma^2}[\sigma^2] = 1\)`
+
+- **Moving the location** (mean moves to 0) and **changing the scale** (standard deviation becomes 1)
+
+---
+## More about the standard normal distribution
+
+- Probability of shoe sizes smaller than 13:
+
+.small[
+
+``` r
+pnorm(13, mean = 11, sd = 1.5)
+```
+
+```
+## [1] 0.9087888
+```
+]
+
+- Let `\(Y\)` be the random variable denoting men's shoe sizes. Then `\(Y \sim N(11, 1.5^2)\)`.
+
+.tiny[
+$$
+`\begin{aligned}
+P(Y \leq 13) &amp;= P\left(\frac{Y - \mu_y}{\sigma_y} \leq \frac{13 - \mu_y}{\sigma_y} \right) \\
+&amp;=P\left( Z \leq \frac{13-11}{1.5} \right) \\
+&amp;=P(Z \leq \frac{2}{1.5})
+\end{aligned}`
+$$
+]
+.small[
+
+``` r
+pnorm(2/1.5, mean = 0, sd = 1)
+```
+
+```
+## [1] 0.9087888
+```
+]
+
+---
+## z-score
+.tiny[
+$$
+`\begin{aligned}
+P(Y \leq 13) &amp;= P\left(\frac{Y - \mu_y}{\sigma_y} \leq \frac{13 - \mu_y}{\sigma_y} \right) \\
+&amp;=P\left( Z \leq \frac{13-11}{1.5} \right) \\
+&amp;=P(Z \leq \frac{2}{1.5})
+\end{aligned}`
+$$
+]
+
+- Standardized value `\(\frac{13-11}{1.5}\)` is a z-score
+
+- `\(z = \frac{x - \mu}{\sigma} = \frac{\text{value - mean}}{\text{standard deviation}}\)`
+
+- **Number of standard deviations above (positive z-scores) or below the mean (negative z-scores)**
+
+
+---
+## z-score
+
+.tiny[
+$$
+`\begin{aligned}
+P(Y \leq 13) &amp;= P\left(\frac{Y - \mu_y}{\sigma_y} \leq \frac{13 - \mu_y}{\sigma_y} \right) \\
+&amp;=P\left( Z \leq \frac{13-11}{1.5} \right) \\
+&amp;=P(Z \leq \frac{2}{1.5})
+\end{aligned}`
+$$
+]
+
+- `\(x - \mu\)` is the number relative to the mean, e.g., shoe size 13 is 2 above the mean
+
+- Dividing by `\(\sigma\)`: gives number of standard deviations above the mean
+
+- e.g., shoe size distribution has sd = 1.5, so shoe size 13 is `\(\frac{2}{1.5} = 1.33\)` standard deviations above the mean
+
+- **Relative** positions stay the same, i.e., `\(P(Y \leq 13) = P(Z \leq \frac{2}{1.5})\)` 
+
+---
+## Recall: Variance and standard deviation
+
+- **Rules of thumb** for symmetric, bell-shaped distributions: 68%, 95%, and 99.7% of the values lie within one, two, and three standard deviations of the mean, respectively
+
+&lt;img src="img/sdRules.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+``` r
+pnorm(2)
+```
+
+```
+## [1] 0.9772499
+```
+
+---
+## Standardizing in R
+
+Consider the samples we drew earlier from `\(N \sim (11, 1.5^2)\)`
+
+.small[
+
+``` r
+set.seed(0) # so results are reproducible 
+normal3 &lt;- rnorm(n = 5000, mean = 11, sd = 1.5) # shoe size distribution 
+standardizedNormal3 &lt;- (normal3 - 11)/1.5
+```
+]
+
+&lt;img src="lecture19_files/figure-html/unnamed-chunk-31-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Standardizing in R
+&lt;img src="lecture19_files/figure-html/unnamed-chunk-32-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+.small[
+
+``` r
+sum(normal3 &lt;= 13)/length(normal3)
+```
+
+```
+## [1] 0.9072
+```
+
+``` r
+sum(standardizedNormal3 &lt;= 2/1.5)/length(standardizedNormal3)
+```
+
+```
+## [1] 0.9072
+```
+]
+
+---
+## Exercise
+
+Assume that player ratings in chess tournaments follow a symmetric, bell-shaped distribution with mean 1600 and standard deviation 350. 
+
+What common probability distribution do player ratings follow, and what are the parameters? 
+
+--
+
+A player with a rating of 2650 enters the tournament. What is the probability of a rating higher than this player? 
+
+--
+
+What is the probability of ratings between 1200 and 1800? 
+
+
+---
+## More about the standard normal distribution 
+
+- We saw earlier that `\(P(Z \leq 0) = .5\)`. This is because the standard normal distribution is symmetric with mean 0.
+
+
+``` r
+pnorm(0) # default value of mean = 0 and sd = 1
+```
+
+```
+## [1] 0.5
+```
+
+- Tail probabilities of the standard normal distribution 
+
+  - The symmetry of the normal distribution allows us to calculate the probability of values falling in the tails
+  
+  - For any `\(z\)`-score, `\(P(Z \leq -z) = P(Z \geq z)\)`
+
+&lt;img src="img/stdnorm5.png" width="20%" style="display: block; margin: auto;" /&gt;
+
+---
+## Quantiles for the normal distribution 
+
+- Quantiles are cut points dividing the range of a probability distribution into continuous intervals
+
+- Recall: quartiles (four groups) and percentiles (100 groups)
+
+- `\(P(X \leq q) = p\)`, where `\(q\)` is the quantile (think of value on the horizontal axis), e.g., `\(P(Z \leq 0) = .5\)`
+
+- Recall: `pnorm(q, mean, sd)` for `\(P(X\leq x)\)`, or `\(P(Z \leq z)\)` for standard normal. `pnorm()` returns the probability, `p`
+
+
+``` r
+pnorm(q = 0, mean = 0, sd = 1)
+```
+
+```
+## [1] 0.5
+```
+
+- `qnorm(p, mean, sd)` for the quantile, e.g., `\(P(X \leq \ ?) = p\)`. `qnorm()` returns the quantile, `q`
+  
+
+``` r
+qnorm(p = .5, mean = 0, sd = 1)
+```
+
+```
+## [1] 0
+```
+
+---
+## Important reference points for the normal distribution 
+
+- z-scores (quantiles) corresponding to particular probabilities are often written as `\(z_p\)`
+  - `\(p\)` denotes the probability in the **right tail**, e.g., `\(z_{.025} \approx 1.96\)`
+
+- Important reference points: 2.5% in the left and right tails 
+
+- In R:
+
+.pull-left[
+
+``` r
+qnorm(.025, lower.tail = FALSE)
+```
+
+```
+## [1] 1.959964
+```
+
+``` r
+qnorm(.975)
+```
+
+```
+## [1] 1.959964
+```
+]
+
+.pull-right[
+&lt;img src="img/stdnorm5.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+---
+## Important reference points for the normal distribution 
+
+
+.pull-left[
+
+``` r
+pnorm(1.96)
+```
+
+```
+## [1] 0.9750021
+```
+
+``` r
+pnorm(1.96, lower.tail = FALSE)
+```
+
+```
+## [1] 0.0249979
+```
+
+&lt;img src="img/stdnorm1.png" width="78%" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+
+``` r
+pnorm(-1.96)
+```
+
+```
+## [1] 0.0249979
+```
+
+``` r
+pnorm(-1.96, lower.tail = FALSE)
+```
+
+```
+## [1] 0.9750021
+```
+
+&lt;img src="img/stdnorm2.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## Standard normal table
+
+&lt;img src="img/normaltable.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+## Standard normal table
+
+.pull-left[
+What is the probability of a shoe size bigger than 13 (z-score 1.33)?
+
+&lt;img src="img/normalcurveupper.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+--
+.pull-right[
+.small[
+
+``` r
+pnorm(13, mean = 11, sd = 1.5, lower.tail = FALSE)
+```
+
+```
+## [1] 0.09121122
+```
+
+``` r
+pnorm(2/1.5, lower.tail = FALSE)
+```
+
+```
+## [1] 0.09121122
+```
+
+``` r
+1 - pnorm(2/1.5)
+```
+
+```
+## [1] 0.09121122
+```
+]
+]
+
+
+---
+## Summary: Distributions in R
+
+- For each distribution, R has a family of commands, starting with the letters `d`, `p`, `q` and `r`
+  - `d` for density
+  - `p` for cumulative density up to input value `\(P(X \leq x)\)`. Think of `\(P(X \leq q) = p\)`
+  - `q` for the quantile, e.g., `\(P(X \leq \ ?) = p\)`
+  - `r` for a random sample from the distribution
+
+---
+## Summary
+
+- Common probability distributions: Normal
+
+  - Standard normal distribution
+
+  - R functions:
+      - `dnorm()` for densities 
+      - `pnorm()` for `\(P(X\leq x)\)`
+      - `rnorm()` for random sample
+      - `qnorm()` for quantiles (the value corresponding to an input probability, e.g., `\(P(X \leq \ ?) = p\)`)
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
