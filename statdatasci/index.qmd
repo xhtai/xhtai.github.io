@@ -153,4 +153,10 @@ There will sometimes be additional (optional) reading from:
 - Mon Nov 20: Normal distribution
   - Notes: [Lecture 19](https://xhtai.github.io/statdatasci/lectures/lecture19/lecture19.html)
   - Reading:
+    - Open Intro Statistics Chapter 4.1
+
+- Wed Nov 22: Sampling distributions 
+  - Notes: [Lecture 20](https://xhtai.github.io/statdatasci/lectures/lecture20/lecture20.html)
+  - Reading:
     - Open Intro Statistics Chapter 5.1
+

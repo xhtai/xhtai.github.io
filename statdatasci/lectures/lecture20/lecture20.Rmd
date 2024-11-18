@@ -1,0 +1,508 @@
+---
+title: "Sampling distributions"
+subtitle: "<br><br> STA35A: Statistical Data Science 1"
+author: "Xiao Hui Tai"
+date: November 20, 2024
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      # ratio: "16:9"
+      # highlightLines: true
+      # highlightStyle: solarized-light
+      countIncrementalSlides: false
+---
+
+```{r child = "../setup.Rmd"}
+```
+
+```{css, echo = FALSE}
+.tiny .remark-code { font-size: 70%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+```
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr); library(ggplot2)
+```
+
+## Today
+
+- Sum of independent normal distributions
+
+- Introduction to sampling distributions
+
+- Central Limit Theorem
+
+- Sampling distribution of the sample mean
+
+---
+## Sum of independent normal random variables 
+
+- Important property: **Any linear combination of normal random variables is a normal random variable** 
+--
+
+- A linear combination of two random variables, $X$ and $Y$, is of the form $aX+bY$, where $a$
+and $b$ are constants
+
+- Recall: 
+  - $E(aX + bY) = aE(X) + bE(Y)$
+  - For a linear combination of **independent** random variables $Var(aX + bY) = a^2 Var(X) + b^2 Var(Y)$
+
+- $X \sim N(\mu_x, \sigma_x^2)$ and $Y \sim N(\mu_y, \sigma_y^2)$ are independent, $W = X + Y \sim N(\mu_x + \mu_y, \sigma_x^2 + \sigma_y^2)$
+
+---
+## Sum of independent normal random variables 
+
+- Extends to more than two random variables in the linear combination
+
+- $E(aX + bY) = aE(X) + bE(Y)$
+  - $b$ can be negative, e.g., $E(X - Y) = E(X) - E(Y)$ and $Var(X - Y) = Var(X) + Var(Y)$.
+
+---
+
+## Course content 
+
+1. Fundamentals of R
+  - Overview of data types and structures
+  - Data manipulation and data visualization tools  
+
+2. Descriptive statistics for numerical and categorical data
+
+3. Probability
+  - Rules of probability computation; conditional probability
+  - Basic probability models: Binomial, Normal and Poisson 
+
+4. **Statistical inference**
+  - **Sampling distributions of sample mean and sample proportion**
+  - Hypothesis testing and confidence intervals for population mean and population proportion
+
+---
+
+## Recall (lecture 13): What is statistical inference?
+- **Descriptive statistics**: summarize and describe data. 
+  - Do not necessarily generalize beyond the data
+
+- **Statistical inference**
+  - Draw conclusions about the larger population 
+  - Using sample data to make conclusions about the underlying population the sample came from 
+
+.pull-left[
+```{r echo=FALSE, out.width="50%"}
+knitr::include_graphics("img/soup.png")
+```
+]
+
+.pull-right[
+Similar to tasting a spoonful of soup while cooking to make an inference about the entire pot.
+]
+
+---
+## Recall: Example of statistical inference in action 
+
+When a **sample statistic** is used to estimate a **population parameter**, it will be accompanied by a **margin of error**
+
+```{r echo = FALSE, out.width = "85%"}
+knitr::include_graphics("img/approval.png")
+```
+
+.tiny[
+Source: https://www.rasmussenreports.com/public_content/politics/biden_administration/prez_track_sep23
+]
+
+---
+## Recall: Many Topics in Statistical Inference
+
+- Fundamentals: probability, distributions, random variables, ...
+
+- **Sampling**
+
+- Hypothesis testing
+
+- Point estimates and confidence intervals
+
+- Modeling: Linear regression, analysis of variance, nonparametric models, machine learning, ... 
+
+---
+## Sampling Distribution of the Sample Mean 
+
+Recall our shoe size example, where wearers of men's shoe sizes follow a $N(11, 1.5^2)$ distribution.
+
+Say we are interested in the sample mean of shoe sizes. We have a sample of 1000 observations.
+
+```{r}
+set.seed(0)
+sampled1000_1 <- rnorm(1000, 11, 1.5)
+head(sampled1000_1, 20)
+mean(sampled1000_1) 
+```
+
+---
+## Sampling Distribution of the Sample Mean 
+Now we repeat the experiment, i.e., get a different sample of 1000 observations. 
+
+```{r}
+set.seed(10)
+sampled1000_2 <- rnorm(1000, 11, 1.5)
+head(sampled1000_2, 20)
+mean(sampled1000_2) 
+all.equal(mean(sampled1000_1), mean(sampled1000_2))
+```
+---
+## Sampling Distribution of the Sample Mean 
+
+If we repeat the experiment an infinite number of times, what distribution of sample means would we get? This is known as the **sampling distribution**.
+
+1. Draw a sample of size $n$, calculate its mean $\overline{x}_1$
+2. Draw a second sample of the same size, calculate its mean $\overline{x}_2$
+3. Repeat this many times to get sample means $\overline{x}_1, \overline{x}_2, \ldots$
+
+$\overline{x}_1, \overline{x}_2, \ldots$ are **sample statistics**
+
+What is the distribution of $\overline{x}_1, \overline{x}_2, \overline{x}_3, \ldots$?
+
+---
+## Sampling Distribution of the Sample Mean 
+
+- The sample mean $\overline{X}$, is defined as $\overline{X} = \frac{\sum_{i = 1}^n X_i}{n}$
+
+- $\overline{x}_1, \overline{x}_2, \overline{x}_3, \ldots$ are draws from $\overline{X}$
+
+Here we consider $X_1, ..., X_n$ that are **independent and identically distributed**. (E.g., $X_1, ... X_n \sim N(11, 1.5^2)$ for the shoe size distribution.)
+
+---
+## Sampling Distribution of the Sample Mean 
+
+1. Draw a sample of size $n$ and calculate its mean $\overline{x}_1$
+2. Draw a second sample of the same size and calculate its mean $\overline{x}_2$
+3. Repeat this many times to get sample means $\overline{x}_1, \overline{x}_2, \ldots$
+
+We cannot repeat an infinite number of times, but we do this 10,000 times in R.
+
+.small[
+```{r}
+set.seed(0)
+repeat10000 <- t(replicate(n = 10000, rnorm(1000, 11, 1.5)))
+str(repeat10000)
+head(rowMeans(repeat10000), 20)
+means10000 <- rowMeans(repeat10000)
+```
+]
+
+---
+## Sampling Distribution of the Sample Mean 
+
+
+```{r}
+data.frame(shoesMean = means10000) %>%
+  ggplot(aes(x = shoesMean)) +
+  geom_density() +
+  labs(x = "Mean of sample of size 1000",
+       y = "Density",
+       title = "Sampling distribution from N(11, 1.5^2)")
+```
+
+---
+## Sampling Distribution of the Sample Mean 
+
+.pull-left[
+```{r echo = FALSE, out.width = "100%"}
+data.frame(shoesMean = means10000) %>%
+  ggplot(aes(x = shoesMean)) +
+  geom_density() +
+  labs(x = "Mean shoe size of sample of size 1000",
+       y = "Density",
+       title = "Sampling distribution from N(11, 1.5^2)")
+```
+]
+.pull-right[
+How would we describe this distribution?
+
+- Center
+
+- Spread
+
+- Shape
+]
+---
+## Sampling Distribution of the Sample Mean 
+
+.pull-left[
+```{r echo = FALSE, out.width = "100%"}
+data.frame(shoesMean = means10000) %>%
+  ggplot(aes(x = shoesMean)) +
+  geom_density() +
+  labs(x = "Mean shoe size of sample of size 1000",
+       y = "Density",
+       title = "Sampling distribution from N(11, 1.5^2)")
+```
+]
+.small[
+.pull-right[
+How would we describe this distribution?
+
+- Center
+  - Centered at 11 (same as the population parameter)
+
+- Spread
+  - Looks to be much smaller than the original distribution (the original distribution has standard deviation 1.5)
+
+- Shape
+  - Symmetric and bell-shaped
+]
+]
+
+---
+## Effect of changing sample size
+
+- Earlier we used a sample size of 1000. What if we used a sample size of 50? 
+
+```{r}
+set.seed(0)
+repeat10000_n50 <- t(replicate(n = 10000, rnorm(50, 11, 1.5)))
+str(repeat10000_n50)
+head(rowMeans(repeat10000_n50), 20)
+means10000_n50 <- rowMeans(repeat10000_n50)
+```
+
+---
+## Effect of changing sample size
+
+.tiny[
+.pull-left[
+```{r eval = FALSE}
+data.frame(shoesMean = means10000, sampleSize = 1000) %>%
+  bind_rows(
+    data.frame(means10000_n50, sampleSize = 50) %>%
+      rename(shoesMean = means10000_n50)
+  )  %>%
+  ggplot(aes(x = shoesMean,
+             fill = as.factor(sampleSize))) +
+  geom_density() +
+  labs(x = "Mean shoe size",
+       y = "Density",
+       title = "Sampling distribution from N(11, 1.5^2)",
+       fill = "Sample size")  +
+  scale_fill_viridis_d()
+ # guides(fill = "none")
+```
+]
+]
+
+.pull-right[
+```{r echo = FALSE, out.width = "100%"}
+data.frame(shoesMean = means10000, sampleSize = 1000) %>%
+  bind_rows(
+    data.frame(means10000_n50, sampleSize = 50) %>%
+      rename(shoesMean = means10000_n50)
+  )  %>%
+  ggplot(aes(x = shoesMean,
+             fill = as.factor(sampleSize))) +
+  geom_density(alpha = .5) +
+  labs(x = "Mean shoe size",
+       y = "Density",
+       title = "Sampling distribution from N(11, 1.5^2)",
+       fill = "Sample size")  +
+  scale_fill_viridis_d()
+ # guides(fill = "none")
+```
+]
+
+- What do you notice about the spread? 
+
+--
+
+  - A larger sample size produces more precise estimates 
+  
+  - We will formalize this intuition using the **Central Limit Theorem**
+  
+---
+## Note on sampling distributions
+
+- "Sampling distributions are never observed, but we keep them in mind"
+
+- **Real-world applications**: one draw from the sampling distribution, $\overline{x}$
+
+- **Simulations**: we cannot run experiments an infinite number of times to generate the sampling distribution 
+
+- Useful to think of a sample statistic as coming from such a hypothetical distribution
+
+  - Helps us characterize sample statistics that we observe
+
+
+---
+## Sampling distributions, confidence intervals and hypothesis testing
+
+What can we do with the sampling distribution? 
+
+- **Confidence intervals**: Estimate a population parameter as point estimate $\pm$ margin of error
+
+  - Margin of error: (1) how confident we want to be (2) sample statistic's variability
+
+- **Hypothesis testing**: Test whether a population parameter is equal to some value
+
+  - How likely is it that we have obtained the observed sample statistic, if the population parameter is indeed that value? 
+
+---
+## Central Limit Theorem
+
+- In words: for *any distribution* with a well-defined mean and variance, the **sample mean** is approximately normally distributed 
+
+- Formally: 
+  - Population with mean $\mu$ and standard deviation $\sigma$
+  - Independent samples $X_1, ..., X_n$
+  - $\overline{X} = \frac{\sum_{i = 1}^n X_i}{n}$
+
+--
+
+- Properties of sampling distribution $\overline{X}$:
+  - Mean is identical to the population mean $\mu$, i.e., $E(\overline{X}) = \mu$
+
+  - Standard deviation $\frac{\sigma}{\sqrt{n}}$, i.e., $Var(\overline{X}) = \frac{\sigma^2}{n}$
+
+  - For large $n$ ( $n \rightarrow \infty$ ), distribution is approximately normal
+  
+  - i.e., $\overline{X} \approx N(\mu, \frac{\sigma^2}{n})$ 
+
+---
+## Intuition
+
+- The average of **many measurements** of the same unknown quantity tends to give a **better estimate** than a single measurement
+
+  - If we want to know the population mean test score of the class, getting information from a sample of 10 students is better than asking a single student
+
+- Recall the **law of large numbers**: as $n \rightarrow \infty$ , $\overline{X} \rightarrow E(X)$
+
+```{r echo = FALSE}
+set.seed(0) # so results are reproducible 
+inputP <- .3
+bernoulliDraws <- rbinom(n = 5000, size = 1, prob = inputP)
+myMeans <- data.frame(sampleSize = 1:5000, myMean = NA)
+meanFun <- function(inputSampSize, outcomes) {
+  return(mean(outcomes[1:inputSampSize]))
+}
+myMeans$myMean <- sapply(myMeans$sampleSize, meanFun, bernoulliDraws)
+```
+
+---
+## Intuition
+.pull-left[
+```{r echo = FALSE, out.width = "100%"}
+myMeans %>%
+  ggplot(aes(x = sampleSize, y = myMean)) +
+  geom_line() +
+  labs(x = "Sample size",
+       y = "Sample mean",
+       title = "Illustration of law of large numbers with p = .3")
+```
+
+- Note that here we are using Bernoulli(.3), so $\mu = p = .3$ and $\sigma^2 = p(1-p) = .3(.7)$
+]
+
+.pull-right[
+- In this illustration, think of each point plotted as a single draw from $\overline{X} \sim N(\mu, \frac{\sigma^2}{n})$, as we vary $n$, the sample size (plotted on the horizontal axis)
+
+- CLT tells us the distribution of $\overline{X}$ at each value of $n$
+
+- For large values of $n$, we see that $Var(\overline{X}) = \frac{\sigma^2}{n}$ gets very small, so any draw from this distribution will be very close to $E(\overline{X}) = \mu$
+
+]
+
+---
+## Intuition
+
+- We can see the same narrowing distribution (smaller variance) with our shoes example:
+
+```{r echo = FALSE, out.width = "70%"}
+data.frame(shoesMean = means10000, sampleSize = 1000) %>%
+  bind_rows(
+    data.frame(means10000_n50, sampleSize = 50) %>%
+      rename(shoesMean = means10000_n50)
+  )  %>%
+  ggplot(aes(x = shoesMean,
+             fill = as.factor(sampleSize))) +
+  geom_density(alpha = .5) +
+  labs(x = "Mean shoe size",
+       y = "Density",
+       title = "Sampling distribution from N(11, 1.5^2)",
+       fill = "Sample size")  +
+  scale_fill_viridis_d()
+ # guides(fill = "none")
+```
+
+
+- Nice applet where you can adjust the sample size and other parameters: http://demonstrations.wolfram.com/SamplingDistributionOfTheSampleMean/
+
+---
+## Central Limit Theorem
+
+Set-up:
+- Population with mean $\mu$ and standard deviation $\sigma$
+- Independent samples $X_1, ..., X_n$
+- $\overline{X} = \frac{\sum_{i = 1}^n X_i}{n}$
+
+Properties of sampling distribution $\overline{X}$:
+
+- Mean is identical to the population mean $\mu$, i.e., $E(\overline{X}) = \mu$
+
+- Standard deviation $\frac{\sigma}{\sqrt{n}}$, i.e., $Var(\overline{X}) = \frac{\sigma^2}{n}$
+
+- For large $n$ ( $n \rightarrow \infty$ ), distribution is approximately normal
+
+- i.e., $\overline{X} \approx N(\mu, \frac{\sigma^2}{n})$ 
+
+Notice that this does not restrict the distribution of the underlying $X_1, ..., X_n$ in any way. These can be normal, binomial, Poisson, ... 
+
+---
+## Central Limit Theorem with different underlying distributions
+
+- All we need to know is $E(X_i)$ or $\mu$, and $Var(X_i)$ or $\sigma^2$
+
+- For **normally distributed** random variables with mean $\mu$ and variance $\sigma^2$
+
+--
+
+  - $\overline{X} \sim N(\mu, \frac{\sigma^2}{n})$ (actually, we don't need CLT for this. Why?)
+
+- For **Poisson( $\lambda$ ) distributed** random variables with $E(X_i) = \lambda$ and $Var(X_i) = \lambda$
+
+--
+
+  - $\overline{X} \approx N(\lambda, \frac{\lambda}{n})$ 
+  
+---
+
+## How Large is Large Enough for n?
+
+- A commonly used rule of thumb is $n > 50$
+
+- For Bernoulli data, one rule of thumb is that $n$ should be large enough that $n p>5$ and $n(1- p)>5$. Sometimes you also see $n p>10$ and $n(1- p)> 10$
+
+  - If p is around a half, you need a smaller sample size than if p is close to 0 or 1
+
+
+---
+
+## Example: Normal data
+
+In the shoe size example, we have $X_1, ..., X_n \sim N(11, 1.5^2)$. Say we collected 1000 samples, so the sample size $n = 1000$. What distribution does the sampling distribution of the sample mean follow?
+
+
+--
+
+What is $P(\overline{X} < 10.9)$? Calculate this in two ways: using the original distribution, and using the standard normal distribution. 
+
+
+---
+## Summary
+  
+- Sum of independent normal distributions: any linear combination of normal random variables is a normal random variable
+
+- Central Limit Theorem: $\overline{X} \approx N(\mu, \frac{\sigma^2}{n})$ 
+
+- Sampling distribution of the sample mean
+
+
+
