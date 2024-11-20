@@ -160,3 +160,7 @@ There will sometimes be additional (optional) reading from:
   - Reading:
     - Open Intro Statistics Chapter 5.1
 
+- Fri Nov 24: Sample proportion, Confidence intervals
+  - Notes: [Lecture 21](https://xhtai.github.io/statdatasci/lectures/lecture21/lecture21.html)
+  - Reading:
+    - Open Intro Statistics Chapter 5.2
