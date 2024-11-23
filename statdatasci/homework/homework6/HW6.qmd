@@ -1,0 +1,67 @@
+---
+title: "Homework 6"
+author: ""
+date: "DUE: November 28 2024, 9PM"
+output: 
+  html_document: 
+    toc: true
+    toc_float: true
+---
+
+## Instructions
+Upload a PDF file, named with your UC Davis email ID and homework number (e.g., `xtai_hw1.pdf`), to Gradescope (accessible through Canvas). You will give the commands to answer each question in its own code block, which will also produce output that will be automatically embedded in the output file. Each answer must be supported by any written statements as well as any code used. 
+
+All code used to produce your results must be shown in your PDF file (e.g., do not use `echo = FALSE` or `include = FALSE` as options anywhere). `qmd/Rmd` files do not need to be submitted, but may be requested by the TA and must be available when the assignment is submitted. 
+
+Students may choose to collaborate with each other on the homework, but must clearly indicate with whom they collaborated. 
+
+**Please assign the pages with your answers to the corresponding questions when submitting your homework on Gradescope. Points will be taken off if you fail to do so.**
+
+
+## Problem 1 (20 points)
+Assume that tree heights follow a symmetric, bell-shaped distribution with mean 50 feet and variance 16. 
+
+a. What common probability distribution do tree heights follow, and what are the parameters? 
+
+b. A randomly selected tree has height 25 feet. What is the probability of a tree being taller than this tree? 
+
+c. What is the probability of heights between 60 and 80 feet? 
+
+## Problem 2 (25 points)
+Recall that in class (lecture 10), we learned the following rules of thumb for symmetric, bell-shaped distributions: 68%, 95%, and 99.7% of the values lie within one, two, and three standard deviations of the mean, respectively. This is actually derived from the normal distribution. 
+
+a. What are the relevant z-scores represting one, two, and three standard deviations of the mean?
+
+b. Use differences of two `pnorm()` values to derive each of the above three percentages.
+
+c. For the one standard deviation version, how do we derive the same required probability in (b) using only a single call of `pnorm()` with a negative z-score? 
+
+## Problem 3 (25 points)
+
+Suppose $X_1, X_2, ..., X_n$ are independent and identically distributed random variables, distributed $N(\mu, \sigma^2)$. Let $Y = \frac{\sum_{i = 1}^n X_i}{4n}$. 
+
+a. What is the distribution of $Y$? Include information about the values of the population mean and variance. 
+
+b. Now assume $n$ is large. Use the Central Limit Theorem to get an approximate distribution for $Y$, and derive its mean and variance. 
+
+## Problem 4 (30 points)
+Assume that the number of branches on a redwood tree follows a normal distribution with mean 150 and standard deviation 30. Let the random variable $X_i$ denote the number of branches on the $i$th redwood tree, where $i = 1, ..., n$. Then, $X_i \sim N(150, 30^2)$. 
+
+a. What is the probability of a tree having more than 180 branches? Calculate this in R using the original $X_i \sim N(150, 30^2)$ distribution, and after standardizing to a standard normal distribution. 
+
+b. Assume the samples are independent. What is the approximate distribution of the sampling distribution of the sample mean, $\overline{X}$?
+
+c. Simulate 1000 draws, $X_1$ to $X_{1000}$, and calculate the sample mean. 
+
+d. The following code repeats (c) 5000 times. Each row is one of the 5000 experiments, and each column is one of 1000 observations in each sample. Calculate the 5000 sample means. What are the mean and standard deviation of these 5000 sample means? Is it close to what you would expect?
+
+```{r}
+set.seed(0)
+my5000samples <- t(replicate(5000, rnorm(1000, 150, 30)))
+```
+
+## Appendix
+
+```{r eval = TRUE}
+sessionInfo()
+```
