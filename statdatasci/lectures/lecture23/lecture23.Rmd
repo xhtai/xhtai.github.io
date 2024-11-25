@@ -1,0 +1,370 @@
+---
+title: "Hypothesis Testing"
+subtitle: "<br><br> STA35A: Statistical Data Science 1"
+author: "Xiao Hui Tai"
+date: December 2, 2024
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      # ratio: "16:9"
+      # highlightLines: true
+      # highlightStyle: solarized-light
+      countIncrementalSlides: false
+---
+
+```{r child = "../setup.Rmd"}
+```
+
+
+```{css, echo = FALSE}
+.tiny .remark-code { font-size: 70%; }
+.small .remark-code { font-size: 80%; }
+.tiny { font-size: 60%; }
+.small { font-size: 80%; }
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+```
+
+
+## Today
+
+- Introduction to hypothesis testing 
+
+  - Framework 
+  
+  - Errors from hypothesis tests 
+
+- Hypothesis test for population mean 
+
+
+---
+## Hypothesis testing
+
+Example: Honor Court
+
+Suppose a case of suspected cheating is brought to a university Honor Court.  There are two opposing claims.
+- **Student:**  I did not cheat on the exam.
+- **Professor:**  The student did cheat on the exam.
+
+- Honor Court assumes students are innocent until proven guilty
+
+- The professor must provide evidence to support their claim
+
+- Evidence: there were two different versions of the exam; the student on three separate problems used numbers from the *other* version of the exam
+
+
+--
+
+The honor court members agree that this would be **extremely unlikely** if it were true that the student did not cheat. The professor's evidence is very strong; there is sufficient evidence to reject the student's claim that they did not cheat on the exam. 
+
+---
+
+## Hypothesis Testing Framework
+
+Steps in hypothesis testing:
+
+- Start with two opposing claims about the population (claim 1 and claim 2)
+
+- Choose a sampling strategy and collect data
+
+- Figure out how likely it is to see data like what we got, or more extreme results, if claim 1 is true
+
+- If our data would have been **unlikely** if claim 1 were true, then we reject claim 1. Otherwise, do not reject claim 1. 
+
+Note: we **never "accept"** claim 1. We can never "accept" claim 2 either. The test only tells us if we have sufficient evidence to reject claim 1. The outcomes are (1) reject claim 1, (2) fail to reject claim 1. 
+
+---
+
+## Hypothesis Testing Framework
+
+- Claim 1: **null hypothesis** $H_0$
+
+- Claim 2: **alternative hypothesis**, $H_1$ or $H_A$
+
+- In this example:  
+    $H_0$: Student did not cheat  
+    $H_A$: Student cheated 
+
+- Gather data
+
+- Assess **how likely** we are to observe data, or more extreme results, **if $H_0$ were true** (**p-value**)
+
+- In Honor Court example, if the student did not cheat, it is very unlikely that the student would have numbers from the other version of the exam in three separate problems
+
+---
+
+## Example: Ultra Low Dose Contraceptives
+
+- A certain ultra-low dose oral contraceptive pill is supposed to contain 0.02 mg of estrogen 
+
+- If the dose is higher, the user may risk side effects, and if the dose is lower, the user may get pregnant
+
+- Manufacturer wishes to check whether the mean concentration in a large shipment is the needed 0.02 mg or not
+
+- A random sample of $n=500$ pills is tested, and the sample mean concentration is 0.017 mg with a sample standard deviation of 0.008 mg
+
+--
+
+- Is this sufficient evidence that the mean concentraion is not 0.02 mg? What about if our sample mean was 0.019 mg? 
+
+---
+## Example: Ultra Low Dose Contraceptives
+
+- State the claims
+  - **Claim 1**: Shipment is consistent with a population mean of 0.02 mg estrogen. $H_0: \mu=0.02$
+  - **Claim 2**: Shipment is not consistent with a population mean of 0.02 mg estrogen.  $H_A: \mu \neq 0.02$
+  
+- **Strategy**: Sample 500 pills at random and use a hypothesis test to evaluate whether they are consistent with a population with mean 0.02 mg estrogen
+  
+- **Data**: 500 pills have a sample mean $\bar{x}=0.017$ and sample standard deviation $s=0.008$
+
+- Assess **how likely** we are to observe $\bar{x}=0.017$, or more extreme results, if $H_0$ were true
+  - Say the probability of getting a result like ours (or more extreme) is 0.01 if Claim 1 is true.
+  
+---
+## Example: Ultra Low Dose Contraceptives
+
+- **Conclusion**: A probability of .01 is pretty unlikely. Reject claim 1. 
+
+- "There is sufficient evidence to reject the null hypothesis that $\mu = .02$, that the population mean amount of estrogen is 0.02mg." 
+
+  - i.e., the manufacturing procedure may not be consistent with one that produces pills at the required 0.02 mg dose
+
+- Suppose the probability of getting a result like ours, or more extreme, was relatively large, say 0.20 
+
+  - **Fail to reject** Claim 1 
+
+---
+## Two comments
+1. We would **not** say that evidence leads us to accept Claim 1.
+
+  - Same as in the US judicial system 
+
+    - Defendants are "innocent until proven guilty"
+    
+    - Find someone "guilty" or "not guilty" 
+    
+    - Do not say someone is "innocent"; we say there is insufficient evidence to say they are guilty
+  
+2. Hypothesis testing does not tell us the probability that Claim 1 is true. 
+
+  - Assumed claim 1 was true before we did our calculation
+  
+  - Calculated a probability about data like ours or more extreme than ours under that assumption 
+
+
+---
+
+## Step 1: State claim 1 and claim 2
+
+What are $H_0$ and $H_A$ in each case?
+
+1. Researchers would like to know whether a new intervention for informing children in developing countries of their HIV status is associated with different mental health quality of life. 
+
+2. Researchers would like to know if lead levels in the water from Flint exceed the EPA action level of 15 ppb.
+
+3. The World Health Organization would like to know if the prevalence of the omicron variant this month is the same as last month.
+
+---
+## Step 2
+
+Step 2 is to make a plan for data collection and analysis, get random sample, and summarize the data. 
+
+- Need to define a **test statistic** ( $T$), which is a **random variable** that is computed from the data, e.g., a sample mean ( $\overline{X}$)
+
+- Need to know the distribution of the test statistic ( $T$) under the null hypothesis 
+
+  - Type of test depends on this distribution, e.g., if our test statistic can be approximated by a normal distribution, we will use a **Z-test**
+
+---
+
+## Step 3: Assess results 
+
+- Calculate the probability of "getting data like ours, or more extreme than ours," if $H_0$ is actually true
+
+- From Step 2, we have the distribution of $T$
+
+- Step 3: compute the value of the test statistic ( $t$) based on the data collected, and calculate the probability of getting a test statistic that is equally or more extreme than the one that we got, based on the distribution of the test statistic ( $T$)
+
+- This is a **conditional probability** (conditional on $H_0$ being true), called a **p-value**.
+
+- **p-value**: probability of getting a specific test statistic ( $t$) based on the data, or one more extreme, if $H_0$ were true
+
+---
+
+## Step 4: Draw conclusions
+
+- Recall that the two possible outcomes are (1) Reject claim 1, and (2) fail to reject claim 1
+
+- Reject Claim 1 when the probability of seeing our data (or more extreme data) when Claim 1 is true is small
+
+- What qualifies as "small" depends on the **significance level** of the test
+
+---
+## Significance level
+
+- We defined the significance level, $\alpha$, when discussing confidence intervals: 
+  - Confidence level = $100(1 - \alpha)$%, i.e., a 95% confidence interval will need $\alpha = .05$
+  - P(CI contains true parameter) = $1 - \alpha$.
+  
+- In a hypothesis test:
+  - Defines the tolerable **Type I error**: the probability of rejecting $H_0$ **when $H_0$ is actually true**
+  - Statistical property that we need: P(reject $H_0$ | $H_0$ true) $= \alpha$
+
+- When the null hypothesis is true, if we repeat the experiment a large number of times, we would expect to make the wrong decision only $\alpha$ (e.g., 5%) of the time
+
+
+---
+## Decision rule
+
+- **Decision rule**: reject $H_0$ if p-value $< \alpha$
+  - We will demonstrate (in the next class) that this produces the required property that P(reject $H_0$ | $H_0$ true) $= \alpha$
+
+- p-value $<\alpha$ = "statistically significant"
+
+- p-value $\geq \alpha$: insufficient evidence to reject $H_0$
+
+---
+
+## Errors from hypothesis tests
+
+```{r echo=FALSE,out.width="50%"}
+knitr::include_graphics("img/murderkitty.jpeg")
+```
+
+A cat is on trial.  Did it commit the crime?  Evidence is presented as part of the trial by jury.
+
+|  | Truly Innocent   | Truly Guilty |
+|:------|:------:|:---------:|
+| Jury: Not Guilty | $\checkmark$ | $\times$ |
+| Jury: Guilty | $\times$  | $\checkmark$ | 
+
+---
+
+## Errors from hypothesis tests
+
+Cat is innocent unless proven guilty.  
+
+Right decisions? Mistakes? 
+
+|  | Truly Innocent   | Truly Guilty |
+|:------|:------:|:---------:|
+| Jury: Not Guilty | $\checkmark$ | $\times$ |
+| Jury: Guilty | $\times$  | $\checkmark$ | 
+
+In a hypothesis testing framework:
+$H_0:$ Cat is innocent vs. $H_A$: Cat is guilty
+
+|  | $H_0$ true   | $H_A$ true |
+|:------|:------:|:---------:|
+| Decision: Do Not Reject $H_0$ | $\checkmark$ | $\times$ |
+| Decision: Reject $H_0$ | $\times$  | $\checkmark$ | 
+
+
+---
+
+## Errors from hypothesis tests
+Suppose we wish to test that the population mean equals some value, say $\mu_0$.
+
+Test of $H_0:  \mu=\mu_0$
+
+
+|  | Truly $\mu=\mu_0$   | Truly $\mu\neq\mu_0$ |
+|:------|:------:|:---------:|
+| Decision: Do Not Reject $H_0$ | $\checkmark$ | $\times$ |
+| Decision: Reject $H_0$ | $\times$  | $\checkmark$ | 
+
+- **Type I error**:  rejecting $H_0$ when it is really true
+
+- $\alpha$ is the maximum allowable Type I error rate 
+
+- We specify $\alpha$ at the design stage of the study and use it in making decisions with hypothesis tests.
+
+---
+
+## Recall: Hypothesis Testing Framework
+
+Steps in hypothesis testing:
+
+- Start with two claims about the population, $H_0$ and $H_A$
+
+- Choose a sampling strategy, collect data, and summarize data, i.e., define test statistic and compute statistic from the data
+
+- Figure out how likely it is to see data like what we got, or more extreme results, if $H_0$ is true, i.e., compute p-value 
+
+- Draw conclusions, i.e., if our data would have been unlikely if $H_0$ were true, then reject $H_0$. Otherwise, do not reject $H_0$.
+
+---
+## Hypothesis Testing for the Population Mean
+
+Say $X_i$ has mean $\mu$ and variance 4. 
+
+- **Step 1**: Start with two claims about the population  
+
+$H_0$: $\mu = 20$  
+$H_A$: $\mu \neq 20$
+
+- **Step 2**: Choose a sampling strategy, collect data, and summarize data  
+
+Test statistic: By CLT, $Z = \frac{\overline{X} - \mu}{\sigma / \sqrt{n}} \approx N(0, 1)$ when $n$ large. Collect a sample with $n = 100$. Under $H_0$, $Z = \frac{\overline{X} - 20}{2 / \sqrt{100}} \approx N(0, 1)$. From the sample, we get $\bar{x} = 21$
+
+- **Step 3**: Figure out how likely it is to see data like what we got, or more extreme results, if $H_0$ is true.
+
+To get the value of the test statistic based on our data ( $z$), simply substitute $\bar{x} = 21$ to get $z = \frac{21 - 20}{2 / \sqrt{100}} = 5$
+
+---
+## Hypothesis Testing for the Population Mean
+
+- **Step 3** (continued): Figure out how likely it is to see data like what we got, or more extreme results, if claim 1 is true.
+
+Probability under $H_0$ of getting data like what we got, or more extreme, is $P(|Z| \geq |z|) = P(Z \geq 5$ or $Z \leq -5)$. 
+
+.small[
+```{r}
+2*pnorm(-5)
+```
+]
+
+`2*pnorm(-5)` is very small (on the order of $10^{-7}$).
+
+- **Step 4**: If our data would have been unlikely if $H_0$ were true, then reject $H_0$. Otherwise, do not reject $H_0$
+
+Using a significance level of $\alpha = .05$, $P(|Z| \geq 5) < \alpha$, so reject $H_0$. At a 5% level, there is sufficient evidence to reject the null hypothesis that $\mu = 20$.
+
+---
+## Hypothesis Testing for the Population Mean
+Say $X_i$ has mean $\mu$ and standard deviation $\sigma$. The test statistic we will use is $Z = \frac{\overline{X} - \mu}{\sigma / \sqrt{n}}$. By CLT, $Z \approx N(0, 1)$ when $n$ large.
+
+$H_0$: $\mu = \mu_0$  
+$H_A$: $\mu \neq \mu_0$
+
+Under $H_0$, $Z = \frac{\overline{X} - \mu_0}{\sigma / \sqrt{n}} \approx N(0, 1)$
+
+Value of test statistic: $z = \frac{\overline{x} - \mu_0}{\sigma / \sqrt{n}}$
+
+Decision rule: reject $H_0$ if $P(|Z| \geq |z|) = P(Z \geq |z|$ or $Z \leq -|z|) < \alpha$
+
+
+---
+
+## Summary
+
+- Hypothesis testing framework
+
+  - Null and alternative hypotheses
+  
+  - Test statistics
+  
+  - p-values
+  
+  - Significance level
+
+- Errors from hypothesis tests
+
+  - Type I error
+  
+- Hypothesis test for population mean 
+
