@@ -1,0 +1,66 @@
+---
+title: "Homework 7"
+author: ""
+date: "DUE: December 8 2024, 9PM"
+output: 
+  html_document: 
+    toc: true
+    toc_float: true
+---
+
+## Instructions
+Upload a PDF file, named with your UC Davis email ID and homework number (e.g., `xtai_hw1.pdf`), to Gradescope (accessible through Canvas). You will give the commands to answer each question in its own code block, which will also produce output that will be automatically embedded in the output file. Each answer must be supported by any written statements as well as any code used. 
+
+All code used to produce your results must be shown in your PDF file (e.g., do not use `echo = FALSE` or `include = FALSE` as options anywhere). `qmd/Rmd` files do not need to be submitted, but may be requested by the TA and must be available when the assignment is submitted. 
+
+Students may choose to collaborate with each other on the homework, but must clearly indicate with whom they collaborated. 
+
+**Please assign the pages with your answers to the corresponding questions when submitting your homework on Gradescope. Points will be taken off if you fail to do so.**
+
+## Problem 1 (25 points)
+
+Assume that 70% of 18-20 year olds consume alcoholic beverages in any given year. Consider a random sample of 500 18-20 year olds. For each person, we record whether or not they have consumed alcoholic beverages in the past year. 
+
+a. Define a random variable $X_i$ that describes the binary outcomes recorded (to be clear, we have 500 observations from this distribution). What distribution does your random variable follow? What is (are) the parameter(s)? What is the mean? What is the variance? 
+
+b. Calculating the fraction of 1's in our sample gives us a single observation from the sampling distribution of the sample proportion. What is the approximate distribution of this sampling distribution? Now, what is the approximate distribution of $\sum_{i = 1}^n X_i$? Use this to calculate the probability that more than 361 students consumed alcoholic beverages.
+
+c. A different way to think about $\sum_{i = 1}^n X_i$ is a single draw from a different distribution. What distribution is this, and what are the parameters? Use R to calculate the exact probability that more than 361 students consumed alcoholic beverages. Is this different from your answer in (b)? Is this what you would expect? Please explain. 
+
+# Problem 2: Palmer Penguins 
+Let's go back to the Palmer Penguins example. This data set contains information on 344 penguins in the Palmer Archipelago. Assume these are independent samples from the population of penguins in the Palmer Archipelago. You can load the data set using the following code. 
+
+```{r}
+library(palmerpenguins)
+dplyr::glimpse(penguins)
+```
+
+## Problem 2a: Investigating body mass (25 points)
+
+a. What is a point estimate for the population mean body mass of penguins in the Palmer Archipelago? What about for the population variance? 
+
+b. Find a 99% confidence interval for the population mean body mass of penguins in the Palmer Archipelago. 
+
+c. Does your confidence interval in (b) require any additional assumptions on the distribution of body mass of penguins in the Palmer Archipelago? Why or why not? 
+
+d. What is the interpretation of your confidence interval in (b)? 
+
+
+## Problem 2b: Investigating bill length (25 points)
+
+a. Construct a binary variable for whether the bill length is greater than 45mm. 
+
+b. Find a 95% confidence interval for the population proportion of penguins with bills longer than 45mm.
+
+c. If we had a sample size of 1000, would the confidence intervals be narrower or wider? Why? 
+
+## Problem 2c: Investigating flipper length (25 points)
+a. Construct a 90% confidence interval for the population mean flipper length of penguins in the Palmer Archipelago. What is the interpretation of your confidence interval? 
+
+b. We are interested in testing the hypothesis that the population mean flipper length is 200mm. Conduct a hypothesis test at the 10% level. 
+
+## Appendix
+
+```{r eval = TRUE}
+sessionInfo()
+```
